@@ -1,0 +1,709 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "GameAppBackend API",
+		"description": "All routes from routes/api.php (Laravel default prefix: /api).\n\n**Sanctum (SPA / cookie):** For browser-style auth, call `GET /sanctum/csrf-cookie` on the same origin first, then send `X-XSRF-TOKEN` from the `XSRF-TOKEN` cookie and `Accept: application/json`.\n\n**Token (mobile / Bearer):** Use `Authorization: Bearer {{token}}` after login/register when using token abilities.\n\n**Admin routes** require `auth:sanctum` + `admin` middleware (user must be admin).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{ "key": "base_url", "value": "http://127.0.0.1:8000" },
+		{ "key": "token", "value": "" },
+		{ "key": "asset_id", "value": "" },
+		{ "key": "rule_id", "value": "" },
+		{ "key": "campaign_id", "value": "" },
+		{ "key": "advertiser_id", "value": "" },
+		{ "key": "banner_id", "value": "" },
+		{ "key": "plan_id", "value": "" },
+		{ "key": "level_rule_id", "value": "" },
+		{ "key": "public_banner_id", "value": "" }
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"User\",\n  \"email\": \"user@example.com\",\n  \"password\": \"password\",\n  \"password_confirmation\": \"password\"\n}"
+						},
+						"url": "{{base_url}}/api/register",
+						"description": "Throttle: 10/min"
+					}
+				},
+				{
+					"name": "Login",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"password\"\n}"
+						},
+						"url": "{{base_url}}/api/login",
+						"description": "Throttle: 10/min"
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/logout",
+						"description": "Requires auth:sanctum"
+					}
+				},
+				{
+					"name": "Current user",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/user",
+						"description": "Requires auth:sanctum"
+					}
+				}
+			]
+		},
+		{
+			"name": "Public",
+			"item": [
+				{
+					"name": "Subscription plans (public)",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/subscription/plans"
+					}
+				},
+				{
+					"name": "Stripe webhook",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Stripe-Signature", "value": "<stripe_signature>", "description": "Set by Stripe; raw body" }
+						],
+						"body": { "mode": "raw", "raw": "" },
+						"url": "{{base_url}}/api/stripe/webhook",
+						"description": "Throttle: 120/min. Raw Stripe event payload."
+					}
+				},
+				{
+					"name": "Game level ad settings",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/game/level-ad-settings"
+					}
+				},
+				{
+					"name": "Game config",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/game/config"
+					}
+				}
+			]
+		},
+		{
+			"name": "Ads & banners (public / throttled)",
+			"item": [
+				{
+					"name": "Next video ad",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/next-video",
+						"description": "Throttle: 120/min"
+					}
+				},
+				{
+					"name": "Next audio ad",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/next-audio",
+						"description": "Throttle: 120/min"
+					}
+				},
+				{
+					"name": "Track ad event",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"event_type\": \"impression\",\n  \"ad_asset_id\": \"uuid\"\n}"
+						},
+						"url": "{{base_url}}/api/analytics/ad-event",
+						"description": "Throttle: 120/min. Body shape depends on PublicAdController validation."
+					}
+				},
+				{
+					"name": "Public banner",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/banners/public"
+					}
+				},
+				{
+					"name": "Banner click",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "POST",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/banners/{{public_banner_id}}/click"
+					}
+				},
+				{
+					"name": "Banner impression",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "POST",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/banners/{{public_banner_id}}/impression"
+					}
+				}
+			]
+		},
+		{
+			"name": "Subscription (authenticated user)",
+			"item": [
+				{
+					"name": "Checkout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": { "mode": "raw", "raw": "{\n  \"price_id\": \"price_xxx\"\n}" },
+						"url": "{{base_url}}/api/subscription/checkout",
+						"description": "auth:sanctum. Throttle: 60/min"
+					}
+				},
+				{
+					"name": "Subscription status",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/subscription/status"
+					}
+				},
+				{
+					"name": "Billing portal",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/subscription/portal"
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin — Ad assets",
+			"item": [
+				{
+					"name": "Presigned upload URL",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": { "mode": "raw", "raw": "{}" },
+						"url": "{{base_url}}/api/ads/upload-url",
+						"description": "auth:sanctum + admin"
+					}
+				},
+				{
+					"name": "Create asset (JSON)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Sample\",\n  \"type\": \"audio\",\n  \"format\": \"audio\",\n  \"asset_url\": \"https://example.com/file.mp3\"\n}"
+						},
+						"url": "{{base_url}}/api/ads/assets/json"
+					}
+				},
+				{
+					"name": "Create asset (multipart)",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{ "key": "name", "value": "TEST", "type": "text" },
+								{ "key": "type", "value": "audio", "type": "text" },
+								{ "key": "format", "value": "audio", "type": "text" },
+								{ "key": "file", "type": "file", "src": [] }
+							]
+						},
+						"url": "{{base_url}}/api/ads/assets",
+						"description": "Use form-data; CSRF for SPA (X-XSRF-TOKEN + cookies)."
+					}
+				},
+				{
+					"name": "List assets",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/assets"
+					}
+				},
+				{
+					"name": "List assets with analytics",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/assets/with-analytics"
+					}
+				},
+				{
+					"name": "Update asset",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": { "mode": "raw", "raw": "{}" },
+						"url": "{{base_url}}/api/ads/assets/{{asset_id}}"
+					}
+				},
+				{
+					"name": "Delete asset",
+					"request": {
+						"method": "DELETE",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/assets/{{asset_id}}"
+					}
+				},
+				{
+					"name": "Approve asset",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": { "mode": "raw", "raw": "{\n  \"status\": \"approved\"\n}" },
+						"url": "{{base_url}}/api/ads/assets/{{asset_id}}/approve"
+					}
+				},
+				{
+					"name": "Toggle asset (approved/paused)",
+					"request": {
+						"method": "PATCH",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/assets/{{asset_id}}/toggle"
+					}
+				},
+				{
+					"name": "Asset analytics events",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/assets/{{asset_id}}/analytics"
+					}
+				},
+				{
+					"name": "Asset event locations",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/assets/{{asset_id}}/locations",
+						"description": "Optional query: ?eventType=..."
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin — Rules & campaigns",
+			"item": [
+				{
+					"name": "List ad rules",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/rules"
+					}
+				},
+				{
+					"name": "Create ad rule",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": { "mode": "raw", "raw": "{}" },
+						"url": "{{base_url}}/api/ads/rules"
+					}
+				},
+				{
+					"name": "Update ad rule",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": { "mode": "raw", "raw": "{}" },
+						"url": "{{base_url}}/api/ads/rules/{{rule_id}}"
+					}
+				},
+				{
+					"name": "Delete ad rule",
+					"request": {
+						"method": "DELETE",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/rules/{{rule_id}}"
+					}
+				},
+				{
+					"name": "List campaigns",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/campaigns"
+					}
+				},
+				{
+					"name": "Create campaign",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": { "mode": "raw", "raw": "{}" },
+						"url": "{{base_url}}/api/ads/campaigns"
+					}
+				},
+				{
+					"name": "Update campaign",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": { "mode": "raw", "raw": "{}" },
+						"url": "{{base_url}}/api/ads/campaigns/{{campaign_id}}"
+					}
+				},
+				{
+					"name": "Delete campaign",
+					"request": {
+						"method": "DELETE",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/campaigns/{{campaign_id}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin — Analytics",
+			"item": [
+				{
+					"name": "Platform analytics",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/platform-analytics"
+					}
+				},
+				{
+					"name": "Top performing",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/top-performing"
+					}
+				},
+				{
+					"name": "Ads analytics (alias)",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/analytics",
+						"description": "Same controller as platform-analytics in routes."
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin — Advertisers",
+			"item": [
+				{
+					"name": "List advertisers",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/advertisers"
+					}
+				},
+				{
+					"name": "Create advertiser",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Acme\",\n  \"company_name\": \"Acme Inc\",\n  \"email\": \"ads@acme.com\",\n  \"is_active\": true\n}"
+						},
+						"url": "{{base_url}}/api/advertisers"
+					}
+				},
+				{
+					"name": "Show advertiser",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/advertisers/{{advertiser_id}}"
+					}
+				},
+				{
+					"name": "Update advertiser",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": { "mode": "raw", "raw": "{}" },
+						"url": "{{base_url}}/api/advertisers/{{advertiser_id}}"
+					}
+				},
+				{
+					"name": "Delete advertiser",
+					"request": {
+						"method": "DELETE",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/advertisers/{{advertiser_id}}"
+					}
+				},
+				{
+					"name": "Advertiser report",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/advertisers/{{advertiser_id}}/report"
+					}
+				},
+				{
+					"name": "Advertiser export",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/advertisers/{{advertiser_id}}/export"
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin — Platform banners",
+			"item": [
+				{
+					"name": "List banners",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/admin/banners"
+					}
+				},
+				{
+					"name": "Create banner",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": { "mode": "raw", "raw": "{}" },
+						"url": "{{base_url}}/api/admin/banners"
+					}
+				},
+				{
+					"name": "Update banner",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": { "mode": "raw", "raw": "{}" },
+						"url": "{{base_url}}/api/admin/banners/{{banner_id}}"
+					}
+				},
+				{
+					"name": "Delete banner",
+					"request": {
+						"method": "DELETE",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/admin/banners/{{banner_id}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin — Game level ad rules",
+			"item": [
+				{
+					"name": "List level ad rules",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/admin/game-level-ad-rules"
+					}
+				},
+				{
+					"name": "Create level ad rule",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"level_from\": 1,\n  \"level_to\": null,\n  \"ads_after_level_complete\": 1,\n  \"is_active\": true,\n  \"sort_order\": 0\n}"
+						},
+						"url": "{{base_url}}/api/admin/game-level-ad-rules"
+					}
+				},
+				{
+					"name": "Update level ad rule",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": { "mode": "raw", "raw": "{}" },
+						"url": "{{base_url}}/api/admin/game-level-ad-rules/{{level_rule_id}}"
+					}
+				},
+				{
+					"name": "Delete level ad rule",
+					"request": {
+						"method": "DELETE",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/admin/game-level-ad-rules/{{level_rule_id}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin — Subscription plans",
+			"item": [
+				{
+					"name": "List plans (admin)",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/admin/subscription/plans"
+					}
+				},
+				{
+					"name": "Create plan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": { "mode": "raw", "raw": "{}" },
+						"url": "{{base_url}}/api/admin/subscription/plans"
+					}
+				},
+				{
+					"name": "Update plan",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": { "mode": "raw", "raw": "{}" },
+						"url": "{{base_url}}/api/admin/subscription/plans/{{plan_id}}"
+					}
+				},
+				{
+					"name": "Delete plan",
+					"request": {
+						"method": "DELETE",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/admin/subscription/plans/{{plan_id}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin — Settings",
+			"item": [
+				{
+					"name": "Get Stripe settings",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/admin/settings/stripe"
+					}
+				},
+				{
+					"name": "Update Stripe settings",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"stripe_publishable_key\": \"pk_test_...\",\n  \"stripe_secret_key\": \"sk_test_...\",\n  \"stripe_webhook_secret\": \"whsec_...\"\n}"
+						},
+						"url": "{{base_url}}/api/admin/settings/stripe"
+					}
+				}
+			]
+		}
+	]
+}

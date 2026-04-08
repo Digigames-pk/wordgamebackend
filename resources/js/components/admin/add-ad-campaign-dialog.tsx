@@ -153,23 +153,10 @@ export function AddAdCampaignDialog({
     const createMut = useMutation({
         mutationFn: async (payload: { kind: 'multipart'; fd: FormData } | { kind: 'json'; body: Record<string, unknown> }) => {
             if (payload.kind === 'multipart') {
-                const res = await fetch('/api/ads/assets', {
+                return apiJson('/ads/assets', {
                     method: 'POST',
-                    credentials: 'same-origin',
-                    headers: {
-                        Accept: 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content ?? '',
-                        'X-XSRF-TOKEN': document.cookie.match(/XSRF-TOKEN=([^;]+)/)
-                            ? decodeURIComponent(document.cookie.match(/XSRF-TOKEN=([^;]+)/)![1])
-                            : '',
-                    },
                     body: payload.fd,
                 });
-                if (!res.ok) {
-                    const err = await res.json().catch(() => ({}));
-                    throw new Error((err as { message?: string }).message || res.statusText);
-                }
-                return res.json();
             }
             return apiJson('/ads/assets/json', {
                 method: 'POST',
@@ -351,7 +338,7 @@ export function AddAdCampaignDialog({
         fd.append('weight', String(form.weight));
         fd.append('duration_sec', String(form.duration_sec));
         fd.append('skip_after_sec', String(form.skip_after_sec));
-        fd.append('is_skippable', String(!form.nonSkippable));
+        fd.append('is_skippable', form.nonSkippable ? '0' : '1');
         if (form.click_through_url) fd.append('click_through_url', form.click_through_url);
         if (form.advertiser_id) fd.append('advertiser_id', form.advertiser_id);
         if (form.max_impressions) fd.append('max_impressions', form.max_impressions);
@@ -363,13 +350,8 @@ export function AddAdCampaignDialog({
             fd.append('metadata[station]', form.station_name.trim());
         }
         if (t === 'banner') {
-            fd.append(
-                'display_timing',
-                JSON.stringify({
-                    show_after_sec: form.display_start_sec,
-                    duration_sec: form.display_duration_sec,
-                }),
-            );
+            fd.append('display_timing[show_after_sec]', String(form.display_start_sec));
+            fd.append('display_timing[duration_sec]', String(form.display_duration_sec));
         }
         fd.append('file', file);
         setUploadProgress(50);

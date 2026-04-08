@@ -7,9 +7,24 @@ function csrfMeta(): string {
     return document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content ?? '';
 }
 
+async function ensureXsrfToken(): Promise<void> {
+    if (xsrfToken()) {
+        return;
+    }
+    await fetch('/sanctum/csrf-cookie', {
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+        },
+    });
+}
+
 export async function apiJson<T>(path: string, init: RequestInit = {}): Promise<T> {
     const url = path.startsWith('/api') ? path : `/api${path.startsWith('/') ? '' : '/'}${path}`;
     const method = (init.method ?? 'GET').toUpperCase();
+    if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+        await ensureXsrfToken();
+    }
     const headers: Record<string, string> = {
         Accept: 'application/json',
         ...(init.headers as Record<string, string>),
