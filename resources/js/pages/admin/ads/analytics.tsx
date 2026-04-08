@@ -8,7 +8,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Analytics', href: '/admin/ads/analytics' },
 ];
 
-export default function AdminAdsAnalyticsPage() {
+export default function AdminAdsAnalyticsPage({ analytics }: { analytics: Record<string, number> }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Analytics" />
@@ -17,7 +17,7 @@ export default function AdminAdsAnalyticsPage() {
                     <h2 className="font-display text-3xl font-bold tracking-tight">Platform analytics</h2>
                     <p className="mt-1 text-muted-foreground">Aggregate impressions and clicks.</p>
                 </div>
-                <AnalyticsPanel />
+                <AnalyticsPanel analytics={analytics} />
             </div>
         </AppLayout>
     );

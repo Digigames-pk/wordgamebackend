@@ -1,4 +1,4 @@
-import { AdsTypeView } from './ads-type-view';
+import { AdsTypeView, type AdminAdAssetRow, type AdminAdvertiserOption } from './ads-type-view';
 import { type BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -6,6 +6,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'VAST / VMAP', href: '/admin/ads/vast' },
 ];
 
-export default function AdminAdsVastPage() {
-    return <AdsTypeView adType="vast" title="VAST / VMAP" breadcrumbs={breadcrumbs} />;
+export default function AdminAdsVastPage({
+    assets,
+    advertisers,
+}: {
+    assets: AdminAdAssetRow[];
+    advertisers: AdminAdvertiserOption[];
+}) {
+    return <AdsTypeView adType="vast" title="VAST / VMAP" breadcrumbs={breadcrumbs} assets={assets} advertisers={advertisers} />;
 }

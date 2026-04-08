@@ -8,7 +8,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Ad rules', href: '/admin/ads/rules' },
 ];
 
-export default function AdminAdsRulesPage() {
+export default function AdminAdsRulesPage({ rules }: { rules: Record<string, unknown>[] }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Ad rules" />
@@ -17,7 +17,7 @@ export default function AdminAdsRulesPage() {
                     <h2 className="font-display text-3xl font-bold tracking-tight">Ad rules</h2>
                     <p className="mt-1 text-muted-foreground">Frequency caps and scheduling windows.</p>
                 </div>
-                <RulesPanel />
+                <RulesPanel rules={rules} />
             </div>
         </AppLayout>
     );

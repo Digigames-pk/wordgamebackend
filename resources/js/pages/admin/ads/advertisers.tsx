@@ -11,14 +11,19 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { apiJson } from '@/lib/api';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Head, router } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import { Loader2, Plus, RefreshCw } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
+
+function inertiaErrorMessage(errors: Record<string, string | string[] | undefined>): string {
+    const first = Object.values(errors).find(Boolean);
+    if (Array.isArray(first)) return first[0] ?? 'Request failed';
+    return typeof first === 'string' ? first : 'Request failed';
+}
 
 interface Advertiser {
     id: string;
@@ -39,9 +44,15 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Advertisers', href: '/admin/ads/advertisers' },
 ];
 
-export default function AdminAdsAdvertisersPage() {
-    const qc = useQueryClient();
+export default function AdminAdsAdvertisersPage({
+    advertisers,
+    assets,
+}: {
+    advertisers: Advertiser[];
+    assets: AssetRow[];
+}) {
     const [open, setOpen] = useState(false);
+    const [creating, setCreating] = useState(false);
     const [form, setForm] = useState({
         name: '',
         company_name: '',
@@ -49,48 +60,39 @@ export default function AdminAdsAdvertisersPage() {
         email: '',
     });
 
-    const advQ = useQuery({
-        queryKey: ['admin', 'advertisers'],
-        queryFn: () => apiJson<{ advertisers: Advertiser[] }>('/advertisers'),
-    });
-    const assetsQ = useQuery({
-        queryKey: ['admin', 'ads', 'assets'],
-        queryFn: () => apiJson<{ assets: AssetRow[] }>('/ads/assets'),
-    });
-
     const counts = useMemo(() => {
         const m = new Map<string, number>();
-        for (const a of assetsQ.data?.assets ?? []) {
+        for (const a of assets) {
             if (a.advertiser_id) {
                 m.set(a.advertiser_id, (m.get(a.advertiser_id) ?? 0) + 1);
             }
         }
         return m;
-    }, [assetsQ.data?.assets]);
+    }, [assets]);
 
-    const create = useMutation({
-        mutationFn: () =>
-            apiJson('/advertisers', {
-                method: 'POST',
-                body: JSON.stringify({
-                    name: form.name,
-                    company_name: form.company_name || undefined,
-                    contact_name: form.contact_name || undefined,
-                    email: form.email || undefined,
-                    is_active: true,
-                }),
-            }),
-        onSuccess: () => {
-            qc.invalidateQueries({ queryKey: ['admin', 'advertisers'] });
-            setOpen(false);
-            setForm({ name: '', company_name: '', contact_name: '', email: '' });
-            toast.success('Advertiser created');
-        },
-        onError: (e: Error) => toast.error(e.message),
-    });
-
-    const loading = advQ.isLoading || assetsQ.isLoading;
-    const rows = advQ.data?.advertisers ?? [];
+    const createAdvertiser = () => {
+        setCreating(true);
+        router.post(
+            route('admin.ads.advertisers.store'),
+            {
+                name: form.name,
+                company_name: form.company_name || undefined,
+                contact_name: form.contact_name || undefined,
+                email: form.email || undefined,
+                is_active: true,
+            },
+            {
+                preserveScroll: true,
+                onFinish: () => setCreating(false),
+                onSuccess: () => {
+                    setOpen(false);
+                    setForm({ name: '', company_name: '', contact_name: '', email: '' });
+                    toast.success('Advertiser created');
+                },
+                onError: (errors) => toast.error(inertiaErrorMessage(errors)),
+            },
+        );
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -102,14 +104,7 @@ export default function AdminAdsAdvertisersPage() {
                         <p className="mt-1 text-muted-foreground">Brands and agencies that own ad assets.</p>
                     </div>
                     <div className="flex gap-2">
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => {
-                                void advQ.refetch();
-                                void assetsQ.refetch();
-                            }}
-                        >
+                        <Button variant="outline" size="icon" onClick={() => router.reload({ only: ['advertisers', 'assets'] })}>
                             <RefreshCw className="h-4 w-4" />
                         </Button>
                         <Button onClick={() => setOpen(true)}>
@@ -123,11 +118,7 @@ export default function AdminAdsAdvertisersPage() {
                         <CardTitle>Directory</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        {loading ? (
-                            <div className="flex justify-center py-12">
-                                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-                            </div>
-                        ) : rows.length === 0 ? (
+                        {advertisers.length === 0 ? (
                             <p className="py-8 text-center text-muted-foreground">No advertisers yet.</p>
                         ) : (
                             <Table>
@@ -142,7 +133,7 @@ export default function AdminAdsAdvertisersPage() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {rows.map((a) => (
+                                    {advertisers.map((a) => (
                                         <TableRow key={a.id}>
                                             <TableCell className="font-medium">{a.name}</TableCell>
                                             <TableCell>{a.company_name ?? '—'}</TableCell>
@@ -200,8 +191,8 @@ export default function AdminAdsAdvertisersPage() {
                         <Button variant="outline" onClick={() => setOpen(false)}>
                             Cancel
                         </Button>
-                        <Button onClick={() => create.mutate()} disabled={!form.name.trim() || create.isPending}>
-                            {create.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create'}
+                        <Button onClick={createAdvertiser} disabled={!form.name.trim() || creating}>
+                            {creating ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create'}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

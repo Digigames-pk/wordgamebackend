@@ -8,9 +8,8 @@ import { Switch } from '@/components/ui/switch';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { apiJson } from '@/lib/api';
+import { Head, router } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import {
     BarChart2,
     BarChart3,
@@ -19,7 +18,6 @@ import {
     Globe,
     Image,
     Infinity,
-    Loader2,
     Music,
     Percent,
     PlayCircle,
@@ -31,15 +29,20 @@ import {
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-export type AdTypeTab = 'audio' | 'video' | 'banner' | 'vast';
-
-export interface AdsTypeViewProps {
-    adType: AdTypeTab;
-    title: string;
-    breadcrumbs: BreadcrumbItem[];
+function inertiaErrorMessage(errors: Record<string, string | string[] | undefined>): string {
+    const first = Object.values(errors).find(Boolean);
+    if (Array.isArray(first)) return first[0] ?? 'Request failed';
+    return typeof first === 'string' ? first : 'Request failed';
 }
 
-interface AdAssetRow extends PerformanceAdAsset {
+export type AdTypeTab = 'audio' | 'video' | 'banner' | 'vast';
+
+export interface AdminAdvertiserOption {
+    id: string;
+    name: string;
+}
+
+export interface AdAssetRow extends PerformanceAdAsset {
     format?: string;
     owner_type: string;
     placement_type?: string;
@@ -56,6 +59,16 @@ interface AdAssetRow extends PerformanceAdAsset {
     vast_tag_url?: string | null;
     vmap_tag_url?: string | null;
     metadata?: Record<string, unknown> | null;
+}
+
+export type AdminAdAssetRow = AdAssetRow;
+
+export interface AdsTypeViewProps {
+    adType: AdTypeTab;
+    title: string;
+    breadcrumbs: BreadcrumbItem[];
+    assets: AdAssetRow[];
+    advertisers: AdminAdvertiserOption[];
 }
 
 function formatNumber(num: number): string {
@@ -94,18 +107,37 @@ function targetTierLabel(c: AdAssetRow): string {
     return 'Free only';
 }
 
-export function AdsTypeView({ adType, title, breadcrumbs }: AdsTypeViewProps) {
-    const qc = useQueryClient();
+export function AdsTypeView({ adType, title, breadcrumbs, assets, advertisers }: AdsTypeViewProps) {
     const [addOpen, setAddOpen] = useState(false);
     const [perfOpen, setPerfOpen] = useState(false);
     const [perfAsset, setPerfAsset] = useState<AdAssetRow | null>(null);
+    const [busyAssetId, setBusyAssetId] = useState<string | null>(null);
 
-    const q = useQuery({
-        queryKey: ['admin', 'ads', 'assets'],
-        queryFn: () => apiJson<{ assets: AdAssetRow[] }>('/ads/assets'),
-    });
+    const campaigns = assets;
 
-    const campaigns = q.data?.assets ?? [];
+    const runToggle = (id: string) => {
+        setBusyAssetId(id);
+        router.patch(
+            route('admin.ads.assets.toggle', id),
+            {},
+            {
+                preserveScroll: true,
+                onFinish: () => setBusyAssetId(null),
+                onSuccess: () => toast.success('Ad status updated'),
+                onError: (errors) => toast.error(inertiaErrorMessage(errors)),
+            },
+        );
+    };
+
+    const runDelete = (id: string) => {
+        setBusyAssetId(id);
+        router.delete(route('admin.ads.assets.destroy', id), {
+            preserveScroll: true,
+            onFinish: () => setBusyAssetId(null),
+            onSuccess: () => toast.success('Ad deleted'),
+            onError: (errors) => toast.error(inertiaErrorMessage(errors)),
+        });
+    };
     const typeCampaigns = useMemo(() => filterByType(campaigns, adType), [campaigns, adType]);
 
     const totalCampaigns = campaigns.length;
@@ -136,24 +168,6 @@ export function AdsTypeView({ adType, title, breadcrumbs }: AdsTypeViewProps) {
             icon: Code,
         },
     };
-
-    const toggleMut = useMutation({
-        mutationFn: (id: string) => apiJson(`/ads/assets/${id}/toggle`, { method: 'PATCH' }),
-        onSuccess: () => {
-            qc.invalidateQueries({ queryKey: ['admin', 'ads', 'assets'] });
-            toast.success('Ad status updated');
-        },
-        onError: (e: Error) => toast.error(e.message),
-    });
-
-    const deleteMut = useMutation({
-        mutationFn: (id: string) => apiJson(`/ads/assets/${id}`, { method: 'DELETE' }),
-        onSuccess: () => {
-            qc.invalidateQueries({ queryKey: ['admin', 'ads', 'assets'] });
-            toast.success('Ad deleted');
-        },
-        onError: (e: Error) => toast.error(e.message),
-    });
 
     const renderGeo = (c: AdAssetRow) => {
         const t =
@@ -294,7 +308,7 @@ export function AdsTypeView({ adType, title, breadcrumbs }: AdsTypeViewProps) {
                                 <CardDescription>{TL.desc}</CardDescription>
                             </div>
                             <div className="flex gap-2">
-                                <Button variant="outline" size="icon" onClick={() => q.refetch()}>
+                                <Button variant="outline" size="icon" onClick={() => router.reload({ only: ['assets', 'advertisers'] })}>
                                     <RefreshCw className="h-4 w-4" />
                                 </Button>
                                 <Button onClick={() => setAddOpen(true)}>
@@ -304,11 +318,7 @@ export function AdsTypeView({ adType, title, breadcrumbs }: AdsTypeViewProps) {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        {q.isLoading ? (
-                            <div className="flex items-center justify-center py-8">
-                                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                            </div>
-                        ) : typeCampaigns.length === 0 ? (
+                        {typeCampaigns.length === 0 ? (
                             <div className="py-8 text-center text-muted-foreground">
                                 No {adType} ads configured yet. Add your first ad to get started.
                             </div>
@@ -421,8 +431,8 @@ export function AdsTypeView({ adType, title, breadcrumbs }: AdsTypeViewProps) {
                                                 <TableCell className="text-center">
                                                     <Switch
                                                         checked={campaign.status === 'approved'}
-                                                        onCheckedChange={() => toggleMut.mutate(campaign.id)}
-                                                        disabled={toggleMut.isPending}
+                                                        onCheckedChange={() => runToggle(campaign.id)}
+                                                        disabled={busyAssetId === campaign.id}
                                                     />
                                                 </TableCell>
                                                 <TableCell className="text-right">
@@ -443,7 +453,12 @@ export function AdsTypeView({ adType, title, breadcrumbs }: AdsTypeViewProps) {
                                                             </TooltipTrigger>
                                                             <TooltipContent>Ad performance</TooltipContent>
                                                         </Tooltip>
-                                                        <Button variant="ghost" size="icon" onClick={() => deleteMut.mutate(campaign.id)}>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            disabled={busyAssetId === campaign.id}
+                                                            onClick={() => runDelete(campaign.id)}
+                                                        >
                                                             <Trash2 className="h-4 w-4 text-destructive" />
                                                         </Button>
                                                     </div>
@@ -462,7 +477,9 @@ export function AdsTypeView({ adType, title, breadcrumbs }: AdsTypeViewProps) {
                 open={addOpen}
                 onOpenChange={setAddOpen}
                 defaultAdType={adType}
-                onCreated={() => qc.invalidateQueries({ queryKey: ['admin', 'ads', 'assets'] })}
+                libraryAssets={assets}
+                advertisers={advertisers}
+                onCreated={() => router.reload({ only: ['assets', 'advertisers'] })}
             />
 
             <AdPerformanceDialog open={perfOpen} onOpenChange={setPerfOpen} asset={perfAsset} />

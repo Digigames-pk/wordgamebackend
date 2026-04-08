@@ -21,7 +21,7 @@ export default function AdminAdsFreeTierPage() {
                     <CardHeader>
                         <CardTitle>Defaults</CardTitle>
                         <CardDescription>
-                            Wire this to <code className="text-xs">/api/admin/ads/settings</code> when the backend endpoint is available.
+                            Wire this to an admin web route when the backend endpoint is available.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="text-sm text-muted-foreground">

@@ -1,4 +1,4 @@
-import { AdsTypeView } from './ads-type-view';
+import { AdsTypeView, type AdminAdAssetRow, type AdminAdvertiserOption } from './ads-type-view';
 import { type BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -6,6 +6,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Video ads', href: '/admin/ads/video' },
 ];
 
-export default function AdminAdsVideoPage() {
-    return <AdsTypeView adType="video" title="Video ads" breadcrumbs={breadcrumbs} />;
+export default function AdminAdsVideoPage({
+    assets,
+    advertisers,
+}: {
+    assets: AdminAdAssetRow[];
+    advertisers: AdminAdvertiserOption[];
+}) {
+    return <AdsTypeView adType="video" title="Video ads" breadcrumbs={breadcrumbs} assets={assets} advertisers={advertisers} />;
 }

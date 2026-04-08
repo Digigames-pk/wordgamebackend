@@ -8,7 +8,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Subscription plans', href: '/admin/ads/plans' },
 ];
 
-export default function AdminAdsPlansPage() {
+export default function AdminAdsPlansPage({ plans }: { plans: Record<string, unknown>[] }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Subscription plans" />
@@ -17,7 +17,7 @@ export default function AdminAdsPlansPage() {
                     <h2 className="font-display text-3xl font-bold tracking-tight">Subscription plans</h2>
                     <p className="mt-1 text-muted-foreground">Stripe Product/Price sync for ad-free subscriptions.</p>
                 </div>
-                <PlansPanel />
+                <PlansPanel plans={plans} />
             </div>
         </AppLayout>
     );

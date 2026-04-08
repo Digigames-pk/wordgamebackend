@@ -8,7 +8,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Platform banners', href: '/admin/ads/platform-banners' },
 ];
 
-export default function AdminAdsPlatformBannersPage() {
+export default function AdminAdsPlatformBannersPage({ banners }: { banners: Record<string, unknown>[] }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Platform banners" />
@@ -17,7 +17,7 @@ export default function AdminAdsPlatformBannersPage() {
                     <h2 className="font-display text-3xl font-bold tracking-tight">Platform banners</h2>
                     <p className="mt-1 text-muted-foreground">Image banners for the game shell (outside VAST/video ads).</p>
                 </div>
-                <BannersPanel />
+                <BannersPanel banners={banners} />
             </div>
         </AppLayout>
     );

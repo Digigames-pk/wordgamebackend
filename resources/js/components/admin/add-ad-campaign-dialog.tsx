@@ -16,8 +16,8 @@ import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { apiJson } from '@/lib/api';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { router } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import {
     ChevronRight,
     ExternalLink,
@@ -61,15 +61,25 @@ function filterByType(assets: LibraryAsset[], t: CreateAdType): LibraryAsset[] {
     });
 }
 
+function inertiaErrorMessage(errors: Record<string, string | string[] | undefined>): string {
+    const first = Object.values(errors).find(Boolean);
+    if (Array.isArray(first)) return first[0] ?? 'Request failed';
+    return typeof first === 'string' ? first : 'Request failed';
+}
+
 export function AddAdCampaignDialog({
     open,
     onOpenChange,
     defaultAdType,
+    libraryAssets,
+    advertisers,
     onCreated,
 }: {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     defaultAdType: CreateAdType;
+    libraryAssets: LibraryAsset[];
+    advertisers: { id: string; name: string }[];
     onCreated: () => void;
 }) {
     const fileRef = useRef<HTMLInputElement>(null);
@@ -98,22 +108,9 @@ export function AddAdCampaignDialog({
         end_date: '',
     });
     const [file, setFile] = useState<File | null>(null);
+    const [submitting, setSubmitting] = useState(false);
 
-    const assetsQ = useQuery({
-        queryKey: ['admin', 'ads', 'assets'],
-        queryFn: () => apiJson<{ assets: LibraryAsset[] }>('/ads/assets'),
-        enabled: open,
-    });
-    const advertisersQ = useQuery({
-        queryKey: ['admin', 'advertisers'],
-        queryFn: () => apiJson<{ advertisers: { id: string; name: string }[] }>('/advertisers'),
-        enabled: open,
-    });
-
-    const libraryOptions = useMemo(
-        () => filterByType(assetsQ.data?.assets ?? [], createAdType),
-        [assetsQ.data?.assets, createAdType],
-    );
+    const libraryOptions = useMemo(() => filterByType(libraryAssets, createAdType), [libraryAssets, createAdType]);
 
     const resetForm = useCallback(() => {
         setCreateAdType(defaultAdType);
@@ -150,28 +147,6 @@ export function AddAdCampaignDialog({
         }
     }, [open, defaultAdType, resetForm]);
 
-    const createMut = useMutation({
-        mutationFn: async (payload: { kind: 'multipart'; fd: FormData } | { kind: 'json'; body: Record<string, unknown> }) => {
-            if (payload.kind === 'multipart') {
-                return apiJson('/ads/assets', {
-                    method: 'POST',
-                    body: payload.fd,
-                });
-            }
-            return apiJson('/ads/assets/json', {
-                method: 'POST',
-                body: JSON.stringify(payload.body),
-            });
-        },
-        onSuccess: () => {
-            onCreated();
-            onOpenChange(false);
-            resetForm();
-            toast.success('Ad campaign created');
-        },
-        onError: (e: Error) => toast.error(e.message),
-    });
-
     const appendTypeToFormData = (fd: FormData, t: CreateAdType) => {
         if (t === 'vast') {
             fd.append('type', 'vast');
@@ -200,7 +175,41 @@ export function AddAdCampaignDialog({
         return m;
     };
 
-    const handleSubmit = async () => {
+    const finishCreateSuccess = () => {
+        onCreated();
+        onOpenChange(false);
+        resetForm();
+        toast.success('Ad campaign created');
+    };
+
+    const postJsonCreate = (body: Record<string, unknown>) => {
+        setSubmitting(true);
+        router.post(route('admin.ads.assets.store-json'), body, {
+            preserveScroll: true,
+            onFinish: () => {
+                setSubmitting(false);
+                setUploadProgress(0);
+            },
+            onSuccess: () => finishCreateSuccess(),
+            onError: (errors) => toast.error(inertiaErrorMessage(errors)),
+        });
+    };
+
+    const postMultipartCreate = (fd: FormData) => {
+        setSubmitting(true);
+        router.post(route('admin.ads.assets.store'), fd, {
+            forceFormData: true,
+            preserveScroll: true,
+            onFinish: () => {
+                setSubmitting(false);
+                setUploadProgress(0);
+            },
+            onSuccess: () => finishCreateSuccess(),
+            onError: (errors) => toast.error(inertiaErrorMessage(errors)),
+        });
+    };
+
+    const handleSubmit = () => {
         if (!form.name.trim()) {
             toast.error('Enter a campaign name');
             return;
@@ -214,27 +223,24 @@ export function AddAdCampaignDialog({
                 toast.error('Enter a VAST tag URL');
                 return;
             }
-            await createMut.mutateAsync({
-                kind: 'json',
-                body: {
-                    name: form.name.trim(),
-                    type: 'vast',
-                    format: 'video',
-                    placement_type: form.placement_type,
-                    weight: form.weight,
-                    duration_sec: form.duration_sec,
-                    skip_after_sec: form.skip_after_sec,
-                    is_skippable: !form.nonSkippable,
-                    vast_tag_url: form.vast_tag_url.trim(),
-                    asset_url: form.vast_tag_url.trim() || 'programmatic://vast-vmap-ad',
-                    click_through_url: form.click_through_url || undefined,
-                    advertiser_id: form.advertiser_id || undefined,
-                    max_impressions: form.max_impressions ? Number(form.max_impressions) : undefined,
-                    max_clicks: form.max_clicks ? Number(form.max_clicks) : undefined,
-                    start_date: form.start_date || undefined,
-                    end_date: form.end_date || undefined,
-                    metadata,
-                },
+            postJsonCreate({
+                name: form.name.trim(),
+                type: 'vast',
+                format: 'video',
+                placement_type: form.placement_type,
+                weight: form.weight,
+                duration_sec: form.duration_sec,
+                skip_after_sec: form.skip_after_sec,
+                is_skippable: !form.nonSkippable,
+                vast_tag_url: form.vast_tag_url.trim(),
+                asset_url: form.vast_tag_url.trim() || 'programmatic://vast-vmap-ad',
+                click_through_url: form.click_through_url || undefined,
+                advertiser_id: form.advertiser_id || undefined,
+                max_impressions: form.max_impressions ? Number(form.max_impressions) : undefined,
+                max_clicks: form.max_clicks ? Number(form.max_clicks) : undefined,
+                start_date: form.start_date || undefined,
+                end_date: form.end_date || undefined,
+                metadata,
             });
             return;
         }
@@ -278,8 +284,7 @@ export function AddAdCampaignDialog({
                 body.format = 'audio';
             }
             setUploadProgress(40);
-            await createMut.mutateAsync({ kind: 'json', body });
-            setUploadProgress(0);
+            postJsonCreate(body);
             return;
         }
 
@@ -321,7 +326,7 @@ export function AddAdCampaignDialog({
                 body.type = 'audio';
                 body.format = 'audio';
             }
-            await createMut.mutateAsync({ kind: 'json', body });
+            postJsonCreate(body);
             return;
         }
 
@@ -355,11 +360,7 @@ export function AddAdCampaignDialog({
         }
         fd.append('file', file);
         setUploadProgress(50);
-        try {
-            await createMut.mutateAsync({ kind: 'multipart', fd });
-        } finally {
-            setUploadProgress(0);
-        }
+        postMultipartCreate(fd);
     };
 
     const canSubmit =
@@ -552,7 +553,7 @@ export function AddAdCampaignDialog({
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="none">No advertiser</SelectItem>
-                                {advertisersQ.data?.advertisers?.map((a) => (
+                                {advertisers.map((a) => (
                                     <SelectItem key={a.id} value={a.id}>
                                         {a.name}
                                     </SelectItem>
@@ -774,8 +775,8 @@ export function AddAdCampaignDialog({
                     <Button variant="outline" data-testid="button-cancel-campaign" onClick={() => onOpenChange(false)}>
                         Cancel
                     </Button>
-                    <Button data-testid="button-create-campaign" disabled={!canSubmit || createMut.isPending} onClick={() => void handleSubmit()}>
-                        {createMut.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create Campaign'}
+                    <Button data-testid="button-create-campaign" disabled={!canSubmit || submitting} onClick={() => handleSubmit()}>
+                        {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create Campaign'}
                     </Button>
                 </DialogFooter>
             </DialogContent>

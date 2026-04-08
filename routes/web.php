@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminAdsActionController;
+use App\Http\Controllers\Admin\AdsPageController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -13,22 +15,31 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 });
 
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('admin', fn () => redirect()->route('admin.ads.audio'))->name('admin.dashboard');
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', fn () => redirect()->route('admin.ads.audio'))->name('dashboard');
 
-    Route::prefix('admin/ads')->name('admin.ads.')->group(function () {
-        Route::get('audio', fn () => Inertia::render('admin/ads/audio'))->name('audio');
-        Route::get('video', fn () => Inertia::render('admin/ads/video'))->name('video');
-        Route::get('vast', fn () => Inertia::render('admin/ads/vast'))->name('vast');
-        Route::get('banner', fn () => Inertia::render('admin/ads/banner'))->name('banner');
-        Route::get('advertisers', fn () => Inertia::render('admin/ads/advertisers'))->name('advertisers');
-        Route::get('free-tier', fn () => Inertia::render('admin/ads/free-tier'))->name('free-tier');
-        Route::get('rules', fn () => Inertia::render('admin/ads/rules'))->name('rules');
-        Route::get('analytics', fn () => Inertia::render('admin/ads/analytics'))->name('analytics');
-        Route::get('platform-banners', fn () => Inertia::render('admin/ads/platform-banners'))->name('platform-banners');
-        Route::get('stripe', fn () => Inertia::render('admin/ads/stripe'))->name('stripe');
-        Route::get('plans', fn () => Inertia::render('admin/ads/plans'))->name('plans');
-        Route::get('levels', fn () => Inertia::render('admin/ads/levels'))->name('levels');
+    Route::prefix('ads')->name('ads.')->group(function () {
+        Route::post('assets', [AdminAdsActionController::class, 'storeAdAsset'])->name('assets.store');
+        Route::post('assets/json', [AdminAdsActionController::class, 'storeAdAssetJson'])->name('assets.store-json');
+        Route::patch('assets/{id}/toggle', [AdminAdsActionController::class, 'toggleAdAsset'])->name('assets.toggle');
+        Route::delete('assets/{id}', [AdminAdsActionController::class, 'destroyAdAsset'])->name('assets.destroy');
+        Route::post('advertisers', [AdminAdsActionController::class, 'storeAdvertiser'])->name('advertisers.store');
+        Route::put('settings/stripe', [AdminAdsActionController::class, 'updateStripeKeys'])->name('settings.stripe');
+        Route::post('subscription/plans', [AdminAdsActionController::class, 'storeSubscriptionPlan'])->name('subscription.plans.store');
+        Route::post('game-level-ad-rules', [AdminAdsActionController::class, 'storeGameLevelRule'])->name('game-level-ad-rules.store');
+
+        Route::get('audio', [AdsPageController::class, 'audio'])->name('audio');
+        Route::get('video', [AdsPageController::class, 'video'])->name('video');
+        Route::get('vast', [AdsPageController::class, 'vast'])->name('vast');
+        Route::get('banner', [AdsPageController::class, 'banner'])->name('banner');
+        Route::get('advertisers', [AdsPageController::class, 'advertisers'])->name('advertisers');
+        Route::get('free-tier', [AdsPageController::class, 'freeTier'])->name('free-tier');
+        Route::get('rules', [AdsPageController::class, 'rules'])->name('rules');
+        Route::get('analytics', [AdsPageController::class, 'analytics'])->name('analytics');
+        Route::get('platform-banners', [AdsPageController::class, 'platformBanners'])->name('platform-banners');
+        Route::get('stripe', [AdsPageController::class, 'stripe'])->name('stripe');
+        Route::get('plans', [AdsPageController::class, 'plans'])->name('plans');
+        Route::get('levels', [AdsPageController::class, 'levels'])->name('levels');
     });
 });
 

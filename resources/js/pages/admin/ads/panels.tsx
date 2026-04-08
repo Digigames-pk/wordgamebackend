@@ -2,16 +2,18 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { apiJson } from '@/lib/api';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { router } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
-export function RulesPanel() {
-    const q = useQuery({
-        queryKey: ['admin', 'rules'],
-        queryFn: () => apiJson<{ rules: Record<string, unknown>[] }>('/ads/rules'),
-    });
+function inertiaErrorMessage(errors: Record<string, string | string[] | undefined>): string {
+    const first = Object.values(errors).find(Boolean);
+    if (Array.isArray(first)) return first[0] ?? 'Request failed';
+    return typeof first === 'string' ? first : 'Request failed';
+}
 
+export function RulesPanel({ rules }: { rules: Record<string, unknown>[] }) {
     return (
         <Card>
             <CardHeader>
@@ -19,19 +21,13 @@ export function RulesPanel() {
                 <CardDescription>Frequency caps and allowed hours</CardDescription>
             </CardHeader>
             <CardContent>
-                {q.isLoading && <p className="text-muted-foreground">Loading…</p>}
-                <pre className="max-h-96 overflow-auto rounded-md border bg-muted/50 p-4 text-xs">{JSON.stringify(q.data?.rules, null, 2)}</pre>
+                <pre className="max-h-96 overflow-auto rounded-md border bg-muted/50 p-4 text-xs">{JSON.stringify(rules, null, 2)}</pre>
             </CardContent>
         </Card>
     );
 }
 
-export function AnalyticsPanel() {
-    const q = useQuery({
-        queryKey: ['admin', 'platform-analytics'],
-        queryFn: () => apiJson<{ analytics: Record<string, number> }>('/ads/platform-analytics'),
-    });
-
+export function AnalyticsPanel({ analytics }: { analytics: Record<string, number> }) {
     return (
         <Card>
             <CardHeader>
@@ -39,19 +35,13 @@ export function AnalyticsPanel() {
                 <CardDescription>Aggregate impressions and clicks</CardDescription>
             </CardHeader>
             <CardContent>
-                {q.isLoading && <p className="text-muted-foreground">Loading…</p>}
-                <pre className="rounded-md border bg-muted/50 p-4 text-sm">{JSON.stringify(q.data?.analytics, null, 2)}</pre>
+                <pre className="rounded-md border bg-muted/50 p-4 text-sm">{JSON.stringify(analytics, null, 2)}</pre>
             </CardContent>
         </Card>
     );
 }
 
-export function BannersPanel() {
-    const q = useQuery({
-        queryKey: ['admin', 'banners'],
-        queryFn: () => apiJson<{ banners: Record<string, unknown>[] }>('/admin/banners'),
-    });
-
+export function BannersPanel({ banners }: { banners: Record<string, unknown>[] }) {
     return (
         <Card>
             <CardHeader>
@@ -59,9 +49,8 @@ export function BannersPanel() {
                 <CardDescription>Image banners for the game shell (outside VAST/video ads)</CardDescription>
             </CardHeader>
             <CardContent>
-                {q.isLoading && <p className="text-muted-foreground">Loading…</p>}
                 <ul className="space-y-2 text-sm">
-                    {q.data?.banners?.map((b) => (
+                    {banners.map((b) => (
                         <li key={String(b.id)} className="rounded border p-2">
                             {String(b.name ?? b.id)}
                         </li>
@@ -72,61 +61,71 @@ export function BannersPanel() {
     );
 }
 
-export function StripePanel() {
-    const q = useQuery({
-        queryKey: ['admin', 'stripe-settings'],
-        queryFn: () =>
-            apiJson<{
-                stripe_publishable_key: string | null;
-                stripe_secret_key_preview: string | null;
-                webhook_url: string;
-            }>('/admin/settings/stripe'),
-    });
-    const qc = useQueryClient();
+export function StripePanel({
+    stripeSettings,
+}: {
+    stripeSettings: {
+        stripe_publishable_key: string | null;
+        stripe_secret_key_preview: string | null;
+        webhook_url: string;
+    };
+}) {
     const [pub, setPub] = useState('');
     const [sec, setSec] = useState('');
     const [wh, setWh] = useState('');
+    const [saving, setSaving] = useState(false);
 
-    const save = useMutation({
-        mutationFn: () =>
-            apiJson('/admin/settings/stripe', {
-                method: 'PUT',
-                body: JSON.stringify({
-                    stripe_publishable_key: pub || undefined,
-                    stripe_secret_key: sec || undefined,
-                    stripe_webhook_secret: wh || undefined,
-                }),
-            }),
-        onSuccess: () => {
-            qc.invalidateQueries({ queryKey: ['admin', 'stripe-settings'] });
-            setSec('');
-            setWh('');
-        },
-    });
+    const save = () => {
+        setSaving(true);
+        router.put(
+            route('admin.ads.settings.stripe'),
+            {
+                stripe_publishable_key: pub || undefined,
+                stripe_secret_key: sec || undefined,
+                stripe_webhook_secret: wh || undefined,
+            },
+            {
+                preserveScroll: true,
+                onFinish: () => setSaving(false),
+                onSuccess: () => {
+                    toast.success('Stripe settings saved');
+                    setSec('');
+                    setWh('');
+                },
+                onError: (errors) => toast.error(inertiaErrorMessage(errors)),
+            },
+        );
+    };
 
     return (
         <Card>
             <CardHeader>
                 <CardTitle>Stripe keys</CardTitle>
                 <CardDescription>
-                    Webhook URL: <code className="text-xs">{q.data?.webhook_url}</code>
+                    Webhook URL: <code className="text-xs">{stripeSettings.webhook_url}</code>
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-                {q.isLoading && <p>Loading…</p>}
                 <div className="space-y-2">
                     <Label>Publishable key</Label>
-                    <Input value={pub} onChange={(e) => setPub(e.target.value)} placeholder={q.data?.stripe_publishable_key ?? ''} />
+                    <Input
+                        value={pub}
+                        onChange={(e) => setPub(e.target.value)}
+                        placeholder={stripeSettings.stripe_publishable_key ?? ''}
+                    />
                 </div>
                 <div className="space-y-2">
-                    <Label>Secret key {q.data?.stripe_secret_key_preview ? `(saved ${q.data.stripe_secret_key_preview})` : ''}</Label>
+                    <Label>
+                        Secret key{' '}
+                        {stripeSettings.stripe_secret_key_preview ? `(saved ${stripeSettings.stripe_secret_key_preview})` : ''}
+                    </Label>
                     <Input type="password" value={sec} onChange={(e) => setSec(e.target.value)} placeholder="sk_…" />
                 </div>
                 <div className="space-y-2">
                     <Label>Webhook signing secret</Label>
                     <Input type="password" value={wh} onChange={(e) => setWh(e.target.value)} placeholder="whsec_…" />
                 </div>
-                <Button onClick={() => save.mutate()} disabled={save.isPending}>
+                <Button onClick={save} disabled={saving}>
                     Save
                 </Button>
             </CardContent>
@@ -134,32 +133,33 @@ export function StripePanel() {
     );
 }
 
-export function PlansPanel() {
-    const q = useQuery({
-        queryKey: ['admin', 'plans'],
-        queryFn: () => apiJson<{ plans: Record<string, unknown>[] }>('/admin/subscription/plans'),
-    });
-    const qc = useQueryClient();
+export function PlansPanel({ plans }: { plans: Record<string, unknown>[] }) {
     const [name, setName] = useState('Pro');
     const [amount, setAmount] = useState('999');
     const [interval, setInterval] = useState('month');
+    const [creating, setCreating] = useState(false);
 
-    const create = useMutation({
-        mutationFn: () =>
-            apiJson('/admin/subscription/plans', {
-                method: 'POST',
-                body: JSON.stringify({
-                    name,
-                    description: 'Removes ads',
-                    interval,
-                    amount: Number(amount),
-                    currency: 'usd',
-                    removes_ads: true,
-                    is_active: true,
-                }),
-            }),
-        onSuccess: () => qc.invalidateQueries({ queryKey: ['admin', 'plans'] }),
-    });
+    const create = () => {
+        setCreating(true);
+        router.post(
+            route('admin.ads.subscription.plans.store'),
+            {
+                name,
+                description: 'Removes ads',
+                interval,
+                amount: Number(amount),
+                currency: 'usd',
+                removes_ads: true,
+                is_active: true,
+            },
+            {
+                preserveScroll: true,
+                onFinish: () => setCreating(false),
+                onSuccess: () => toast.success('Plan created'),
+                onError: (errors) => toast.error(inertiaErrorMessage(errors)),
+            },
+        );
+    };
 
     return (
         <Card>
@@ -182,12 +182,11 @@ export function PlansPanel() {
                         <Input value={interval} onChange={(e) => setInterval(e.target.value)} placeholder="month or year" />
                     </div>
                 </div>
-                <Button onClick={() => create.mutate()} disabled={create.isPending}>
+                <Button onClick={create} disabled={creating}>
                     Create & sync to Stripe
                 </Button>
-                {q.isLoading && <p>Loading…</p>}
                 <ul className="space-y-2 text-sm">
-                    {q.data?.plans?.map((p) => (
+                    {plans.map((p) => (
                         <li key={String(p.id)} className="rounded border p-2">
                             {String(p.name)} — {String(p.amount)} {String(p.currency)} / {String(p.interval)} (
                             {String(p.stripe_price_id ?? 'no price')})
@@ -199,30 +198,31 @@ export function PlansPanel() {
     );
 }
 
-export function LevelsPanel() {
-    const q = useQuery({
-        queryKey: ['admin', 'levels'],
-        queryFn: () => apiJson<{ rules: Record<string, unknown>[] }>('/admin/game-level-ad-rules'),
-    });
-    const qc = useQueryClient();
+export function LevelsPanel({ levelRules }: { levelRules: Record<string, unknown>[] }) {
     const [from, setFrom] = useState('1');
     const [to, setTo] = useState('');
     const [count, setCount] = useState('1');
+    const [creating, setCreating] = useState(false);
 
-    const create = useMutation({
-        mutationFn: () =>
-            apiJson('/admin/game-level-ad-rules', {
-                method: 'POST',
-                body: JSON.stringify({
-                    level_from: Number(from),
-                    level_to: to ? Number(to) : null,
-                    ads_after_level_complete: Number(count),
-                    is_active: true,
-                    sort_order: 0,
-                }),
-            }),
-        onSuccess: () => qc.invalidateQueries({ queryKey: ['admin', 'levels'] }),
-    });
+    const create = () => {
+        setCreating(true);
+        router.post(
+            route('admin.ads.game-level-ad-rules.store'),
+            {
+                level_from: Number(from),
+                level_to: to ? Number(to) : null,
+                ads_after_level_complete: Number(count),
+                is_active: true,
+                sort_order: 0,
+            },
+            {
+                preserveScroll: true,
+                onFinish: () => setCreating(false),
+                onSuccess: () => toast.success('Rule added'),
+                onError: (errors) => toast.error(inertiaErrorMessage(errors)),
+            },
+        );
+    };
 
     return (
         <Card>
@@ -245,10 +245,10 @@ export function LevelsPanel() {
                         <Input value={count} onChange={(e) => setCount(e.target.value)} />
                     </div>
                 </div>
-                <Button onClick={() => create.mutate()} disabled={create.isPending}>
+                <Button onClick={create} disabled={creating}>
                     Add rule
                 </Button>
-                <pre className="max-h-96 overflow-auto rounded-md border bg-muted/50 p-4 text-xs">{JSON.stringify(q.data?.rules, null, 2)}</pre>
+                <pre className="max-h-96 overflow-auto rounded-md border bg-muted/50 p-4 text-xs">{JSON.stringify(levelRules, null, 2)}</pre>
             </CardContent>
         </Card>
     );

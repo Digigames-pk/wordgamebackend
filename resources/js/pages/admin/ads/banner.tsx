@@ -1,4 +1,4 @@
-import { AdsTypeView } from './ads-type-view';
+import { AdsTypeView, type AdminAdAssetRow, type AdminAdvertiserOption } from './ads-type-view';
 import { type BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -6,6 +6,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Banner ads', href: '/admin/ads/banner' },
 ];
 
-export default function AdminAdsBannerPage() {
-    return <AdsTypeView adType="banner" title="Banner ads" breadcrumbs={breadcrumbs} />;
+export default function AdminAdsBannerPage({
+    assets,
+    advertisers,
+}: {
+    assets: AdminAdAssetRow[];
+    advertisers: AdminAdvertiserOption[];
+}) {
+    return <AdsTypeView adType="banner" title="Banner ads" breadcrumbs={breadcrumbs} assets={assets} advertisers={advertisers} />;
 }

@@ -8,7 +8,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Level ad rules', href: '/admin/ads/levels' },
 ];
 
-export default function AdminAdsLevelsPage() {
+export default function AdminAdsLevelsPage({ levelRules }: { levelRules: Record<string, unknown>[] }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Level ad rules" />
@@ -17,7 +17,7 @@ export default function AdminAdsLevelsPage() {
                     <h2 className="font-display text-3xl font-bold tracking-tight">Game level ad rules</h2>
                     <p className="mt-1 text-muted-foreground">How many ad opportunities after completing a level.</p>
                 </div>
-                <LevelsPanel />
+                <LevelsPanel levelRules={levelRules} />
             </div>
         </AppLayout>
     );

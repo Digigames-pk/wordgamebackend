@@ -3,11 +3,24 @@ import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
+import {
+    BarChart3,
+    BookOpen,
+    Code,
+    Folder,
+    Image,
+    LayoutGrid,
+    LayoutList,
+    Layers,
+    Music,
+    Settings,
+    Users,
+    Video,
+    Wallet,
+    Waypoints,
+} from 'lucide-react';
 import AppLogo from './app-logo';
-import { usePage } from '@inertiajs/react';
-import { AdminAdsNav } from '@/components/admin-ads-nav';
 
 function useMainNavItems(): NavItem[] {
     return [
@@ -18,6 +31,21 @@ function useMainNavItems(): NavItem[] {
         },
     ];
 }
+
+const adminNavItems: NavItem[] = [
+    { title: 'Audio ads', url: '/admin/ads/audio', icon: Music },
+    { title: 'VAST / VMAP', url: '/admin/ads/vast', icon: Code },
+    { title: 'Video ads', url: '/admin/ads/video', icon: Video },
+    { title: 'Banner ads', url: '/admin/ads/banner', icon: Image },
+    { title: 'Advertisers', url: '/admin/ads/advertisers', icon: Users },
+    { title: 'Free tier settings', url: '/admin/ads/free-tier', icon: Settings },
+    { title: 'Ad rules', url: '/admin/ads/rules', icon: Layers },
+    { title: 'Analytics', url: '/admin/ads/analytics', icon: BarChart3 },
+    { title: 'Platform banners', url: '/admin/ads/platform-banners', icon: Image },
+    { title: 'Stripe keys', url: '/admin/ads/stripe', icon: Wallet },
+    { title: 'Subscription plans', url: '/admin/ads/plans', icon: Waypoints },
+    { title: 'Level ad rules', url: '/admin/ads/levels', icon: LayoutList },
+];
 
 const footerNavItems: NavItem[] = [
     {
@@ -52,7 +80,7 @@ export function AppSidebar() {
 
             <SidebarContent>
                 <NavMain items={mainNavItems} />
-                {auth.user?.is_admin ? <AdminAdsNav /> : null}
+                {auth.user?.is_admin ? <NavMain items={adminNavItems} groupLabel="Administration" /> : null}
             </SidebarContent>
 
             <SidebarFooter>
