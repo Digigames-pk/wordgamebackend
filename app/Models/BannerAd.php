@@ -9,6 +9,15 @@ class BannerAd extends Model
 {
     use HasUuids;
 
+    protected static function booted(): void
+    {
+        static::creating(function (BannerAd $banner): void {
+            if (! filled($banner->image_url)) {
+                $banner->image_url = 'placeholder://platform-banner';
+            }
+        });
+    }
+
     protected $fillable = [
         'image_url', 'link_url', 'alt_text', 'name', 'position', 'size', 'weight',
         'is_active', 'is_platform_default', 'click_count', 'impression_count',

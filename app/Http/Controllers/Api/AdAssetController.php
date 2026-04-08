@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdAnalyticsEvent;
 use App\Models\AdAsset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -140,7 +141,7 @@ class AdAssetController extends Controller
         AdAsset::query()->findOrFail($id);
         $eventType = $request->query('eventType');
 
-        $q = \App\Models\AdAnalyticsEvent::query()->where('ad_asset_id', $id);
+        $q = AdAnalyticsEvent::query()->where('ad_asset_id', $id);
         if ($eventType) {
             $q->where('event_type', $eventType);
         }
@@ -203,13 +204,6 @@ class AdAssetController extends Controller
         $payload = $request->validate($rules);
 
         if ($creating) {
-            if (empty($payload['asset_url']) && empty($payload['vast_tag_url']) && empty($payload['vmap_tag_url'])) {
-                if (($payload['type'] ?? '') === 'display') {
-                    $payload['asset_url'] = 'placeholder://banner-ad';
-                } elseif (! empty($payload['vast_tag_url']) || ! empty($payload['vmap_tag_url'])) {
-                    $payload['asset_url'] = $payload['asset_url'] ?? 'programmatic://vast-vmap-ad';
-                }
-            }
             if (! empty($payload['vast_tag_url']) || ! empty($payload['vmap_tag_url'])) {
                 $payload['asset_url'] = $payload['asset_url'] ?? 'programmatic://vast-vmap-ad';
             }

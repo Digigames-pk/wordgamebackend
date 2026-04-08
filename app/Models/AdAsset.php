@@ -11,6 +11,29 @@ class AdAsset extends Model
 {
     use HasUuids;
 
+    protected static function booted(): void
+    {
+        static::creating(function (AdAsset $adAsset): void {
+            if (filled($adAsset->asset_url)) {
+                return;
+            }
+
+            if (filled($adAsset->vast_tag_url) || filled($adAsset->vmap_tag_url)) {
+                $adAsset->asset_url = 'programmatic://vast-vmap-ad';
+
+                return;
+            }
+
+            $type = (string) ($adAsset->type ?? '');
+
+            $adAsset->asset_url = match ($type) {
+                'display' => 'placeholder://banner-ad',
+                'vast' => 'programmatic://vast-vmap-ad',
+                default => 'placeholder://ad-asset',
+            };
+        });
+    }
+
     protected $fillable = [
         'owner_type', 'advertiser_id', 'name', 'type', 'format', 'placement_type',
         'asset_url', 'video_url', 'thumbnail_url', 'aspect_ratio', 'duration_sec',

@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\AdAsset;
+use App\Models\Subscription;
+use App\Models\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
@@ -41,6 +43,32 @@ class ApiAdsTest extends TestCase
         $this->getJson('/api/ads/assets')->assertOk();
     }
 
+    public function test_store_json_ad_asset_fills_asset_url_when_omitted(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+
+        Sanctum::actingAs($admin);
+
+        $response = $this->postJson('/api/ads/assets/json', [
+            'name' => 'TESTAudio Ad',
+            'type' => 'audio',
+            'format' => 'audio',
+            'placement_type' => 'all',
+            'duration_sec' => 30,
+            'skip_after_sec' => 5,
+            'is_skippable' => true,
+            'metadata' => ['target_tier' => 'free'],
+            'weight' => 5,
+        ]);
+
+        $response->assertCreated();
+        $this->assertDatabaseHas('ad_assets', [
+            'name' => 'TESTAudio Ad',
+            'type' => 'audio',
+            'asset_url' => 'placeholder://ad-asset',
+        ]);
+    }
+
     public function test_player_cannot_access_admin_assets(): void
     {
         $player = User::factory()->create(['is_admin' => false]);
@@ -62,7 +90,7 @@ class ApiAdsTest extends TestCase
 
     public function test_ad_free_user_gets_no_ad(): void
     {
-        $plan = \App\Models\SubscriptionPlan::query()->create([
+        $plan = SubscriptionPlan::query()->create([
             'name' => 'Test',
             'description' => null,
             'interval' => 'month',
@@ -75,7 +103,7 @@ class ApiAdsTest extends TestCase
         ]);
 
         $user = User::factory()->create(['is_admin' => false]);
-        \App\Models\Subscription::query()->create([
+        Subscription::query()->create([
             'user_id' => $user->id,
             'subscription_plan_id' => $plan->id,
             'stripe_customer_id' => 'cus_test',
