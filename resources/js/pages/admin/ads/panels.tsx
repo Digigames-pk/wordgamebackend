@@ -1,7 +1,10 @@
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { postWithMethod } from '@/lib/inertia-form-method';
 import { router } from '@inertiajs/react';
 import { route } from 'ziggy-js';
 import { useState } from 'react';
@@ -77,7 +80,8 @@ export function StripePanel({
 
     const save = () => {
         setSaving(true);
-        router.put(
+        postWithMethod(
+            'put',
             route('admin.ads.settings.stripe'),
             {
                 stripe_publishable_key: pub || undefined,
@@ -198,7 +202,18 @@ export function PlansPanel({ plans }: { plans: Record<string, unknown>[] }) {
     );
 }
 
-export function LevelsPanel({ levelRules }: { levelRules: Record<string, unknown>[] }) {
+export interface LevelAdRuleRow {
+    id: number;
+    sort_order: number;
+    level_from: number;
+    level_to: number | null;
+    ads_after_level_complete: number;
+    is_active: boolean;
+    created_at?: string | null;
+    updated_at?: string | null;
+}
+
+export function LevelsPanel({ levelRules }: { levelRules: LevelAdRuleRow[] }) {
     const [from, setFrom] = useState('1');
     const [to, setTo] = useState('');
     const [count, setCount] = useState('1');
@@ -248,7 +263,47 @@ export function LevelsPanel({ levelRules }: { levelRules: Record<string, unknown
                 <Button onClick={create} disabled={creating}>
                     Add rule
                 </Button>
-                <pre className="max-h-96 overflow-auto rounded-md border bg-muted/50 p-4 text-xs">{JSON.stringify(levelRules, null, 2)}</pre>
+                {levelRules.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">No level rules yet. Add one above.</p>
+                ) : (
+                    <div className="rounded-md border">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="w-14">Order</TableHead>
+                                    <TableHead>Level from</TableHead>
+                                    <TableHead>Level to</TableHead>
+                                    <TableHead>Ads after level</TableHead>
+                                    <TableHead>Active</TableHead>
+                                    <TableHead className="text-right">Updated</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {levelRules.map((r) => (
+                                    <TableRow key={r.id}>
+                                        <TableCell className="font-mono text-muted-foreground">{r.sort_order}</TableCell>
+                                        <TableCell className="font-medium">{r.level_from}</TableCell>
+                                        <TableCell>{r.level_to ?? '—'}</TableCell>
+                                        <TableCell>{r.ads_after_level_complete}</TableCell>
+                                        <TableCell>
+                                            <Badge variant={r.is_active ? 'default' : 'secondary'}>
+                                                {r.is_active ? 'Yes' : 'No'}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell className="text-right text-xs text-muted-foreground">
+                                            {r.updated_at
+                                                ? new Date(r.updated_at).toLocaleString(undefined, {
+                                                      dateStyle: 'short',
+                                                      timeStyle: 'short',
+                                                  })
+                                                : '—'}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                )}
             </CardContent>
         </Card>
     );

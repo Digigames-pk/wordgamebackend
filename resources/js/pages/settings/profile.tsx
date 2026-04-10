@@ -22,7 +22,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
     const { auth } = usePage<SharedData>().props;
 
-    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
+    const { data, setData, post, errors, processing, recentlySuccessful, transform } = useForm({
         name: auth.user.name,
         email: auth.user.email,
     });
@@ -30,7 +30,8 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        patch(route('profile.update'));
+        transform((form) => ({ ...form, _method: 'patch' }));
+        post(route('profile.update'));
     };
 
     return (

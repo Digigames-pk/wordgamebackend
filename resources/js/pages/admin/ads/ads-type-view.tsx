@@ -8,6 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
+import { postWithMethod } from '@/lib/inertia-form-method';
 import { Head, router } from '@inertiajs/react';
 import { route } from 'ziggy-js';
 import {
@@ -117,7 +118,8 @@ export function AdsTypeView({ adType, title, breadcrumbs, assets, advertisers }:
 
     const runToggle = (id: string) => {
         setBusyAssetId(id);
-        router.patch(
+        postWithMethod(
+            'patch',
             route('admin.ads.assets.toggle', id),
             {},
             {
@@ -131,7 +133,7 @@ export function AdsTypeView({ adType, title, breadcrumbs, assets, advertisers }:
 
     const runDelete = (id: string) => {
         setBusyAssetId(id);
-        router.delete(route('admin.ads.assets.destroy', id), {
+        postWithMethod('delete', route('admin.ads.assets.destroy', id), {}, {
             preserveScroll: true,
             onFinish: () => setBusyAssetId(null),
             onSuccess: () => toast.success('Ad deleted'),

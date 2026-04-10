@@ -1,4 +1,4 @@
-import { LevelsPanel } from './panels';
+import { LevelsPanel, type LevelAdRuleRow } from './panels';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
@@ -8,7 +8,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Level ad rules', href: '/admin/ads/levels' },
 ];
 
-export default function AdminAdsLevelsPage({ levelRules }: { levelRules: Record<string, unknown>[] }) {
+export default function AdminAdsLevelsPage({ levelRules }: { levelRules: LevelAdRuleRow[] }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Level ad rules" />
