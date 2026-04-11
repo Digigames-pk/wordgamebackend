@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\AdAnalyticsEvent;
 use App\Models\AdAsset;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -66,7 +65,7 @@ class AdAssetController extends Controller
             $file = $request->file('file');
             $folder = str_starts_with((string) $file->getMimeType(), 'video/') ? 'ad-videos' : 'ad-audio';
             $disk = $this->adStorageDisk();
-            $path = $file->store("{$folder}/global", $disk);
+            $path = Storage::disk($disk)->putFile("{$folder}/global", $file, 'public');
             $url = Storage::disk($disk)->url($path);
             if (str_starts_with((string) $file->getMimeType(), 'video/')) {
                 $data['video_url'] = $url;
@@ -95,7 +94,7 @@ class AdAssetController extends Controller
             $file = $request->file('file');
             $folder = str_starts_with((string) $file->getMimeType(), 'video/') ? 'ad-videos' : 'ad-audio';
             $disk = $this->adStorageDisk();
-            $path = $file->store("{$folder}/global", $disk);
+            $path = Storage::disk($disk)->putFile("{$folder}/global", $file, 'public');
             $url = Storage::disk($disk)->url($path);
             if (str_starts_with((string) $file->getMimeType(), 'video/')) {
                 $data['video_url'] = $url;
@@ -225,7 +224,7 @@ class AdAssetController extends Controller
     }
 
     /**
-     * Use Wasabi when configured so uploads and {@see Filesystem::url()} are consistent.
+     * Use Wasabi when configured so uploads and public URLs from Storage are consistent.
      */
     protected function adStorageDisk(): string
     {

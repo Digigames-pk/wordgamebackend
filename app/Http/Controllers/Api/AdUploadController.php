@@ -45,6 +45,7 @@ class AdUploadController extends Controller
         }
 
         $client = new S3Client($s3Config);
+        // public-read so the returned publicUrl works anonymously in browsers / mobile players
         $cmd = $client->getCommand('PutObject', [
             'Bucket' => $disk['bucket'],
             'Key' => $objectKey,

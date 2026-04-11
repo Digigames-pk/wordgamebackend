@@ -54,6 +54,7 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+            'visibility' => 'public',
             'throw' => false,
         ],
         'wasabi' => [
@@ -67,6 +68,7 @@ return [
                 ? 'https://'.env('WAS_BUCKET').'.s3.'.env('WAS_DEFAULT_REGION', 'us-east-1').'.wasabisys.com'
                 : null),
             'use_path_style_endpoint' => env('WAS_USE_PATH_STYLE_ENDPOINT', false),
+            'visibility' => 'public',
             'throw' => false,
         ],
 
