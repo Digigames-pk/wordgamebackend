@@ -56,6 +56,19 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
         ],
+        'wasabi' => [
+            'driver' => 's3',
+            'key' => env('WAS_ACCESS_KEY_ID'),
+            'secret' => env('WAS_SECRET_ACCESS_KEY'),
+            'region' => env('WAS_DEFAULT_REGION', 'us-east-1'),
+            'bucket' => env('WAS_BUCKET'),
+            'endpoint' => env('WAS_ENDPOINT', 'https://s3.'.env('WAS_DEFAULT_REGION', 'us-east-1').'.wasabisys.com'),
+            'url' => env('WAS_URL', env('WAS_BUCKET')
+                ? 'https://'.env('WAS_BUCKET').'.s3.'.env('WAS_DEFAULT_REGION', 'us-east-1').'.wasabisys.com'
+                : null),
+            'use_path_style_endpoint' => env('WAS_USE_PATH_STYLE_ENDPOINT', false),
+            'throw' => false,
+        ],
 
     ],
 

@@ -9,8 +9,14 @@ use Illuminate\Http\Request;
 
 class AdAnalyticsService
 {
-    public function trackAdEvent(Request $request, string $adAssetId, string $eventType, ?string $sessionId = null): void
-    {
+    public function trackAdEvent(
+        Request $request,
+        string $adAssetId,
+        string $eventType,
+        ?string $sessionId = null,
+        ?float $watchedDurationSec = null,
+        ?string $placement = null
+    ): void {
         $asset = AdAsset::query()->find($adAssetId);
         if (! $asset) {
             return;
@@ -19,6 +25,10 @@ class AdAnalyticsService
         $ua = $request->userAgent() ?? '';
         $deviceType = preg_match('/Mobile|Android|iPhone/i', $ua) ? 'mobile'
             : (preg_match('/Tablet|iPad/i', $ua) ? 'tablet' : 'desktop');
+
+        $watchedMs = $watchedDurationSec !== null
+            ? (int) round($watchedDurationSec * 1000)
+            : null;
 
         AdAnalyticsEvent::query()->create([
             'ad_asset_id' => $adAssetId,
@@ -30,6 +40,8 @@ class AdAnalyticsService
             'device_type' => $deviceType,
             'browser' => $this->simpleBrowser($ua),
             'session_id' => $sessionId,
+            'watched_duration_ms' => $watchedMs,
+            'placement' => $placement,
             'client_ip' => $request->ip(),
             'recorded_at' => now(),
         ]);

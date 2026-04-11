@@ -4,9 +4,9 @@ use App\Http\Controllers\Api\AdAssetController;
 use App\Http\Controllers\Api\AdCampaignController;
 use App\Http\Controllers\Api\AdRuleController;
 use App\Http\Controllers\Api\AdUploadController;
+use App\Http\Controllers\Api\AdvertiserController;
 use App\Http\Controllers\Api\AppSettingsController;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\AdvertiserController;
 use App\Http\Controllers\Api\BannerAdminController;
 use App\Http\Controllers\Api\GameLevelAdRuleController;
 use App\Http\Controllers\Api\GamePublicController;
@@ -34,10 +34,13 @@ Route::get('/game/level-ad-settings', [GamePublicController::class, 'levelAdSett
 Route::get('/game/config', [GamePublicController::class, 'config']);
 
 Route::middleware(['throttle:120,1'])->group(function () {
+    Route::get('/game/next-ad', [PublicAdController::class, 'nextInterstitial']);
+    Route::get('/ads/next-random', [PublicAdController::class, 'nextInterstitial']);
     Route::get('/ads/next-video', [PublicAdController::class, 'nextVideo']);
     Route::get('/ads/next-audio', [PublicAdController::class, 'nextAudio']);
     Route::post('/analytics/ad-event', [PublicAdController::class, 'trackAdEvent']);
     Route::get('/banners/public', [PublicBannerController::class, 'publicBanner']);
+    Route::get('/ads/banner', [PublicBannerController::class, 'publicBanner']);
     Route::post('/banners/{id}/click', [PublicBannerController::class, 'click']);
     Route::post('/banners/{id}/impression', [PublicBannerController::class, 'impression']);
 });

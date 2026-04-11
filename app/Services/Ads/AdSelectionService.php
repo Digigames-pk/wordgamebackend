@@ -4,11 +4,13 @@ namespace App\Services\Ads;
 
 use App\Models\AdAsset;
 use App\Models\BannerAd;
+use App\Models\GameLevelAdRule;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class AdSelectionService
 {
-    public function approvedGlobalAssets(): \Illuminate\Database\Eloquent\Builder
+    public function approvedGlobalAssets(): Builder
     {
         return AdAsset::query()
             ->where('owner_type', 'global')
@@ -30,7 +32,7 @@ class AdSelectionService
             ->filter(fn (AdAsset $a) => $this->isValidForSchedule($a));
 
         $videoAds = $assets->filter(function (AdAsset $a) {
-            return $a->video_url || $a->vast_tag_url;
+            return $a->video_url || $a->vast_tag_url || $a->vmap_tag_url;
         });
 
         $selected = $this->weightedRandom($videoAds);
@@ -41,10 +43,10 @@ class AdSelectionService
         return [
             'id' => $selected->id,
             'name' => $selected->name,
-            'videoUrl' => $selected->video_url,
-            'vastTagUrl' => $selected->vast_tag_url,
-            'vmapTagUrl' => $selected->vmap_tag_url,
-            'thumbnailUrl' => $selected->thumbnail_url,
+            'videoUrl' => $this->absolutePublicAssetUrl($selected->video_url),
+            'vastTagUrl' => $this->absolutePublicAssetUrl($selected->vast_tag_url),
+            'vmapTagUrl' => $this->absolutePublicAssetUrl($selected->vmap_tag_url),
+            'thumbnailUrl' => $this->absolutePublicAssetUrl($selected->thumbnail_url),
             'aspectRatio' => $selected->aspect_ratio ?? '16:9',
             'durationSec' => $selected->duration_sec,
             'skipAfterSec' => $selected->skip_after_sec ?? 5,
@@ -71,13 +73,121 @@ class AdSelectionService
         return [
             'id' => $selected->id,
             'name' => $selected->name,
-            'assetUrl' => $selected->asset_url,
+            'assetUrl' => $this->absolutePublicAssetUrl($selected->asset_url),
             'durationSec' => $selected->duration_sec,
             'skipAfterSec' => $selected->skip_after_sec ?? 5,
             'clickThroughUrl' => $selected->click_through_url,
             'type' => $selected->type,
             'format' => $selected->format,
         ];
+    }
+
+    /**
+     * Weighted random across audio + video + VAST/VMAP interstitial candidates.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function nextRandomInterstitialPayload(): ?array
+    {
+        $candidates = $this->interstitialCandidateAssets();
+        $selected = $this->weightedRandom($candidates);
+        if (! $selected instanceof AdAsset) {
+            return null;
+        }
+
+        return $this->normalizeInterstitialPayload($selected);
+    }
+
+    /**
+     * @return Collection<int, AdAsset>
+     */
+    public function interstitialCandidateAssets(): Collection
+    {
+        $videoAssets = $this->approvedGlobalAssets()
+            ->where(function ($q) {
+                $q->where('format', 'video')
+                    ->orWhere('type', 'vast');
+            })
+            ->get()
+            ->filter(fn (AdAsset $a) => $this->isValidForSchedule($a))
+            ->filter(function (AdAsset $a) {
+                return $a->video_url || $a->vast_tag_url || $a->vmap_tag_url;
+            });
+
+        $audioAds = $this->approvedGlobalAssets()
+            ->where('format', 'audio')
+            ->get()
+            ->filter(fn (AdAsset $a) => $this->isValidForSchedule($a) && filled($a->asset_url));
+
+        return $videoAssets->merge($audioAds)->values();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function normalizeInterstitialPayload(AdAsset $selected): array
+    {
+        $deliveryType = $this->deliveryTypeFor($selected);
+
+        return [
+            'id' => $selected->id,
+            'name' => $selected->name,
+            'deliveryType' => $deliveryType,
+            'assetUrl' => $this->absolutePublicAssetUrl($selected->asset_url),
+            'videoUrl' => $this->absolutePublicAssetUrl($selected->video_url),
+            'vastTagUrl' => $this->absolutePublicAssetUrl($selected->vast_tag_url),
+            'vmapTagUrl' => $this->absolutePublicAssetUrl($selected->vmap_tag_url),
+            'thumbnailUrl' => $this->absolutePublicAssetUrl($selected->thumbnail_url),
+            'aspectRatio' => $selected->aspect_ratio ?? '16:9',
+            'durationSec' => $selected->duration_sec,
+            'skipAfterSec' => $selected->skip_after_sec ?? 5,
+            'clickThroughUrl' => $selected->click_through_url,
+            'type' => $selected->type,
+            'format' => $selected->format,
+        ];
+    }
+
+    public function deliveryTypeFor(AdAsset $a): string
+    {
+        if ($a->format === 'audio') {
+            return 'audio';
+        }
+        if (filled($a->vmap_tag_url)) {
+            return 'vmap';
+        }
+        if (filled($a->vast_tag_url) && ! filled($a->video_url)) {
+            return 'vast';
+        }
+        if (filled($a->video_url)) {
+            return 'video';
+        }
+        if (filled($a->vast_tag_url)) {
+            return 'vast';
+        }
+
+        return 'video';
+    }
+
+    /**
+     * First matching active rule for a level (inclusive range).
+     */
+    public function resolveRuleForLevel(int $level): ?GameLevelAdRule
+    {
+        return GameLevelAdRule::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('level_from')
+            ->get()
+            ->first(function (GameLevelAdRule $r) use ($level) {
+                if ($level < $r->level_from) {
+                    return false;
+                }
+                if ($r->level_to !== null && $level > $r->level_to) {
+                    return false;
+                }
+
+                return true;
+            });
     }
 
     public function isValidForSchedule(AdAsset $ad): bool
@@ -158,12 +268,43 @@ class AdSelectionService
         return [
             'id' => $selected->id,
             'name' => $selected->name,
-            'imageUrl' => $selected->image_url,
+            'imageUrl' => $this->absolutePublicAssetUrl($selected->image_url),
             'linkUrl' => $selected->link_url,
             'altText' => $selected->alt_text,
             'position' => $selected->position,
             'size' => $selected->size,
             'weight' => $selected->weight,
         ];
+    }
+
+    /**
+     * Ensure clients always get a fetchable URL (Wasabi/S3 or absolute HTTP).
+     */
+    protected function absolutePublicAssetUrl(?string $url): ?string
+    {
+        if ($url === null || $url === '') {
+            return $url;
+        }
+        if (preg_match('#^https?://#i', $url)) {
+            return $url;
+        }
+        if (str_contains($url, '://')) {
+            return $url;
+        }
+        if (str_starts_with($url, '//')) {
+            return 'https:'.$url;
+        }
+
+        $base = config('filesystems.disks.wasabi.url');
+        if (is_string($base) && $base !== '') {
+            return rtrim($base, '/').'/'.ltrim($url, '/');
+        }
+
+        $aws = config('filesystems.disks.s3.url');
+        if (is_string($aws) && $aws !== '') {
+            return rtrim($aws, '/').'/'.ltrim($url, '/');
+        }
+
+        return $url;
     }
 }

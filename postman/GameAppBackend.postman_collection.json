@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
 		"name": "GameAppBackend API",
-		"description": "All routes from routes/api.php (Laravel default prefix: /api).\n\n**Sanctum (SPA / cookie):** For browser-style auth, call `GET /sanctum/csrf-cookie` on the same origin first, then send `X-XSRF-TOKEN` from the `XSRF-TOKEN` cookie and `Accept: application/json`.\n\n**Token (mobile / Bearer):** Use `Authorization: Bearer {{token}}` after login/register when using token abilities.\n\n**Admin routes** require `auth:sanctum` + `admin` middleware (user must be admin).",
+		"description": "All routes from routes/api.php (Laravel default prefix: /api).\n\n**Sanctum (SPA / cookie):** For browser-style auth, call `GET /sanctum/csrf-cookie` on the same origin first, then send `X-XSRF-TOKEN` from the `XSRF-TOKEN` cookie and `Accept: application/json`.\n\n**Token (mobile / Bearer):** Use `Authorization: Bearer {{token}}` after login/register when using token abilities.\n\n**Admin routes** require `auth:sanctum` + `admin` middleware (user must be admin).\n\n**Ads vs banners:** Interstitial ads (`ad_assets`) use `POST /api/analytics/ad-event` with `adAssetId`. Banners use `POST /api/banners/{id}/click` and `POST /api/banners/{id}/impression` only.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"variable": [
@@ -149,6 +149,36 @@
 					}
 				},
 				{
+					"name": "Next random interstitial (hint)",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/game/next-ad",
+						"description": "Weighted random among approved audio + video + VAST/VMAP. Response includes `deliveryType`, `assetUrl`, `videoUrl`, `vastTagUrl`, `vmapTagUrl`. Throttle: 120/min."
+					}
+				},
+				{
+					"name": "Next random interstitial (level query)",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/game/next-ad?level=5",
+						"description": "If `level` matches an active game_level_ad_rules row, `eligible` is true and `rule` is returned; otherwise `eligible` false and no ad. Throttle: 120/min."
+					}
+				},
+				{
+					"name": "Next random interstitial (alias)",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/next-random",
+						"description": "Same as GET /api/game/next-ad. Throttle: 120/min."
+					}
+				},
+				{
 					"name": "Track ad event",
 					"request": {
 						"auth": { "type": "noauth" },
@@ -159,10 +189,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"event_type\": \"impression\",\n  \"ad_asset_id\": \"uuid\"\n}"
+							"raw": "{\n  \"adAssetId\": \"{{asset_id}}\",\n  \"eventType\": \"impression\",\n  \"sessionId\": null,\n  \"watchedDuration\": 12.5,\n  \"placement\": \"hint\"\n}"
 						},
 						"url": "{{base_url}}/api/analytics/ad-event",
-						"description": "Throttle: 120/min. Body shape depends on PublicAdController validation."
+						"description": "Interstitial `ad_assets` only. `watchedDuration` is seconds (stored as ms). `placement`: hint | level | unknown. Banners: use /api/banners/{id}/click|impression. Throttle: 120/min."
 					}
 				},
 				{
@@ -172,6 +202,16 @@
 						"method": "GET",
 						"header": [{ "key": "Accept", "value": "application/json" }],
 						"url": "{{base_url}}/api/banners/public"
+					}
+				},
+				{
+					"name": "Public banner (alias)",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/json" }],
+						"url": "{{base_url}}/api/ads/banner",
+						"description": "Same response as GET /api/banners/public."
 					}
 				},
 				{
@@ -239,9 +279,12 @@
 							{ "key": "Accept", "value": "application/json" },
 							{ "key": "Content-Type", "value": "application/json" }
 						],
-						"body": { "mode": "raw", "raw": "{}" },
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"filename\": \"promo.mp4\",\n  \"contentType\": \"video/mp4\"\n}"
+						},
 						"url": "{{base_url}}/api/ads/upload-url",
-						"description": "auth:sanctum + admin"
+						"description": "auth:sanctum + admin. Prefers Wasabi (WAS_*) when set; else AWS S3. Response includes `publicUrl`, `maxUploadBytes` (200MB cap for client PUT). Set PHP upload_max_filesize/post_max_size ≥ 200M for multipart /api/ads/assets."
 					}
 				},
 				{

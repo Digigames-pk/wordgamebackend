@@ -14,7 +14,8 @@ class AdAnalyticsEvent extends Model
 
     protected $fillable = [
         'ad_asset_id', 'event_type', 'country', 'country_code', 'region', 'city',
-        'device_type', 'browser', 'session_id', 'client_ip', 'recorded_at',
+        'device_type', 'browser', 'session_id', 'watched_duration_ms', 'placement',
+        'client_ip', 'recorded_at',
     ];
 
     protected function casts(): array

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\AdAnalyticsEvent;
 use App\Models\AdAsset;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -12,6 +13,9 @@ use Illuminate\Validation\Rule;
 
 class AdAssetController extends Controller
 {
+    /** Max ~200 MiB for direct multipart uploads (also raise PHP upload_max_filesize / post_max_size on the server). */
+    public const MULTIPART_MAX_KB = 204800;
+
     public function index(): JsonResponse
     {
         $assets = AdAsset::query()->orderByDesc('created_at')->get();
@@ -51,14 +55,19 @@ class AdAssetController extends Controller
 
     public function storeMultipart(Request $request): JsonResponse
     {
+        $request->validate([
+            'file' => ['required', 'file', 'max:'.self::MULTIPART_MAX_KB],
+        ]);
+
         $data = $this->validatedAsset($request, creating: true);
         $data['owner_type'] = 'global';
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $folder = str_starts_with((string) $file->getMimeType(), 'video/') ? 'ad-videos' : 'ad-audio';
-            $path = $file->store("{$folder}/global", config('filesystems.default') === 'local' ? 'public' : config('filesystems.default'));
-            $url = Storage::disk(config('filesystems.default') === 'local' ? 'public' : config('filesystems.default'))->url($path);
+            $disk = $this->adStorageDisk();
+            $path = $file->store("{$folder}/global", $disk);
+            $url = Storage::disk($disk)->url($path);
             if (str_starts_with((string) $file->getMimeType(), 'video/')) {
                 $data['video_url'] = $url;
                 $data['asset_url'] = $url;
@@ -80,9 +89,12 @@ class AdAssetController extends Controller
         unset($data['owner_type']);
 
         if ($request->hasFile('file')) {
+            $request->validate([
+                'file' => ['required', 'file', 'max:'.self::MULTIPART_MAX_KB],
+            ]);
             $file = $request->file('file');
             $folder = str_starts_with((string) $file->getMimeType(), 'video/') ? 'ad-videos' : 'ad-audio';
-            $disk = config('filesystems.default') === 'local' ? 'public' : config('filesystems.default');
+            $disk = $this->adStorageDisk();
             $path = $file->store("{$folder}/global", $disk);
             $url = Storage::disk($disk)->url($path);
             if (str_starts_with((string) $file->getMimeType(), 'video/')) {
@@ -210,5 +222,27 @@ class AdAssetController extends Controller
         }
 
         return $payload;
+    }
+
+    /**
+     * Use Wasabi when configured so uploads and {@see Filesystem::url()} are consistent.
+     */
+    protected function adStorageDisk(): string
+    {
+        if ($this->wasabiConfigured()) {
+            return 'wasabi';
+        }
+
+        return config('filesystems.default') === 'local' ? 'public' : (string) config('filesystems.default');
+    }
+
+    protected function wasabiConfigured(): bool
+    {
+        $w = config('filesystems.disks.wasabi');
+
+        return is_array($w)
+            && filled($w['bucket'] ?? null)
+            && filled($w['key'] ?? null)
+            && filled($w['secret'] ?? null);
     }
 }

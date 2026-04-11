@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Aws\S3\S3Client;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+
 class AdUploadController extends Controller
 {
     public function presigned(Request $request): JsonResponse
@@ -15,15 +16,14 @@ class AdUploadController extends Controller
             'contentType' => ['required', 'string', 'max:255'],
         ]);
 
-        $key = env('AWS_ACCESS_KEY_ID');
-        $secret = env('AWS_SECRET_ACCESS_KEY');
-        $bucket = env('AWS_BUCKET');
-        $region = env('AWS_DEFAULT_REGION', 'us-east-1');
-        $endpoint = env('AWS_ENDPOINT');
-
-        if (! $key || ! $secret || ! $bucket) {
-            return response()->json(['error' => 'Storage not configured (set AWS_* in .env).'], 500);
+        $resolved = $this->resolveAdUploadDisk();
+        if ($resolved === null) {
+            return response()->json([
+                'error' => 'Storage not configured. Set WAS_* (Wasabi) or AWS_* (S3) in .env.',
+            ], 500);
         }
+
+        ['config' => $disk, 'publicBase' => $publicBase] = $resolved;
 
         $isVideo = str_starts_with($data['contentType'], 'video/');
         $isAudio = str_starts_with($data['contentType'], 'audio/');
@@ -33,20 +33,20 @@ class AdUploadController extends Controller
 
         $s3Config = [
             'version' => 'latest',
-            'region' => $region,
+            'region' => $disk['region'],
             'credentials' => [
-                'key' => $key,
-                'secret' => $secret,
+                'key' => $disk['key'],
+                'secret' => $disk['secret'],
             ],
         ];
-        if ($endpoint) {
-            $s3Config['endpoint'] = $endpoint;
-            $s3Config['use_path_style_endpoint'] = (bool) env('AWS_USE_PATH_STYLE_ENDPOINT', true);
+        if (! empty($disk['endpoint'])) {
+            $s3Config['endpoint'] = $disk['endpoint'];
+            $s3Config['use_path_style_endpoint'] = (bool) ($disk['use_path_style_endpoint'] ?? false);
         }
 
         $client = new S3Client($s3Config);
         $cmd = $client->getCommand('PutObject', [
-            'Bucket' => $bucket,
+            'Bucket' => $disk['bucket'],
             'Key' => $objectKey,
             'ContentType' => $data['contentType'],
             'ACL' => 'public-read',
@@ -55,16 +55,69 @@ class AdUploadController extends Controller
         $req = $client->createPresignedRequest($cmd, '+1 hour');
         $uploadUrl = (string) $req->getUri();
 
-        $publicBase = $endpoint
-            ? rtrim((string) $endpoint, '/').'/'.$bucket
-            : 'https://'.$bucket.'.s3.'.$region.'.amazonaws.com';
-
-        $publicUrl = $publicBase.'/'.$objectKey;
+        $publicUrl = rtrim((string) $publicBase, '/').'/'.$objectKey;
 
         return response()->json([
             'uploadUrl' => $uploadUrl,
             'publicUrl' => $publicUrl,
             'key' => $objectKey,
+            'maxUploadBytes' => 209_715_200,
         ]);
+    }
+
+    /**
+     * Prefer Wasabi when configured; otherwise AWS S3-compatible config.
+     *
+     * @return array{config: array<string, mixed>, publicBase: string}|null
+     */
+    protected function resolveAdUploadDisk(): ?array
+    {
+        $wasabi = config('filesystems.disks.wasabi');
+        if ($this->diskIsConfigured($wasabi)) {
+            $publicBase = filled($wasabi['url'] ?? null)
+                ? (string) $wasabi['url']
+                : $this->defaultWasabiPublicBase($wasabi);
+
+            return ['config' => $wasabi, 'publicBase' => $publicBase];
+        }
+
+        $s3 = config('filesystems.disks.s3');
+        if ($this->diskIsConfigured($s3)) {
+            $endpoint = $s3['endpoint'] ?? null;
+            $region = $s3['region'] ?? 'us-east-1';
+            $bucket = $s3['bucket'];
+            $publicBase = $s3['url'] ?? ($endpoint
+                ? rtrim((string) $endpoint, '/').'/'.$bucket
+                : 'https://'.$bucket.'.s3.'.$region.'.amazonaws.com');
+
+            return ['config' => $s3, 'publicBase' => $publicBase];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  array<string, mixed>|null  $disk
+     */
+    protected function diskIsConfigured(?array $disk): bool
+    {
+        if ($disk === null) {
+            return false;
+        }
+
+        return filled($disk['bucket'] ?? null)
+            && filled($disk['key'] ?? null)
+            && filled($disk['secret'] ?? null);
+    }
+
+    /**
+     * @param  array<string, mixed>  $wasabi
+     */
+    protected function defaultWasabiPublicBase(array $wasabi): string
+    {
+        $bucket = $wasabi['bucket'];
+        $region = $wasabi['region'] ?? 'us-east-1';
+
+        return 'https://'.$bucket.'.s3.'.$region.'.wasabisys.com';
     }
 }

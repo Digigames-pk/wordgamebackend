@@ -22,11 +22,53 @@ class ApiAdsTest extends TestCase
             ->assertJsonStructure(['ad', 'adsDisabled']);
     }
 
+    public function test_public_next_random_interstitial_returns_json(): void
+    {
+        $response = $this->getJson('/api/game/next-ad');
+
+        $response->assertOk()
+            ->assertJsonStructure(['ad', 'adsDisabled', 'eligible']);
+    }
+
+    public function test_public_ads_banner_alias_matches_banners_public(): void
+    {
+        $a = $this->getJson('/api/banners/public')->json();
+        $b = $this->getJson('/api/ads/banner')->json();
+
+        $this->assertSame($a, $b);
+    }
+
     public function test_ad_event_validation(): void
     {
         $response = $this->postJson('/api/analytics/ad-event', []);
 
         $response->assertStatus(422);
+    }
+
+    public function test_ad_event_stores_watched_duration_and_placement(): void
+    {
+        $asset = AdAsset::query()->create([
+            'name' => 'Track me',
+            'type' => 'audio',
+            'format' => 'audio',
+            'asset_url' => 'https://example.com/a.mp3',
+            'duration_sec' => 10,
+            'status' => 'approved',
+            'owner_type' => 'global',
+        ]);
+
+        $this->postJson('/api/analytics/ad-event', [
+            'adAssetId' => $asset->id,
+            'eventType' => 'impression',
+            'watchedDuration' => 3.5,
+            'placement' => 'hint',
+        ])->assertOk();
+
+        $this->assertDatabaseHas('ad_analytics_events', [
+            'ad_asset_id' => $asset->id,
+            'watched_duration_ms' => 3500,
+            'placement' => 'hint',
+        ]);
     }
 
     public function test_admin_assets_requires_authentication(): void
