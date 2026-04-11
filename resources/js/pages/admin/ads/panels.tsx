@@ -1,9 +1,7 @@
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { postWithMethod } from '@/lib/inertia-form-method';
 import { router } from '@inertiajs/react';
 import { route } from 'ziggy-js';
@@ -202,109 +200,3 @@ export function PlansPanel({ plans }: { plans: Record<string, unknown>[] }) {
     );
 }
 
-export interface LevelAdRuleRow {
-    id: number;
-    sort_order: number;
-    level_from: number;
-    level_to: number | null;
-    ads_after_level_complete: number;
-    is_active: boolean;
-    created_at?: string | null;
-    updated_at?: string | null;
-}
-
-export function LevelsPanel({ levelRules }: { levelRules: LevelAdRuleRow[] }) {
-    const [from, setFrom] = useState('1');
-    const [to, setTo] = useState('');
-    const [count, setCount] = useState('1');
-    const [creating, setCreating] = useState(false);
-
-    const create = () => {
-        setCreating(true);
-        router.post(
-            route('admin.ads.game-level-ad-rules.store'),
-            {
-                level_from: Number(from),
-                level_to: to ? Number(to) : null,
-                ads_after_level_complete: Number(count),
-                is_active: true,
-                sort_order: 0,
-            },
-            {
-                preserveScroll: true,
-                onFinish: () => setCreating(false),
-                onSuccess: () => toast.success('Rule added'),
-                onError: (errors) => toast.error(inertiaErrorMessage(errors)),
-            },
-        );
-    };
-
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Game level ad rules</CardTitle>
-                <CardDescription>How many ad opportunities after completing a level (matched by range).</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <div className="grid gap-2 md:grid-cols-3">
-                    <div>
-                        <Label>Level from</Label>
-                        <Input value={from} onChange={(e) => setFrom(e.target.value)} />
-                    </div>
-                    <div>
-                        <Label>Level to (empty = open)</Label>
-                        <Input value={to} onChange={(e) => setTo(e.target.value)} />
-                    </div>
-                    <div>
-                        <Label>Ads after level</Label>
-                        <Input value={count} onChange={(e) => setCount(e.target.value)} />
-                    </div>
-                </div>
-                <Button onClick={create} disabled={creating}>
-                    Add rule
-                </Button>
-                {levelRules.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No level rules yet. Add one above.</p>
-                ) : (
-                    <div className="rounded-md border">
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead className="w-14">Order</TableHead>
-                                    <TableHead>Level from</TableHead>
-                                    <TableHead>Level to</TableHead>
-                                    <TableHead>Ads after level</TableHead>
-                                    <TableHead>Active</TableHead>
-                                    <TableHead className="text-right">Updated</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {levelRules.map((r) => (
-                                    <TableRow key={r.id}>
-                                        <TableCell className="font-mono text-muted-foreground">{r.sort_order}</TableCell>
-                                        <TableCell className="font-medium">{r.level_from}</TableCell>
-                                        <TableCell>{r.level_to ?? '—'}</TableCell>
-                                        <TableCell>{r.ads_after_level_complete}</TableCell>
-                                        <TableCell>
-                                            <Badge variant={r.is_active ? 'default' : 'secondary'}>
-                                                {r.is_active ? 'Yes' : 'No'}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="text-right text-xs text-muted-foreground">
-                                            {r.updated_at
-                                                ? new Date(r.updated_at).toLocaleString(undefined, {
-                                                      dateStyle: 'short',
-                                                      timeStyle: 'short',
-                                                  })
-                                                : '—'}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </div>
-                )}
-            </CardContent>
-        </Card>
-    );
-}

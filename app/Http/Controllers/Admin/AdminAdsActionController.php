@@ -76,4 +76,18 @@ class AdminAdsActionController extends Controller
 
         return redirect()->back();
     }
+
+    public function updateGameLevelRule(Request $request, string $id): RedirectResponse
+    {
+        app(GameLevelAdRuleController::class)->update($request, $id);
+
+        return redirect()->back();
+    }
+
+    public function destroyGameLevelRule(string $id): RedirectResponse
+    {
+        app(GameLevelAdRuleController::class)->destroy($id);
+
+        return redirect()->back();
+    }
 }

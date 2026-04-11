@@ -27,6 +27,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::put('settings/stripe', [AdminAdsActionController::class, 'updateStripeKeys'])->name('settings.stripe');
         Route::post('subscription/plans', [AdminAdsActionController::class, 'storeSubscriptionPlan'])->name('subscription.plans.store');
         Route::post('game-level-ad-rules', [AdminAdsActionController::class, 'storeGameLevelRule'])->name('game-level-ad-rules.store');
+        Route::patch('game-level-ad-rules/{id}', [AdminAdsActionController::class, 'updateGameLevelRule'])->name('game-level-ad-rules.update');
+        Route::delete('game-level-ad-rules/{id}', [AdminAdsActionController::class, 'destroyGameLevelRule'])->name('game-level-ad-rules.destroy');
 
         Route::get('audio', [AdsPageController::class, 'audio'])->name('audio');
         Route::get('video', [AdsPageController::class, 'video'])->name('video');
