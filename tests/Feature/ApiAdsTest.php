@@ -7,6 +7,7 @@ use App\Models\Subscription;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -84,6 +85,29 @@ class ApiAdsTest extends TestCase
             'id' => $asset->id,
             'click_count' => 1,
             'impression_count' => 1,
+        ]);
+    }
+
+    public function test_banner_json_creation_maps_non_image_asset_url_to_click_through(): void
+    {
+        Http::fake([
+            'https://www.google.com*' => Http::response('<html></html>', 200, ['Content-Type' => 'text/html']),
+        ]);
+
+        $admin = User::factory()->create(['is_admin' => true]);
+        Sanctum::actingAs($admin);
+
+        $this->postJson('/api/ads/assets/json', [
+            'name' => 'Banner Bad URL',
+            'type' => 'display',
+            'format' => 'banner',
+            'asset_url' => 'https://www.google.com',
+        ])->assertCreated();
+
+        $this->assertDatabaseHas('ad_assets', [
+            'name' => 'Banner Bad URL',
+            'click_through_url' => 'https://www.google.com',
+            'asset_url' => 'placeholder://banner-ad',
         ]);
     }
 

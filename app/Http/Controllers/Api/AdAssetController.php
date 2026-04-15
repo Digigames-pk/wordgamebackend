@@ -7,7 +7,9 @@ use App\Models\AdAnalyticsEvent;
 use App\Models\AdAsset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class AdAssetController extends Controller
@@ -42,6 +44,7 @@ class AdAssetController extends Controller
     public function storeJson(Request $request): JsonResponse
     {
         $data = $this->validatedAsset($request, creating: true);
+        $data = $this->normalizeBannerAssetUrls($data, creating: true);
         $data['owner_type'] = 'global';
         if (($data['status'] ?? 'pending') !== 'rejected') {
             $data['status'] = 'approved';
@@ -66,7 +69,7 @@ class AdAssetController extends Controller
             $folder = str_starts_with((string) $file->getMimeType(), 'video/') ? 'ad-videos' : 'ad-audio';
             $disk = $this->adStorageDisk();
             $path = Storage::disk($disk)->putFile("{$folder}/global", $file, 'public');
-            $url = Storage::disk($disk)->url($path);
+            $url = $this->storagePublicUrl($disk, $path);
             if (str_starts_with((string) $file->getMimeType(), 'video/')) {
                 $data['video_url'] = $url;
                 $data['asset_url'] = $url;
@@ -85,6 +88,7 @@ class AdAssetController extends Controller
     {
         $asset = AdAsset::query()->findOrFail($id);
         $data = $this->validatedAsset($request, creating: false);
+        $data = $this->normalizeBannerAssetUrls($data, creating: false);
         unset($data['owner_type']);
 
         if ($request->hasFile('file')) {
@@ -95,7 +99,7 @@ class AdAssetController extends Controller
             $folder = str_starts_with((string) $file->getMimeType(), 'video/') ? 'ad-videos' : 'ad-audio';
             $disk = $this->adStorageDisk();
             $path = Storage::disk($disk)->putFile("{$folder}/global", $file, 'public');
-            $url = Storage::disk($disk)->url($path);
+            $url = $this->storagePublicUrl($disk, $path);
             if (str_starts_with((string) $file->getMimeType(), 'video/')) {
                 $data['video_url'] = $url;
                 $data['asset_url'] = $url;
@@ -243,5 +247,101 @@ class AdAssetController extends Controller
             && filled($w['bucket'] ?? null)
             && filled($w['key'] ?? null)
             && filled($w['secret'] ?? null);
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    protected function normalizeBannerAssetUrls(array $data, bool $creating): array
+    {
+        $isBanner = in_array($data['format'] ?? null, ['banner'], true)
+            || in_array($data['type'] ?? null, ['display', 'banner'], true);
+
+        if (! $isBanner || ! filled($data['asset_url'] ?? null)) {
+            return $data;
+        }
+
+        $original = (string) $data['asset_url'];
+        if (! preg_match('#^https?://#i', $original)) {
+            return $data;
+        }
+
+        $stored = $this->storeRemoteBannerImage($original);
+        if ($stored !== null) {
+            $data['asset_url'] = $stored;
+
+            return $data;
+        }
+
+        // If the provided URL is not an image, treat it as click-through link.
+        if (! filled($data['click_through_url'] ?? null)) {
+            $data['click_through_url'] = $original;
+        }
+
+        if ($creating) {
+            unset($data['asset_url']);
+        }
+
+        return $data;
+    }
+
+    protected function storeRemoteBannerImage(string $url): ?string
+    {
+        try {
+            $response = Http::timeout(15)->withHeaders([
+                'User-Agent' => 'GameAppBackend/1.0',
+            ])->get($url);
+        } catch (\Throwable) {
+            return null;
+        }
+
+        if (! $response->ok()) {
+            return null;
+        }
+
+        $contentType = strtolower((string) $response->header('Content-Type', ''));
+        if (! str_starts_with($contentType, 'image/')) {
+            return null;
+        }
+
+        $body = $response->body();
+        if ($body === '') {
+            return null;
+        }
+
+        $extension = $this->extensionFromContentType($contentType) ?? pathinfo(parse_url($url, PHP_URL_PATH) ?: '', PATHINFO_EXTENSION);
+        $extension = $extension !== '' ? strtolower($extension) : 'bin';
+        $filename = Str::uuid()->toString().'.'.$extension;
+        $path = 'ad-banners/global/'.$filename;
+
+        $disk = $this->adStorageDisk();
+        $stored = Storage::disk($disk)->put($path, $body, 'public');
+        if (! $stored) {
+            return null;
+        }
+
+        return $this->storagePublicUrl($disk, $path);
+    }
+
+    protected function extensionFromContentType(string $contentType): ?string
+    {
+        return match (true) {
+            str_contains($contentType, 'image/jpeg') => 'jpg',
+            str_contains($contentType, 'image/png') => 'png',
+            str_contains($contentType, 'image/webp') => 'webp',
+            str_contains($contentType, 'image/gif') => 'gif',
+            str_contains($contentType, 'image/svg+xml') => 'svg',
+            str_contains($contentType, 'image/bmp') => 'bmp',
+            default => null,
+        };
+    }
+
+    protected function storagePublicUrl(string $disk, string $path): string
+    {
+        /** @var \Illuminate\Filesystem\FilesystemAdapter $filesystem */
+        $filesystem = Storage::disk($disk);
+
+        return $filesystem->url($path);
     }
 }

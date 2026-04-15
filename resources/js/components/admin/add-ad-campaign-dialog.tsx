@@ -147,6 +147,12 @@ export function AddAdCampaignDialog({
         }
     }, [open, defaultAdType, resetForm]);
 
+    useEffect(() => {
+        if (createAdType === 'banner' && assetSource === 'url') {
+            setAssetSource('upload');
+        }
+    }, [createAdType, assetSource]);
+
     const appendTypeToFormData = (fd: FormData, t: CreateAdType) => {
         if (t === 'vast') {
             fd.append('type', 'vast');
@@ -371,7 +377,7 @@ export function AddAdCampaignDialog({
               ? file != null
               : assetSource === 'library'
                 ? form.library_asset_id.length > 0
-                : form.external_asset_url.trim().startsWith('http'));
+                : createAdType !== 'banner' && form.external_asset_url.trim().startsWith('http'));
 
     const placementLabel =
         form.placement_type === 'all'
@@ -580,10 +586,12 @@ export function AddAdCampaignDialog({
                                             <Library className="h-3.5 w-3.5" />
                                             From Library
                                         </TabsTrigger>
-                                        <TabsTrigger value="url" className="gap-1.5 text-xs" data-testid="tab-url">
-                                            <LinkIcon className="h-3.5 w-3.5" />
-                                            External URL
-                                        </TabsTrigger>
+                                        {createAdType !== 'banner' && (
+                                            <TabsTrigger value="url" className="gap-1.5 text-xs" data-testid="tab-url">
+                                                <LinkIcon className="h-3.5 w-3.5" />
+                                                External URL
+                                            </TabsTrigger>
+                                        )}
                                     </TabsList>
                                     <TabsContent value="upload" className="mt-4">
                                         <button

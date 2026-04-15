@@ -251,7 +251,7 @@ class AdSelectionService
             ->get()
             ->filter(fn (AdAsset $a) => $this->isValidForSchedule($a))
             ->filter(function (AdAsset $a) {
-                return filled($a->asset_url) || filled($a->video_url);
+                return $this->resolveBannerImageUrl($a) !== null;
             });
 
         if ($assetBanners->isNotEmpty()) {
@@ -263,8 +263,8 @@ class AdSelectionService
             return [
                 'id' => $selectedAsset->id,
                 'name' => $selectedAsset->name,
-                'imageUrl' => $this->absolutePublicAssetUrl($selectedAsset->asset_url ?: $selectedAsset->video_url),
-                'linkUrl' => $selectedAsset->click_through_url,
+                'imageUrl' => $this->resolveBannerImageUrl($selectedAsset),
+                'linkUrl' => $selectedAsset->click_through_url ?: $this->fallbackLinkUrlFromAsset($selectedAsset->asset_url),
                 'altText' => null,
                 'position' => $selectedAsset->banner_position ?? 'bottom',
                 'size' => $selectedAsset->banner_size ?? 'medium',
@@ -336,5 +336,54 @@ class AdSelectionService
         }
 
         return $url;
+    }
+
+    protected function resolveBannerImageUrl(AdAsset $asset): ?string
+    {
+        $url = $asset->asset_url ?: $asset->video_url;
+        if (! filled($url)) {
+            return null;
+        }
+        if (str_starts_with((string) $url, 'placeholder://')) {
+            return null;
+        }
+        if ($this->looksLikeImageUrl((string) $url)) {
+            return $this->absolutePublicAssetUrl((string) $url);
+        }
+
+        return null;
+    }
+
+    protected function fallbackLinkUrlFromAsset(?string $assetUrl): ?string
+    {
+        if (! filled($assetUrl)) {
+            return null;
+        }
+
+        $url = (string) $assetUrl;
+        if ($this->looksLikeImageUrl($url)) {
+            return null;
+        }
+        if (preg_match('#^https?://#i', $url)) {
+            return $url;
+        }
+
+        return null;
+    }
+
+    protected function looksLikeImageUrl(string $url): bool
+    {
+        if (str_starts_with($url, 'data:image/')) {
+            return true;
+        }
+
+        $path = parse_url($url, PHP_URL_PATH);
+        if (! is_string($path) || $path === '') {
+            return false;
+        }
+
+        $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+
+        return in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'avif'], true);
     }
 }
