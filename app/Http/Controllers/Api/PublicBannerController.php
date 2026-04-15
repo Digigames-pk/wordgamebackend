@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdAsset;
 use App\Models\BannerAd;
 use App\Services\Ads\AdSelectionService;
 use App\Support\ApiUser;
@@ -33,14 +34,20 @@ class PublicBannerController extends Controller
 
     public function click(string $id): JsonResponse
     {
-        BannerAd::query()->whereKey($id)->increment('click_count');
+        $updated = AdAsset::query()->whereKey($id)->increment('click_count');
+        if ($updated === 0) {
+            BannerAd::query()->whereKey($id)->increment('click_count');
+        }
 
         return response()->json(['success' => true]);
     }
 
     public function impression(string $id): JsonResponse
     {
-        BannerAd::query()->whereKey($id)->increment('impression_count');
+        $updated = AdAsset::query()->whereKey($id)->increment('impression_count');
+        if ($updated === 0) {
+            BannerAd::query()->whereKey($id)->increment('impression_count');
+        }
 
         return response()->json(['success' => true]);
     }

@@ -38,6 +38,55 @@ class ApiAdsTest extends TestCase
         $this->assertSame($a, $b);
     }
 
+    public function test_public_banner_reads_banner_campaigns_from_ad_assets(): void
+    {
+        AdAsset::query()->create([
+            'name' => 'Banner A',
+            'type' => 'display',
+            'format' => 'banner',
+            'asset_url' => 'https://example.com/banner-a.png',
+            'duration_sec' => 0,
+            'status' => 'approved',
+            'is_active' => true,
+            'owner_type' => 'global',
+            'weight' => 5,
+            'banner_position' => 'bottom',
+            'banner_size' => 'medium',
+        ]);
+
+        $response = $this->getJson('/api/ads/banner');
+
+        $response->assertOk()
+            ->assertJsonPath('showBanner', true)
+            ->assertJsonPath('adsDisabled', false)
+            ->assertJsonPath('banner.name', 'Banner A')
+            ->assertJsonPath('banner.imageUrl', 'https://example.com/banner-a.png');
+    }
+
+    public function test_public_banner_click_and_impression_increment_ad_asset_metrics(): void
+    {
+        $asset = AdAsset::query()->create([
+            'name' => 'Banner Track',
+            'type' => 'display',
+            'format' => 'banner',
+            'asset_url' => 'https://example.com/banner-track.png',
+            'duration_sec' => 0,
+            'status' => 'approved',
+            'is_active' => true,
+            'owner_type' => 'global',
+            'weight' => 5,
+        ]);
+
+        $this->postJson("/api/banners/{$asset->id}/click")->assertOk();
+        $this->postJson("/api/banners/{$asset->id}/impression")->assertOk();
+
+        $this->assertDatabaseHas('ad_assets', [
+            'id' => $asset->id,
+            'click_count' => 1,
+            'impression_count' => 1,
+        ]);
+    }
+
     public function test_ad_event_validation(): void
     {
         $response = $this->postJson('/api/analytics/ad-event', []);

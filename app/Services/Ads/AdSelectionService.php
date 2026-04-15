@@ -242,7 +242,37 @@ class AdSelectionService
      */
     public function nextBannerPayload(): ?array
     {
-        $banners = BannerAd::query()
+        $assetBanners = $this->approvedGlobalAssets()
+            ->where(function ($q) {
+                $q->where('format', 'banner')
+                    ->orWhere('type', 'banner')
+                    ->orWhere('type', 'display');
+            })
+            ->get()
+            ->filter(fn (AdAsset $a) => $this->isValidForSchedule($a))
+            ->filter(function (AdAsset $a) {
+                return filled($a->asset_url) || filled($a->video_url);
+            });
+
+        if ($assetBanners->isNotEmpty()) {
+            $selectedAsset = $this->weightedRandom($assetBanners);
+            if (! $selectedAsset instanceof AdAsset) {
+                return null;
+            }
+
+            return [
+                'id' => $selectedAsset->id,
+                'name' => $selectedAsset->name,
+                'imageUrl' => $this->absolutePublicAssetUrl($selectedAsset->asset_url ?: $selectedAsset->video_url),
+                'linkUrl' => $selectedAsset->click_through_url,
+                'altText' => null,
+                'position' => $selectedAsset->banner_position ?? 'bottom',
+                'size' => $selectedAsset->banner_size ?? 'medium',
+                'weight' => $selectedAsset->weight,
+            ];
+        }
+
+        $legacyBanners = BannerAd::query()
             ->where('is_active', true)
             ->get()
             ->filter(function (BannerAd $b) {
@@ -260,20 +290,20 @@ class AdSelectionService
                 return true;
             });
 
-        $selected = $this->weightedRandom($banners);
-        if (! $selected) {
+        $selectedLegacy = $this->weightedRandom($legacyBanners);
+        if (! $selectedLegacy instanceof BannerAd) {
             return null;
         }
 
         return [
-            'id' => $selected->id,
-            'name' => $selected->name,
-            'imageUrl' => $this->absolutePublicAssetUrl($selected->image_url),
-            'linkUrl' => $selected->link_url,
-            'altText' => $selected->alt_text,
-            'position' => $selected->position,
-            'size' => $selected->size,
-            'weight' => $selected->weight,
+            'id' => $selectedLegacy->id,
+            'name' => $selectedLegacy->name,
+            'imageUrl' => $this->absolutePublicAssetUrl($selectedLegacy->image_url),
+            'linkUrl' => $selectedLegacy->link_url,
+            'altText' => $selectedLegacy->alt_text,
+            'position' => $selectedLegacy->position,
+            'size' => $selectedLegacy->size,
+            'weight' => $selectedLegacy->weight,
         ];
     }
 
