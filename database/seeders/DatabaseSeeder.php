@@ -13,6 +13,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            DefaultGameConfigSeeder::class,
+            DefaultGameLevelsSeeder::class,
+        ]);
+
         User::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@example.com',

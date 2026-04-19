@@ -8,14 +8,22 @@ use App\Http\Controllers\Api\AdvertiserController;
 use App\Http\Controllers\Api\AppSettingsController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BannerAdminController;
+use App\Http\Controllers\Api\DeviceStatePublicController;
+use App\Http\Controllers\Api\GameConfigAdminController;
 use App\Http\Controllers\Api\GameLevelAdRuleController;
+use App\Http\Controllers\Api\GameLevelApiController;
 use App\Http\Controllers\Api\GamePublicController;
+use App\Http\Controllers\Api\LevelBackgroundImageController;
+use App\Http\Controllers\Api\LevelBackgroundPresignController;
+use App\Http\Controllers\Api\LevelCompleteController;
 use App\Http\Controllers\Api\PlatformAnalyticsController;
+use App\Http\Controllers\Api\ProfileApiController;
 use App\Http\Controllers\Api\PublicAdController;
 use App\Http\Controllers\Api\PublicBannerController;
 use App\Http\Controllers\Api\StripeWebhookController;
 use App\Http\Controllers\Api\SubscriptionCheckoutController;
 use App\Http\Controllers\Api\SubscriptionPlanController;
+use App\Http\Controllers\Api\UserAdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
@@ -24,6 +32,9 @@ Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
+
+    Route::get('/profile', [ProfileApiController::class, 'show']);
+    Route::put('/profile', [ProfileApiController::class, 'update']);
 });
 
 Route::get('/subscription/plans', [SubscriptionPlanController::class, 'publicPlans']);
@@ -32,6 +43,13 @@ Route::post('/stripe/webhook', StripeWebhookController::class)->middleware('thro
 
 Route::get('/game/level-ad-settings', [GamePublicController::class, 'levelAdSettings']);
 Route::get('/game/config', [GamePublicController::class, 'config']);
+Route::get('/game/mobile-configs', [GamePublicController::class, 'mobileConfigs']);
+Route::get('/game/level/{level}', [GameLevelApiController::class, 'show'])->whereNumber('level');
+
+Route::post('/public/device-state', [DeviceStatePublicController::class, 'store'])->middleware('throttle:120,1');
+
+Route::post('/game/level-complete', [LevelCompleteController::class, 'store'])
+    ->middleware(['optional.sanctum', 'throttle:120,1']);
 
 Route::middleware(['throttle:120,1'])->group(function () {
     Route::get('/game/next-ad', [PublicAdController::class, 'nextInterstitial']);
@@ -103,4 +121,21 @@ Route::middleware(['auth:sanctum', 'admin', 'throttle:120,1'])->group(function (
 
     Route::get('/admin/settings/stripe', [AppSettingsController::class, 'stripeKeys']);
     Route::put('/admin/settings/stripe', [AppSettingsController::class, 'updateStripeKeys']);
+
+    Route::post('/level-backgrounds/presign', [LevelBackgroundPresignController::class, 'presign']);
+    Route::get('/admin/level-background-images', [LevelBackgroundImageController::class, 'index']);
+    Route::post('/admin/level-background-images', [LevelBackgroundImageController::class, 'store']);
+    Route::patch('/admin/level-background-images/{id}', [LevelBackgroundImageController::class, 'update']);
+    Route::delete('/admin/level-background-images/{id}', [LevelBackgroundImageController::class, 'destroy']);
+
+    Route::get('/admin/game-config-entries', [GameConfigAdminController::class, 'index']);
+    Route::post('/admin/game-config-entries', [GameConfigAdminController::class, 'store']);
+    Route::patch('/admin/game-config-entries/{id}', [GameConfigAdminController::class, 'update']);
+    Route::delete('/admin/game-config-entries/{id}', [GameConfigAdminController::class, 'destroy']);
+
+    Route::get('/admin/users', [UserAdminController::class, 'index']);
+    Route::post('/admin/users', [UserAdminController::class, 'store']);
+    Route::get('/admin/users/{id}', [UserAdminController::class, 'show']);
+    Route::patch('/admin/users/{id}', [UserAdminController::class, 'update']);
+    Route::delete('/admin/users/{id}', [UserAdminController::class, 'destroy']);
 });

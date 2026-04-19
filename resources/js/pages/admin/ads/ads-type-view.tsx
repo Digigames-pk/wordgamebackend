@@ -1,8 +1,10 @@
 import { AdPerformanceDialog, type PerformanceAdAsset } from '@/components/admin/ad-performance-dialog';
+import { EditAdAssetDialog } from '@/components/admin/edit-ad-asset-dialog';
 import { AddAdCampaignDialog } from '@/components/admin/add-ad-campaign-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Switch } from '@/components/ui/switch';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -15,11 +17,13 @@ import {
     BarChart2,
     BarChart3,
     Code,
+    ExternalLink,
     Eye,
     Globe,
     Image,
     Infinity,
     Music,
+    Pencil,
     Percent,
     PlayCircle,
     Plus,
@@ -29,6 +33,18 @@ import {
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
+
+function fileNameFromUrl(url: string | null | undefined): string {
+    if (!url || typeof url !== 'string') return '—';
+    try {
+        const path = new URL(url, 'https://placeholder.local').pathname;
+        const seg = path.split('/').filter(Boolean).pop();
+        return seg && seg.length > 0 ? seg : url.slice(0, 48);
+    } catch {
+        const parts = url.split('/').filter(Boolean);
+        return parts.pop() ?? url.slice(0, 48);
+    }
+}
 
 function inertiaErrorMessage(errors: Record<string, string | string[] | undefined>): string {
     const first = Object.values(errors).find(Boolean);
@@ -45,9 +61,16 @@ export interface AdminAdvertiserOption {
 
 export interface AdAssetRow extends PerformanceAdAsset {
     format?: string;
+    type?: string;
     owner_type: string;
     placement_type?: string;
+    asset_url?: string | null;
+    video_url?: string | null;
+    thumbnail_url?: string | null;
+    skip_after_sec?: number | null;
+    is_skippable?: boolean | null;
     banner_position?: string | null;
+    banner_size?: string | null;
     max_impressions?: number | null;
     max_clicks?: number | null;
     weight?: number;
@@ -59,6 +82,7 @@ export interface AdAssetRow extends PerformanceAdAsset {
     geo_exclude_cities?: string[] | null;
     vast_tag_url?: string | null;
     vmap_tag_url?: string | null;
+    advertiser_id?: string | null;
     metadata?: Record<string, unknown> | null;
 }
 
@@ -113,6 +137,10 @@ export function AdsTypeView({ adType, title, breadcrumbs, assets, advertisers }:
     const [perfOpen, setPerfOpen] = useState(false);
     const [perfAsset, setPerfAsset] = useState<AdAssetRow | null>(null);
     const [busyAssetId, setBusyAssetId] = useState<string | null>(null);
+    const [editOpen, setEditOpen] = useState(false);
+    const [editAsset, setEditAsset] = useState<AdAssetRow | null>(null);
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewSrc, setPreviewSrc] = useState<string | null>(null);
 
     const campaigns = assets;
 
@@ -228,6 +256,78 @@ export function AdsTypeView({ adType, title, breadcrumbs, assets, advertisers }:
     const TL = typeLabels[adType];
     const TypeIcon = TL.icon;
 
+    const renderMediaCell = (c: AdAssetRow) => {
+        if (adType === 'banner') {
+            const hint = fileNameFromUrl(c.asset_url);
+            const src = c.asset_url && /^https?:\/\//i.test(c.asset_url) ? c.asset_url : null;
+            return (
+                <div className="flex max-w-[200px] flex-col gap-1">
+                    <span className="truncate font-mono text-[11px] text-muted-foreground" title={c.asset_url ?? ''}>
+                        {hint}
+                    </span>
+                    {src ? (
+                        <Button type="button" variant="outline" size="sm" className="h-7 w-fit gap-1 text-xs" onClick={() => {
+                            setPreviewSrc(src);
+                            setPreviewOpen(true);
+                        }}>
+                            <Eye className="size-3" /> Preview
+                        </Button>
+                    ) : (
+                        <span className="text-xs text-muted-foreground">No image URL</span>
+                    )}
+                </div>
+            );
+        }
+        if (adType === 'vast') {
+            const v = c.vast_tag_url?.trim();
+            const m = c.vmap_tag_url?.trim();
+            return (
+                <div className="max-w-[240px] space-y-1 text-xs">
+                    {v ? (
+                        <div className="flex items-start gap-1">
+                            <span className="shrink-0 text-muted-foreground">VAST:</span>
+                            <a
+                                href={v}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex min-w-0 items-center gap-0.5 break-all text-primary underline"
+                                title={v}
+                            >
+                                <span className="line-clamp-2">{v.length > 64 ? `${v.slice(0, 64)}…` : v}</span>
+                                <ExternalLink className="size-3 shrink-0" />
+                            </a>
+                        </div>
+                    ) : null}
+                    {m ? (
+                        <div className="flex items-start gap-1">
+                            <span className="shrink-0 text-muted-foreground">VMAP:</span>
+                            <a
+                                href={m}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex min-w-0 items-center gap-0.5 break-all text-primary underline"
+                                title={m}
+                            >
+                                <span className="line-clamp-2">{m.length > 64 ? `${m.slice(0, 64)}…` : m}</span>
+                                <ExternalLink className="size-3 shrink-0" />
+                            </a>
+                        </div>
+                    ) : null}
+                    {!v && !m ? <span className="text-muted-foreground">—</span> : null}
+                </div>
+            );
+        }
+        const mediaUrl = c.video_url || c.asset_url;
+        const hint = fileNameFromUrl(mediaUrl);
+        return (
+            <div className="max-w-[180px]">
+                <span className="block truncate font-mono text-[11px] text-muted-foreground" title={mediaUrl ?? ''}>
+                    {hint}
+                </span>
+            </div>
+        );
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <TooltipProvider delayDuration={200}>
@@ -329,6 +429,9 @@ export function AdsTypeView({ adType, title, breadcrumbs, assets, advertisers }:
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead>Name</TableHead>
+                                        <TableHead className="w-[200px]">
+                                            {adType === 'banner' ? 'Banner file' : adType === 'vast' ? 'Tag URLs' : 'Media file'}
+                                        </TableHead>
                                         <TableHead>Station</TableHead>
                                         <TableHead>Status</TableHead>
                                         <TableHead>Placement</TableHead>
@@ -352,6 +455,7 @@ export function AdsTypeView({ adType, title, breadcrumbs, assets, advertisers }:
                                         return (
                                             <TableRow key={campaign.id}>
                                                 <TableCell className="font-medium">{campaign.name}</TableCell>
+                                                <TableCell className="align-top">{renderMediaCell(campaign)}</TableCell>
                                                 <TableCell>
                                                     <Badge variant="outline" className="font-normal">
                                                         {stationLabel(campaign)}
@@ -455,6 +559,22 @@ export function AdsTypeView({ adType, title, breadcrumbs, assets, advertisers }:
                                                             </TooltipTrigger>
                                                             <TooltipContent>Ad performance</TooltipContent>
                                                         </Tooltip>
+                                                        <Tooltip>
+                                                            <TooltipTrigger asChild>
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="icon"
+                                                                    aria-label="Edit ad"
+                                                                    onClick={() => {
+                                                                        setEditAsset(campaign);
+                                                                        setEditOpen(true);
+                                                                    }}
+                                                                >
+                                                                    <Pencil className="h-4 w-4" />
+                                                                </Button>
+                                                            </TooltipTrigger>
+                                                            <TooltipContent>Edit ad</TooltipContent>
+                                                        </Tooltip>
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
@@ -485,6 +605,27 @@ export function AdsTypeView({ adType, title, breadcrumbs, assets, advertisers }:
             />
 
             <AdPerformanceDialog open={perfOpen} onOpenChange={setPerfOpen} asset={perfAsset} />
+
+            <EditAdAssetDialog
+                open={editOpen}
+                onOpenChange={setEditOpen}
+                asset={editAsset}
+                advertisers={advertisers}
+                onSaved={() => router.reload({ only: ['assets', 'advertisers'] })}
+            />
+
+            <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+                <DialogContent className="max-w-3xl">
+                    <DialogHeader>
+                        <DialogTitle>Banner preview</DialogTitle>
+                    </DialogHeader>
+                    {previewSrc ? (
+                        <div className="flex max-h-[70vh] justify-center overflow-auto rounded-md border bg-muted/30 p-2">
+                            <img src={previewSrc} alt="Banner preview" className="max-h-[65vh] max-w-full object-contain" />
+                        </div>
+                    ) : null}
+                </DialogContent>
+            </Dialog>
             </TooltipProvider>
         </AppLayout>
     );

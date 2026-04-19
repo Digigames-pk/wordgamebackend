@@ -33,7 +33,10 @@ class SubscriptionPlanStripeSync
             $product = $stripe->products->create([
                 'name' => $plan->name,
                 'description' => $plan->description,
-                'metadata' => ['subscription_plan_id' => (string) $plan->id],
+                'metadata' => [
+                    'subscription_plan_id' => (string) $plan->id,
+                    'coins' => (string) ($plan->coins ?? 0),
+                ],
             ]);
             $plan->stripe_product_id = $product->id;
             $plan->save();
@@ -41,6 +44,10 @@ class SubscriptionPlanStripeSync
             $stripe->products->update($plan->stripe_product_id, [
                 'name' => $plan->name,
                 'description' => $plan->description,
+                'metadata' => [
+                    'subscription_plan_id' => (string) $plan->id,
+                    'coins' => (string) ($plan->coins ?? 0),
+                ],
             ]);
         }
 

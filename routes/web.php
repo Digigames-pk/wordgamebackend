@@ -18,6 +18,8 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', fn () => redirect()->route('admin.ads.audio'))->name('dashboard');
 
+    Route::get('users', [AdsPageController::class, 'users'])->name('users');
+
     Route::prefix('ads')->name('ads.')->group(function () {
         Route::post('assets', [AdminAdsActionController::class, 'storeAdAsset'])->name('assets.store');
         Route::post('assets/json', [AdminAdsActionController::class, 'storeAdAssetJson'])->name('assets.store-json');
@@ -29,6 +31,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::post('game-level-ad-rules', [AdminAdsActionController::class, 'storeGameLevelRule'])->name('game-level-ad-rules.store');
         Route::patch('game-level-ad-rules/{id}', [AdminAdsActionController::class, 'updateGameLevelRule'])->name('game-level-ad-rules.update');
         Route::delete('game-level-ad-rules/{id}', [AdminAdsActionController::class, 'destroyGameLevelRule'])->name('game-level-ad-rules.destroy');
+
+        Route::post('level-backgrounds/presign', [AdminAdsActionController::class, 'levelBackgroundPresignJson'])->name('level-backgrounds.presign');
+        Route::post('level-background-images', [AdminAdsActionController::class, 'storeLevelBackgroundImage'])->name('level-background-images.store');
+        Route::patch('level-background-images/{id}', [AdminAdsActionController::class, 'updateLevelBackgroundImage'])->name('level-background-images.update');
+        Route::delete('level-background-images/{id}', [AdminAdsActionController::class, 'destroyLevelBackgroundImage'])->name('level-background-images.destroy');
 
         Route::get('audio', [AdsPageController::class, 'audio'])->name('audio');
         Route::get('video', [AdsPageController::class, 'video'])->name('video');
@@ -42,6 +49,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('stripe', [AdsPageController::class, 'stripe'])->name('stripe');
         Route::get('plans', [AdsPageController::class, 'plans'])->name('plans');
         Route::get('levels', [AdsPageController::class, 'levels'])->name('levels');
+        Route::get('level-backgrounds', [AdsPageController::class, 'levelBackgrounds'])->name('level-backgrounds');
+        Route::get('game-configs', [AdsPageController::class, 'gameConfigs'])->name('game-configs');
     });
 });
 

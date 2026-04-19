@@ -14,6 +14,7 @@ class SubscriptionPlan extends Model
         'amount',
         'currency',
         'removes_ads',
+        'coins',
         'is_active',
         'stripe_product_id',
         'stripe_price_id',
@@ -24,6 +25,7 @@ class SubscriptionPlan extends Model
         return [
             'removes_ads' => 'boolean',
             'is_active' => 'boolean',
+            'coins' => 'integer',
         ];
     }
 

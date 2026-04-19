@@ -10,7 +10,9 @@ use App\Models\AdRule;
 use App\Models\Advertiser;
 use App\Models\BannerAd;
 use App\Models\GameLevelAdRule;
+use App\Models\LevelBackgroundImage;
 use App\Models\SubscriptionPlan;
+use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -119,6 +121,29 @@ class AdsPageController extends Controller
     {
         return Inertia::render('admin/ads/levels', [
             'levelRules' => GameLevelAdRule::query()->orderBy('sort_order')->orderBy('level_from')->get()->all(),
+        ]);
+    }
+
+    public function levelBackgrounds(): Response
+    {
+        return Inertia::render('admin/ads/level-background-images', [
+            'images' => LevelBackgroundImage::query()->orderBy('sort_order')->orderByDesc('id')->get()->all(),
+        ]);
+    }
+
+    public function gameConfigs(): Response
+    {
+        return Inertia::render('admin/ads/game-config-entries');
+    }
+
+    public function users(): Response
+    {
+        return Inertia::render('admin/users', [
+            'users' => User::query()
+                ->with(['subscriptions.plan', 'deviceState'])
+                ->orderBy('name')
+                ->get()
+                ->all(),
         ]);
     }
 }

@@ -10,12 +10,14 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { route } from 'ziggy-js';
-import { Loader2, Plus, RefreshCw } from 'lucide-react';
+import { apiJson } from '@/lib/api';
+import { Loader2, Pencil, Plus, RefreshCw } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -53,6 +55,10 @@ export default function AdminAdsAdvertisersPage({
 }) {
     const [open, setOpen] = useState(false);
     const [creating, setCreating] = useState(false);
+    const [editOpen, setEditOpen] = useState(false);
+    const [editing, setEditing] = useState<Advertiser | null>(null);
+    const [editForm, setEditForm] = useState({ name: '', company_name: '', contact_name: '', email: '', is_active: true });
+    const [savingEdit, setSavingEdit] = useState(false);
     const [form, setForm] = useState({
         name: '',
         company_name: '',
@@ -69,6 +75,43 @@ export default function AdminAdsAdvertisersPage({
         }
         return m;
     }, [assets]);
+
+    const openEdit = (a: Advertiser) => {
+        setEditing(a);
+        setEditForm({
+            name: a.name,
+            company_name: a.company_name ?? '',
+            contact_name: a.contact_name ?? '',
+            email: a.email ?? '',
+            is_active: a.is_active !== false,
+        });
+        setEditOpen(true);
+    };
+
+    const saveEdit = async () => {
+        if (!editing) return;
+        setSavingEdit(true);
+        try {
+            await apiJson(`/advertisers/${editing.id}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    name: editForm.name,
+                    company_name: editForm.company_name || null,
+                    contact_name: editForm.contact_name || null,
+                    email: editForm.email || null,
+                    is_active: editForm.is_active,
+                }),
+            });
+            toast.success('Advertiser updated');
+            setEditOpen(false);
+            setEditing(null);
+            router.reload({ only: ['advertisers', 'assets'] });
+        } catch (e) {
+            toast.error(e instanceof Error ? e.message : 'Update failed');
+        } finally {
+            setSavingEdit(false);
+        }
+    };
 
     const createAdvertiser = () => {
         setCreating(true);
@@ -130,6 +173,7 @@ export default function AdminAdsAdvertisersPage({
                                         <TableHead>Email</TableHead>
                                         <TableHead>Status</TableHead>
                                         <TableHead className="text-right">Linked assets</TableHead>
+                                        <TableHead className="text-right">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -145,6 +189,11 @@ export default function AdminAdsAdvertisersPage({
                                                 </Badge>
                                             </TableCell>
                                             <TableCell className="text-right">{counts.get(a.id) ?? 0}</TableCell>
+                                            <TableCell className="text-right">
+                                                <Button variant="ghost" size="icon" onClick={() => openEdit(a)} aria-label="Edit">
+                                                    <Pencil className="size-4" />
+                                                </Button>
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -193,6 +242,57 @@ export default function AdminAdsAdvertisersPage({
                         </Button>
                         <Button onClick={createAdvertiser} disabled={!form.name.trim() || creating}>
                             {creating ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create'}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={editOpen} onOpenChange={setEditOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Edit advertiser</DialogTitle>
+                    </DialogHeader>
+                    <div className="grid gap-3 py-2">
+                        <div className="grid gap-2">
+                            <Label>Name</Label>
+                            <Input value={editForm.name} onChange={(e) => setEditForm((f) => ({ ...f, name: e.target.value }))} />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label>Company</Label>
+                            <Input
+                                value={editForm.company_name}
+                                onChange={(e) => setEditForm((f) => ({ ...f, company_name: e.target.value }))}
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label>Contact</Label>
+                            <Input
+                                value={editForm.contact_name}
+                                onChange={(e) => setEditForm((f) => ({ ...f, contact_name: e.target.value }))}
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label>Email</Label>
+                            <Input
+                                type="email"
+                                value={editForm.email}
+                                onChange={(e) => setEditForm((f) => ({ ...f, email: e.target.value }))}
+                            />
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Switch
+                                checked={editForm.is_active}
+                                onCheckedChange={(c) => setEditForm((f) => ({ ...f, is_active: Boolean(c) }))}
+                            />
+                            <Label>Active</Label>
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setEditOpen(false)}>
+                            Cancel
+                        </Button>
+                        <Button onClick={() => void saveEdit()} disabled={!editForm.name.trim() || savingEdit}>
+                            {savingEdit ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

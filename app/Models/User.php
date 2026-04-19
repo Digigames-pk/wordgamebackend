@@ -3,7 +3,9 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,7 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -25,6 +27,8 @@ class User extends Authenticatable
         'password',
         'is_admin',
         'stripe_customer_id',
+        'device_id_key',
+        'coins_earned',
     ];
 
     /**
@@ -48,7 +52,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'coins_earned' => 'integer',
         ];
+    }
+
+    public function deviceState(): BelongsTo
+    {
+        return $this->belongsTo(DeviceState::class, 'device_id_key');
     }
 
     public function subscriptions(): HasMany

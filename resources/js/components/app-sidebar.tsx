@@ -16,6 +16,7 @@ import {
     Music,
     Settings,
     Users,
+    UserCog,
     Video,
     Wallet,
     Waypoints,
@@ -33,6 +34,7 @@ function useMainNavItems(): NavItem[] {
 }
 
 const adminNavItems: NavItem[] = [
+    { title: 'Users', url: '/admin/users', icon: UserCog },
     { title: 'Audio ads', url: '/admin/ads/audio', icon: Music },
     { title: 'VAST / VMAP', url: '/admin/ads/vast', icon: Code },
     { title: 'Video ads', url: '/admin/ads/video', icon: Video },
@@ -45,6 +47,8 @@ const adminNavItems: NavItem[] = [
     { title: 'Stripe keys', url: '/admin/ads/stripe', icon: Wallet },
     { title: 'Subscription plans', url: '/admin/ads/plans', icon: Waypoints },
     { title: 'Level ad rules', url: '/admin/ads/levels', icon: LayoutList },
+    { title: 'Level backgrounds', url: '/admin/ads/level-backgrounds', icon: Image },
+    { title: 'Game configs', url: '/admin/ads/game-configs', icon: Settings },
 ];
 
 const footerNavItems: NavItem[] = [

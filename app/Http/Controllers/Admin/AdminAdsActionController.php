@@ -6,9 +6,12 @@ use App\Http\Controllers\Api\AdAssetController;
 use App\Http\Controllers\Api\AdvertiserController;
 use App\Http\Controllers\Api\AppSettingsController;
 use App\Http\Controllers\Api\GameLevelAdRuleController;
+use App\Http\Controllers\Api\LevelBackgroundImageController;
+use App\Http\Controllers\Api\LevelBackgroundPresignController;
 use App\Http\Controllers\Api\SubscriptionPlanController;
 use App\Http\Controllers\Controller;
 use App\Services\Stripe\SubscriptionPlanStripeSync;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -87,6 +90,35 @@ class AdminAdsActionController extends Controller
     public function destroyGameLevelRule(string $id): RedirectResponse
     {
         app(GameLevelAdRuleController::class)->destroy($id);
+
+        return redirect()->back();
+    }
+
+    /**
+     * Web + session + CSRF (same pattern as dashboard ads). Returns JSON for client-side Wasabi PUT.
+     */
+    public function levelBackgroundPresignJson(Request $request): JsonResponse
+    {
+        return app(LevelBackgroundPresignController::class)->presign($request);
+    }
+
+    public function storeLevelBackgroundImage(Request $request): RedirectResponse
+    {
+        app(LevelBackgroundImageController::class)->store($request);
+
+        return redirect()->back();
+    }
+
+    public function updateLevelBackgroundImage(Request $request, string $id): RedirectResponse
+    {
+        app(LevelBackgroundImageController::class)->update($request, $id);
+
+        return redirect()->back();
+    }
+
+    public function destroyLevelBackgroundImage(string $id): RedirectResponse
+    {
+        app(LevelBackgroundImageController::class)->destroy($id);
 
         return redirect()->back();
     }

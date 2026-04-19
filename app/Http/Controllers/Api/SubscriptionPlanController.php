@@ -24,6 +24,7 @@ class SubscriptionPlanController extends Controller
                 'amount' => $p->amount,
                 'currency' => $p->currency,
                 'removes_ads' => $p->removes_ads,
+                'coins' => $p->coins ?? 0,
             ]);
 
         return response()->json(['plans' => $plans]);
@@ -43,9 +44,11 @@ class SubscriptionPlanController extends Controller
             'amount' => ['required', 'integer', 'min:0'],
             'currency' => ['required', 'string', 'size:3'],
             'removes_ads' => ['boolean'],
+            'coins' => ['sometimes', 'integer', 'min:0'],
             'is_active' => ['boolean'],
         ]);
 
+        $data['coins'] = (int) ($data['coins'] ?? 0);
         $plan = SubscriptionPlan::query()->create($data);
 
         try {
@@ -67,6 +70,7 @@ class SubscriptionPlanController extends Controller
             'amount' => ['sometimes', 'integer', 'min:0'],
             'currency' => ['sometimes', 'string', 'size:3'],
             'removes_ads' => ['boolean'],
+            'coins' => ['sometimes', 'integer', 'min:0'],
             'is_active' => ['boolean'],
         ]);
         $plan->update($data);

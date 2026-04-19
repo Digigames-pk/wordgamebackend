@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\GameConfigEntry;
 use App\Models\GameLevelAdRule;
 use Illuminate\Http\JsonResponse;
 
@@ -27,6 +28,14 @@ class GamePublicController extends Controller
                 ->orderBy('sort_order')
                 ->orderBy('level_from')
                 ->get(),
+            'configs' => GameConfigEntry::mapAll(),
+        ]);
+    }
+
+    public function mobileConfigs(): JsonResponse
+    {
+        return response()->json([
+            'configs' => GameConfigEntry::mapAll(),
         ]);
     }
 }
