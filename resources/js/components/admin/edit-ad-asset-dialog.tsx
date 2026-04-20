@@ -14,10 +14,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import type { AdminAdvertiserOption } from '@/pages/admin/ads/ads-type-view';
-import { apiJson } from '@/lib/api';
+import { webSessionJson } from '@/lib/api';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
+import { route } from 'ziggy-js';
 
 export type EditableAdAsset = {
     id: string;
@@ -156,7 +157,7 @@ export function EditAdAssetDialog({
                 body.banner_size = banner_size || null;
             }
 
-            await apiJson(`/ads/assets/${asset.id}`, {
+            await webSessionJson(route('admin.ads.assets.update', asset.id), {
                 method: 'PATCH',
                 body: JSON.stringify(body),
             });

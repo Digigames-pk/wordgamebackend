@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
-import { apiJson } from '@/lib/api';
+import { webSessionJson } from '@/lib/api';
 import { postWithMethod } from '@/lib/inertia-form-method';
 import { router } from '@inertiajs/react';
 import { route } from 'ziggy-js';
@@ -49,7 +49,7 @@ export function RulesPanel({ rules: initialRules }: { rules: Record<string, unkn
 
     const load = useCallback(async () => {
         try {
-            const res = await apiJson<{ rules: AdRuleRow[] }>('/ads/rules');
+            const res = await webSessionJson<{ rules: AdRuleRow[] }>(route('admin.ads.rules.data'));
             setRules(res.rules ?? []);
         } catch {
             setRules(initialRules as AdRuleRow[]);
@@ -77,7 +77,7 @@ export function RulesPanel({ rules: initialRules }: { rules: Record<string, unkn
         if (allowed === undefined) return;
         setBusy(true);
         try {
-            await apiJson('/ads/rules', {
+            await webSessionJson(route('admin.ads.rules.store'), {
                 method: 'POST',
                 body: JSON.stringify({
                     frequency_per_hour: Number(createFph) || 0,
@@ -111,7 +111,7 @@ export function RulesPanel({ rules: initialRules }: { rules: Record<string, unkn
         if (allowed === undefined) return;
         setBusy(true);
         try {
-            await apiJson(`/ads/rules/${editing.id}`, {
+            await webSessionJson(route('admin.ads.rules.update', editing.id), {
                 method: 'PATCH',
                 body: JSON.stringify({
                     frequency_per_hour: Number(editFph) || 0,
@@ -134,7 +134,7 @@ export function RulesPanel({ rules: initialRules }: { rules: Record<string, unkn
         if (!confirm('Delete this ad rule?')) return;
         setBusy(true);
         try {
-            await apiJson(`/ads/rules/${r.id}`, { method: 'DELETE' });
+            await webSessionJson(route('admin.ads.rules.destroy', r.id), { method: 'DELETE' });
             toast.success('Deleted');
             await load();
         } catch (e) {
@@ -298,7 +298,7 @@ export function BannersPanel({ banners: initial }: { banners: Record<string, unk
 
     const load = useCallback(async () => {
         try {
-            const res = await apiJson<{ banners: BannerRow[] }>('/admin/banners');
+            const res = await webSessionJson<{ banners: BannerRow[] }>(route('admin.ads.platform-banners.data'));
             setBanners(res.banners ?? []);
         } catch {
             setBanners(initial as BannerRow[]);
@@ -312,7 +312,7 @@ export function BannersPanel({ banners: initial }: { banners: Record<string, unk
     const create = async () => {
         setBusy(true);
         try {
-            await apiJson('/admin/banners', {
+            await webSessionJson(route('admin.ads.platform-banners.store'), {
                 method: 'POST',
                 body: JSON.stringify({
                     image_url: cf.image_url.trim(),
@@ -349,7 +349,7 @@ export function BannersPanel({ banners: initial }: { banners: Record<string, unk
         if (!editing) return;
         setBusy(true);
         try {
-            await apiJson(`/admin/banners/${editing.id}`, {
+            await webSessionJson(route('admin.ads.platform-banners.update', editing.id), {
                 method: 'PATCH',
                 body: JSON.stringify({
                     image_url: ef.image_url.trim(),
@@ -374,7 +374,7 @@ export function BannersPanel({ banners: initial }: { banners: Record<string, unk
         if (!confirm('Delete this banner?')) return;
         setBusy(true);
         try {
-            await apiJson(`/admin/banners/${b.id}`, { method: 'DELETE' });
+            await webSessionJson(route('admin.ads.platform-banners.destroy', b.id), { method: 'DELETE' });
             toast.success('Deleted');
             await load();
         } catch (e) {
@@ -616,7 +616,7 @@ export function PlansPanel({ plans: initialPlans }: { plans: Record<string, unkn
 
     const load = useCallback(async () => {
         try {
-            const res = await apiJson<{ plans: PlanRow[] }>('/admin/subscription/plans');
+            const res = await webSessionJson<{ plans: PlanRow[] }>(route('admin.ads.subscription.plans.data'));
             setPlans(res.plans ?? []);
         } catch {
             setPlans(initialPlans as PlanRow[]);
@@ -670,7 +670,7 @@ export function PlansPanel({ plans: initialPlans }: { plans: Record<string, unkn
         if (!editing) return;
         setBusy(true);
         try {
-            await apiJson(`/admin/subscription/plans/${editing.id}`, {
+            await webSessionJson(route('admin.ads.subscription.plans.update', editing.id), {
                 method: 'PATCH',
                 body: JSON.stringify({
                     name: ef.name,

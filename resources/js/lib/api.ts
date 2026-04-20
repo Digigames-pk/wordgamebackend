@@ -27,6 +27,7 @@ export async function apiJson<T>(path: string, init: RequestInit = {}): Promise<
     }
     const headers: Record<string, string> = {
         Accept: 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
         ...(init.headers as Record<string, string>),
     };
     const csrf = csrfMeta();
@@ -36,13 +37,28 @@ export async function apiJson<T>(path: string, init: RequestInit = {}): Promise<
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
         headers['X-XSRF-TOKEN'] = xsrfToken();
     }
-    if (init.body && !(init.body instanceof FormData) && !headers['Content-Type']) {
+    let body = init.body;
+    if (method !== 'GET' && method !== 'HEAD' && csrf && typeof body === 'string' && !headers['Content-Type']) {
+        headers['Content-Type'] = 'application/json';
+    }
+    if (method !== 'GET' && method !== 'HEAD' && csrf && typeof body === 'string' && headers['Content-Type']?.includes('application/json')) {
+        try {
+            const parsed = JSON.parse(body) as Record<string, unknown>;
+            if (!('_token' in parsed)) {
+                body = JSON.stringify({ ...parsed, _token: csrf });
+            }
+        } catch {
+            // Leave non-JSON bodies untouched.
+        }
+    }
+    if (body && !(body instanceof FormData) && !headers['Content-Type']) {
         headers['Content-Type'] = 'application/json';
     }
 
     const res = await fetch(url, {
         credentials: 'same-origin',
         ...init,
+        body,
         headers,
     });
 
@@ -66,6 +82,7 @@ export async function webSessionJson<T>(path: string, init: RequestInit = {}): P
     }
     const headers: Record<string, string> = {
         Accept: 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
         ...(init.headers as Record<string, string>),
     };
     const csrf = csrfMeta();
@@ -75,13 +92,28 @@ export async function webSessionJson<T>(path: string, init: RequestInit = {}): P
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
         headers['X-XSRF-TOKEN'] = xsrfToken();
     }
-    if (init.body && !(init.body instanceof FormData) && !headers['Content-Type']) {
+    let body = init.body;
+    if (method !== 'GET' && method !== 'HEAD' && csrf && typeof body === 'string' && !headers['Content-Type']) {
+        headers['Content-Type'] = 'application/json';
+    }
+    if (method !== 'GET' && method !== 'HEAD' && csrf && typeof body === 'string' && headers['Content-Type']?.includes('application/json')) {
+        try {
+            const parsed = JSON.parse(body) as Record<string, unknown>;
+            if (!('_token' in parsed)) {
+                body = JSON.stringify({ ...parsed, _token: csrf });
+            }
+        } catch {
+            // Leave non-JSON bodies untouched.
+        }
+    }
+    if (body && !(body instanceof FormData) && !headers['Content-Type']) {
         headers['Content-Type'] = 'application/json';
     }
 
     const res = await fetch(url, {
         credentials: 'same-origin',
         ...init,
+        body,
         headers,
     });
 

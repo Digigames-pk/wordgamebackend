@@ -15,12 +15,13 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Switch } from '@/components/ui/switch';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { apiJson } from '@/lib/api';
+import { webSessionJson } from '@/lib/api';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
 import { Eye, Loader2, Pencil, Plus, Shield, Trash2, User } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
+import { route } from 'ziggy-js';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Admin', href: '/admin/ads/audio' },
@@ -90,7 +91,7 @@ export default function AdminUsersPage({ users: initialUsers }: { users: AdminUs
 
     const reloadUsers = useCallback(async () => {
         try {
-            const res = await apiJson<{ users: AdminUserRow[] }>('/admin/users');
+            const res = await webSessionJson<{ users: AdminUserRow[] }>(route('admin.users.data'));
             setUsers(res.users ?? []);
         } catch {
             router.reload({ only: ['users'] });
@@ -105,7 +106,7 @@ export default function AdminUsersPage({ users: initialUsers }: { users: AdminUs
     const createUser = async () => {
         setBusy(true);
         try {
-            await apiJson('/admin/users', {
+            await webSessionJson(route('admin.users.store'), {
                 method: 'POST',
                 body: JSON.stringify({
                     name: createForm.name.trim(),
@@ -150,7 +151,7 @@ export default function AdminUsersPage({ users: initialUsers }: { users: AdminUs
                 body.password = editForm.password;
                 body.password_confirmation = editForm.password_confirmation;
             }
-            await apiJson(`/admin/users/${editing.id}`, {
+            await webSessionJson(route('admin.users.update', editing.id), {
                 method: 'PATCH',
                 body: JSON.stringify(body),
             });
@@ -169,7 +170,7 @@ export default function AdminUsersPage({ users: initialUsers }: { users: AdminUs
         if (!confirm(`Delete user ${u.email}? This cannot be undone.`)) return;
         setBusy(true);
         try {
-            await apiJson(`/admin/users/${u.id}`, { method: 'DELETE' });
+            await webSessionJson(route('admin.users.destroy', u.id), { method: 'DELETE' });
             toast.success('User deleted');
             await reloadUsers();
         } catch (e) {

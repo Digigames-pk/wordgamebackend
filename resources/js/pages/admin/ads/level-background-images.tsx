@@ -12,7 +12,6 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { webSessionJson } from '@/lib/api';
 import { postWithMethod } from '@/lib/inertia-form-method';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
@@ -43,6 +42,8 @@ function inertiaErrorMessage(errors: Record<string, string | string[] | undefine
 export default function LevelBackgroundImagesPage({ images }: { images: Row[] }) {
     const rows = images;
     const [busy, setBusy] = useState(false);
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewSrc, setPreviewSrc] = useState<string | null>(null);
 
     const [createOpen, setCreateOpen] = useState(false);
     const [form, setForm] = useState({ image_url: '', title: '', sort_order: '0', is_active: true });
@@ -52,66 +53,31 @@ export default function LevelBackgroundImagesPage({ images }: { images: Row[] })
     const [editing, setEditing] = useState<Row | null>(null);
     const [editForm, setEditForm] = useState({ image_url: '', title: '', sort_order: '0', is_active: true });
 
-    const presignAndUpload = async (f: File): Promise<string> => {
-        const presign = await webSessionJson<{ uploadUrl: string; publicUrl: string }>(
-            route('admin.ads.level-backgrounds.presign'),
-            {
-                method: 'POST',
-                body: JSON.stringify({
-                    filename: f.name,
-                    contentType: f.type || 'application/octet-stream',
-                }),
-            },
-        );
-        const put = await fetch(presign.uploadUrl, {
-            method: 'PUT',
-            headers: { 'Content-Type': f.type || 'application/octet-stream' },
-            body: f,
-        });
-        if (!put.ok) {
-            throw new Error('Upload to storage failed');
-        }
-        return presign.publicUrl;
-    };
-
     const create = () => {
         setBusy(true);
-        void (async () => {
-            try {
-                let url = form.image_url.trim();
-                if (file) {
-                    url = await presignAndUpload(file);
-                }
-                if (!url) {
-                    toast.error('Provide an image URL or upload a file');
-                    setBusy(false);
-                    return;
-                }
-                router.post(
-                    route('admin.ads.level-background-images.store'),
-                    {
-                        image_url: url,
-                        title: form.title.trim() || null,
-                        sort_order: Number(form.sort_order) || 0,
-                        is_active: form.is_active,
-                    },
-                    {
-                        preserveScroll: true,
-                        onFinish: () => setBusy(false),
-                        onSuccess: () => {
-                            toast.success('Image saved');
-                            setCreateOpen(false);
-                            setForm({ image_url: '', title: '', sort_order: '0', is_active: true });
-                            setFile(null);
-                        },
-                        onError: (errors) => toast.error(inertiaErrorMessage(errors)),
-                    },
-                );
-            } catch (e) {
-                toast.error(e instanceof Error ? e.message : 'Save failed');
-                setBusy(false);
-            }
-        })();
+        const fd = new FormData();
+        const url = form.image_url.trim();
+        if (url) {
+            fd.append('image_url', url);
+        }
+        fd.append('title', form.title.trim());
+        fd.append('sort_order', String(Number(form.sort_order) || 0));
+        fd.append('is_active', form.is_active ? '1' : '0');
+        if (file) {
+            fd.append('file', file);
+        }
+        router.post(route('admin.ads.level-background-images.store'), fd, {
+            forceFormData: true,
+            preserveScroll: true,
+            onFinish: () => setBusy(false),
+            onSuccess: () => {
+                toast.success('Image saved');
+                setCreateOpen(false);
+                setForm({ image_url: '', title: '', sort_order: '0', is_active: true });
+                setFile(null);
+            },
+            onError: (errors) => toast.error(inertiaErrorMessage(errors)),
+        });
     };
 
     const openEdit = (r: Row) => {
@@ -169,7 +135,7 @@ export default function LevelBackgroundImagesPage({ images }: { images: Row[] })
                     <div>
                         <h2 className="font-display text-3xl font-bold tracking-tight">Level background images</h2>
                         <p className="mt-1 text-muted-foreground">
-                            Upload to Wasabi (presigned) or paste a URL. The public level API picks a random active image.
+                            Upload image files with the same dashboard flow as banner ads, or paste a URL.
                         </p>
                     </div>
                     <Button onClick={() => setCreateOpen(true)} className="gap-2">
@@ -201,11 +167,23 @@ export default function LevelBackgroundImagesPage({ images }: { images: Row[] })
                                     {rows.map((r) => (
                                         <TableRow key={r.id}>
                                             <TableCell>
-                                                <img
-                                                    src={r.image_url}
-                                                    alt=""
-                                                    className="h-12 w-20 rounded border object-cover"
-                                                />
+                                                <div className="flex max-w-[220px] flex-col gap-1">
+                                                    <span className="truncate font-mono text-[11px] text-muted-foreground" title={r.image_url}>
+                                                        {r.image_url.split('/').filter(Boolean).pop() ?? r.image_url}
+                                                    </span>
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                        size="sm"
+                                                        className="h-7 w-fit gap-1 text-xs"
+                                                        onClick={() => {
+                                                            setPreviewSrc(r.image_url);
+                                                            setPreviewOpen(true);
+                                                        }}
+                                                    >
+                                                        Preview
+                                                    </Button>
+                                                </div>
                                             </TableCell>
                                             <TableCell className="max-w-xs truncate font-mono text-xs">{r.image_url}</TableCell>
                                             <TableCell>{r.title ?? '—'}</TableCell>
@@ -318,6 +296,19 @@ export default function LevelBackgroundImagesPage({ images }: { images: Row[] })
                             {busy ? <Loader2 className="size-4 animate-spin" /> : 'Save'}
                         </Button>
                     </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+                <DialogContent className="max-w-3xl">
+                    <DialogHeader>
+                        <DialogTitle>Background preview</DialogTitle>
+                    </DialogHeader>
+                    {previewSrc ? (
+                        <div className="flex max-h-[70vh] justify-center overflow-auto rounded-md border bg-muted/30 p-2">
+                            <img src={previewSrc} alt="Background preview" className="max-h-[65vh] max-w-full object-contain" />
+                        </div>
+                    ) : null}
                 </DialogContent>
             </Dialog>
         </AppLayout>

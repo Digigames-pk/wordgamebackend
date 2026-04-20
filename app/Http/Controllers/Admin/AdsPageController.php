@@ -10,6 +10,7 @@ use App\Models\AdRule;
 use App\Models\Advertiser;
 use App\Models\BannerAd;
 use App\Models\GameLevelAdRule;
+use App\Models\GameConfigEntry;
 use App\Models\LevelBackgroundImage;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
@@ -133,7 +134,9 @@ class AdsPageController extends Controller
 
     public function gameConfigs(): Response
     {
-        return Inertia::render('admin/ads/game-config-entries');
+        return Inertia::render('admin/ads/game-config-entries', [
+            'configs' => GameConfigEntry::query()->orderBy('entry_key')->get()->all(),
+        ]);
     }
 
     public function users(): Response

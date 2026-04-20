@@ -12,12 +12,13 @@ import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
-import { apiJson } from '@/lib/api';
+import { postWithMethod } from '@/lib/inertia-form-method';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { Loader2, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
+import { route } from 'ziggy-js';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Ads', href: '/admin/ads/audio' },
@@ -30,9 +31,8 @@ interface Row {
     entry_value: string | null;
 }
 
-export default function GameConfigEntriesPage() {
-    const [rows, setRows] = useState<Row[]>([]);
-    const [loading, setLoading] = useState(true);
+export default function GameConfigEntriesPage({ configs }: { configs: Row[] }) {
+    const rows = useMemo(() => configs ?? [], [configs]);
     const [busy, setBusy] = useState(false);
 
     const [createOpen, setCreateOpen] = useState(false);
@@ -42,41 +42,26 @@ export default function GameConfigEntriesPage() {
     const [editing, setEditing] = useState<Row | null>(null);
     const [editForm, setEditForm] = useState({ entry_key: '', entry_value: '' });
 
-    const load = useCallback(async () => {
-        setLoading(true);
-        try {
-            const res = await apiJson<{ configs: Row[] }>('/admin/game-config-entries');
-            setRows(res.configs ?? []);
-        } catch (e) {
-            toast.error(e instanceof Error ? e.message : 'Failed to load');
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-
-    useEffect(() => {
-        void load();
-    }, [load]);
-
-    const create = async () => {
+    const create = () => {
         setBusy(true);
-        try {
-            await apiJson('/admin/game-config-entries', {
-                method: 'POST',
-                body: JSON.stringify({
-                    entry_key: form.entry_key.trim(),
-                    entry_value: form.entry_value,
-                }),
-            });
-            toast.success('Config created');
-            setCreateOpen(false);
-            setForm({ entry_key: '', entry_value: '' });
-            await load();
-        } catch (e) {
-            toast.error(e instanceof Error ? e.message : 'Save failed');
-        } finally {
-            setBusy(false);
-        }
+        router.post(
+            route('admin.ads.game-config-entries.store'),
+            {
+                entry_key: form.entry_key.trim(),
+                entry_value: form.entry_value,
+            },
+            {
+                preserveScroll: true,
+                onFinish: () => setBusy(false),
+                onSuccess: () => {
+                    toast.success('Config created');
+                    setCreateOpen(false);
+                    setForm({ entry_key: '', entry_value: '' });
+                    router.reload({ only: ['configs'] });
+                },
+                onError: () => toast.error('Save failed'),
+            },
+        );
     };
 
     const openEdit = (r: Row) => {
@@ -85,40 +70,42 @@ export default function GameConfigEntriesPage() {
         setEditOpen(true);
     };
 
-    const saveEdit = async () => {
+    const saveEdit = () => {
         if (!editing) return;
         setBusy(true);
-        try {
-            await apiJson(`/admin/game-config-entries/${editing.id}`, {
-                method: 'PATCH',
-                body: JSON.stringify({
-                    entry_key: editForm.entry_key.trim(),
-                    entry_value: editForm.entry_value,
-                }),
-            });
-            toast.success('Updated');
-            setEditOpen(false);
-            setEditing(null);
-            await load();
-        } catch (e) {
-            toast.error(e instanceof Error ? e.message : 'Update failed');
-        } finally {
-            setBusy(false);
-        }
+        postWithMethod(
+            'patch',
+            route('admin.ads.game-config-entries.update', editing.id),
+            {
+                entry_key: editForm.entry_key.trim(),
+                entry_value: editForm.entry_value,
+            },
+            {
+                preserveScroll: true,
+                onFinish: () => setBusy(false),
+                onSuccess: () => {
+                    toast.success('Updated');
+                    setEditOpen(false);
+                    setEditing(null);
+                    router.reload({ only: ['configs'] });
+                },
+                onError: () => toast.error('Update failed'),
+            },
+        );
     };
 
-    const destroy = async (r: Row) => {
+    const destroy = (r: Row) => {
         if (!confirm(`Delete config “${r.entry_key}”?`)) return;
         setBusy(true);
-        try {
-            await apiJson(`/admin/game-config-entries/${r.id}`, { method: 'DELETE' });
-            toast.success('Deleted');
-            await load();
-        } catch (e) {
-            toast.error(e instanceof Error ? e.message : 'Delete failed');
-        } finally {
-            setBusy(false);
-        }
+        postWithMethod('delete', route('admin.ads.game-config-entries.destroy', r.id), {}, {
+            preserveScroll: true,
+            onFinish: () => setBusy(false),
+            onSuccess: () => {
+                toast.success('Deleted');
+                router.reload({ only: ['configs'] });
+            },
+            onError: () => toast.error('Delete failed'),
+        });
     };
 
     return (
@@ -144,11 +131,7 @@ export default function GameConfigEntriesPage() {
                         <CardDescription>Values are returned to clients as JSON (numbers are coerced when numeric).</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        {loading ? (
-                            <div className="flex justify-center py-12">
-                                <Loader2 className="size-8 animate-spin text-muted-foreground" />
-                            </div>
-                        ) : rows.length === 0 ? (
+                        {rows.length === 0 ? (
                             <p className="py-8 text-center text-muted-foreground">No config rows yet.</p>
                         ) : (
                             <Table>
@@ -210,7 +193,7 @@ export default function GameConfigEntriesPage() {
                         <Button variant="outline" onClick={() => setCreateOpen(false)}>
                             Cancel
                         </Button>
-                        <Button onClick={() => void create()} disabled={busy || !form.entry_key.trim()}>
+                        <Button onClick={() => create()} disabled={busy || !form.entry_key.trim()}>
                             {busy ? <Loader2 className="size-4 animate-spin" /> : 'Save'}
                         </Button>
                     </DialogFooter>
@@ -239,7 +222,7 @@ export default function GameConfigEntriesPage() {
                         <Button variant="outline" onClick={() => setEditOpen(false)}>
                             Cancel
                         </Button>
-                        <Button onClick={() => void saveEdit()} disabled={busy}>
+                        <Button onClick={() => saveEdit()} disabled={busy}>
                             {busy ? <Loader2 className="size-4 animate-spin" /> : 'Save'}
                         </Button>
                     </DialogFooter>

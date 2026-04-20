@@ -16,7 +16,7 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { route } from 'ziggy-js';
-import { apiJson } from '@/lib/api';
+import { webSessionJson } from '@/lib/api';
 import { Loader2, Pencil, Plus, RefreshCw } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
@@ -92,7 +92,7 @@ export default function AdminAdsAdvertisersPage({
         if (!editing) return;
         setSavingEdit(true);
         try {
-            await apiJson(`/advertisers/${editing.id}`, {
+            await webSessionJson(route('admin.ads.advertisers.update', editing.id), {
                 method: 'PUT',
                 body: JSON.stringify({
                     name: editForm.name,
