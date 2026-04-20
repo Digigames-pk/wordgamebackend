@@ -5,7 +5,6 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {
-    BarChart3,
     BookOpen,
     Code,
     Folder,
@@ -40,10 +39,10 @@ const adminNavItems: NavItem[] = [
     { title: 'Video ads', url: '/admin/ads/video', icon: Video },
     { title: 'Banner ads', url: '/admin/ads/banner', icon: Image },
     { title: 'Advertisers', url: '/admin/ads/advertisers', icon: Users },
-    { title: 'Free tier settings', url: '/admin/ads/free-tier', icon: Settings },
+    // { title: 'Free tier settings', url: '/admin/ads/free-tier', icon: Settings },
     { title: 'Ad rules', url: '/admin/ads/rules', icon: Layers },
-    { title: 'Analytics', url: '/admin/ads/analytics', icon: BarChart3 },
-    { title: 'Platform banners', url: '/admin/ads/platform-banners', icon: Image },
+    // { title: 'Analytics', url: '/admin/ads/analytics', icon: BarChart3 },
+    // { title: 'Platform banners', url: '/admin/ads/platform-banners', icon: Image },
     { title: 'Stripe keys', url: '/admin/ads/stripe', icon: Wallet },
     { title: 'Subscription plans', url: '/admin/ads/plans', icon: Waypoints },
     { title: 'Level ad rules', url: '/admin/ads/levels', icon: LayoutList },
