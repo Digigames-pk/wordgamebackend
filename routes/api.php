@@ -68,8 +68,8 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
     Route::get('/subscription/status', [SubscriptionCheckoutController::class, 'status']);
     Route::post('/subscription/portal', [SubscriptionCheckoutController::class, 'portal']);
 });
-
-Route::middleware(['auth:sanctum', 'admin', 'throttle:120,1'])->group(function () {
+// 'throttle:120,1'
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('/ads/upload-url', [AdUploadController::class, 'presigned']);
     Route::post('/ads/assets/json', [AdAssetController::class, 'storeJson']);
     Route::post('/ads/assets', [AdAssetController::class, 'storeMultipart']);
