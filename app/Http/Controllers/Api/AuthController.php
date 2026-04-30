@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\DeviceState;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -69,5 +70,15 @@ class AuthController extends Controller
     public function user(Request $request): JsonResponse
     {
         return response()->json($request->user());
+    }
+
+    public function deviceId(Request $request): JsonResponse
+    {
+        $input = $request->deviceId;
+        $deviceId = DeviceState::where('device_id', $input)->first();
+        if (!$deviceId) {
+            return response()->json(['message' => 'Device not found'], 404);
+        }
+        return response()->json(['device_id' => $deviceId]);
     }
 }

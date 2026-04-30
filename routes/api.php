@@ -61,6 +61,7 @@ Route::middleware(['throttle:120,1'])->group(function () {
     Route::get('/ads/banner', [PublicBannerController::class, 'publicBanner']);
     Route::post('/banners/{id}/click', [PublicBannerController::class, 'click']);
     Route::post('/banners/{id}/impression', [PublicBannerController::class, 'impression']);
+    Route::post('/device-id', [AuthController::class, 'deviceId']);
 });
 
 Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
