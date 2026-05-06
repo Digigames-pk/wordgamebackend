@@ -2,7 +2,8 @@
 
 /**
  * Authoritative puzzle blueprints (levels 1–10 mirror the mobile LEVELS array).
- * Procedural levels (11+) pick a blueprint deterministically from level_number.
+ * Procedural levels (11+) reuse this geometry (letters count, grid_layout) but
+ * substitute words from config/procedural_word_pools.php, then persist rows.
  */
 return [
     [
