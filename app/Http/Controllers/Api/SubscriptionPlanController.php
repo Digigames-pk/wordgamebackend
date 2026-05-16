@@ -25,6 +25,7 @@ class SubscriptionPlanController extends Controller
                 'currency' => $p->currency,
                 'removes_ads' => $p->removes_ads,
                 'coins' => $p->coins ?? 0,
+                'apple_product_id' => $p->apple_product_id,
             ]);
 
         return response()->json(['plans' => $plans]);
@@ -46,6 +47,7 @@ class SubscriptionPlanController extends Controller
             'removes_ads' => ['boolean'],
             'coins' => ['sometimes', 'integer', 'min:0'],
             'is_active' => ['boolean'],
+            'apple_product_id' => ['nullable', 'string', 'max:255'],
         ]);
 
         $data['coins'] = (int) ($data['coins'] ?? 0);
@@ -72,6 +74,7 @@ class SubscriptionPlanController extends Controller
             'removes_ads' => ['boolean'],
             'coins' => ['sometimes', 'integer', 'min:0'],
             'is_active' => ['boolean'],
+            'apple_product_id' => ['nullable', 'string', 'max:255'],
         ]);
         $plan->update($data);
 
