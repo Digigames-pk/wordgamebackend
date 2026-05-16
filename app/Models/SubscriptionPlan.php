@@ -18,6 +18,7 @@ class SubscriptionPlan extends Model
         'is_active',
         'stripe_product_id',
         'stripe_price_id',
+        'apple_product_id',
     ];
 
     protected function casts(): array

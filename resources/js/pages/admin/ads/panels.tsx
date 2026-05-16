@@ -599,6 +599,7 @@ interface PlanRow {
     is_active?: boolean;
     coins?: number;
     stripe_price_id?: string | null;
+    apple_product_id?: string | null;
 }
 
 export function PlansPanel({ plans: initialPlans }: { plans: Record<string, unknown>[] }) {
@@ -606,12 +607,21 @@ export function PlansPanel({ plans: initialPlans }: { plans: Record<string, unkn
     const [amount, setAmount] = useState('999');
     const [interval, setInterval] = useState('month');
     const [coins, setCoins] = useState('0');
+    const [appleProductId, setAppleProductId] = useState('');
     const [creating, setCreating] = useState(false);
 
     const [plans, setPlans] = useState<PlanRow[]>(() => initialPlans as PlanRow[]);
     const [editOpen, setEditOpen] = useState(false);
     const [editing, setEditing] = useState<PlanRow | null>(null);
-    const [ef, setEf] = useState({ name: '', amount: '', interval: 'month', coins: '0', removes_ads: true, is_active: true });
+    const [ef, setEf] = useState({
+        name: '',
+        amount: '',
+        interval: 'month',
+        coins: '0',
+        apple_product_id: '',
+        removes_ads: true,
+        is_active: true,
+    });
     const [busy, setBusy] = useState(false);
 
     const load = useCallback(async () => {
@@ -640,6 +650,7 @@ export function PlansPanel({ plans: initialPlans }: { plans: Record<string, unkn
                 removes_ads: true,
                 is_active: true,
                 coins: Number(coins) || 0,
+                apple_product_id: appleProductId.trim() || null,
             },
             {
                 preserveScroll: true,
@@ -660,6 +671,7 @@ export function PlansPanel({ plans: initialPlans }: { plans: Record<string, unkn
             amount: String(p.amount),
             interval: p.interval,
             coins: String(p.coins ?? 0),
+            apple_product_id: p.apple_product_id ?? '',
             removes_ads: p.removes_ads !== false,
             is_active: p.is_active !== false,
         });
@@ -680,6 +692,7 @@ export function PlansPanel({ plans: initialPlans }: { plans: Record<string, unkn
                     removes_ads: ef.removes_ads,
                     is_active: ef.is_active,
                     coins: Number(ef.coins) || 0,
+                    apple_product_id: ef.apple_product_id.trim() || null,
                 }),
             });
             toast.success('Plan updated');
@@ -701,7 +714,7 @@ export function PlansPanel({ plans: initialPlans }: { plans: Record<string, unkn
                     <CardDescription>Creates Stripe Product + Price when saved (requires Stripe secret).</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <div className="grid gap-2 md:grid-cols-4">
+                    <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-5">
                         <div>
                             <Label>Name</Label>
                             <Input value={name} onChange={(e) => setName(e.target.value)} />
@@ -717,6 +730,14 @@ export function PlansPanel({ plans: initialPlans }: { plans: Record<string, unkn
                         <div>
                             <Label>Coins (local)</Label>
                             <Input value={coins} onChange={(e) => setCoins(e.target.value)} inputMode="numeric" />
+                        </div>
+                        <div>
+                            <Label>Apple product ID</Label>
+                            <Input
+                                value={appleProductId}
+                                onChange={(e) => setAppleProductId(e.target.value)}
+                                placeholder="com.example.pro.monthly"
+                            />
                         </div>
                     </div>
                     <Button onClick={create} disabled={creating}>
@@ -734,8 +755,8 @@ export function PlansPanel({ plans: initialPlans }: { plans: Record<string, unkn
                         {plans.map((p) => (
                             <li key={String(p.id)} className="flex flex-wrap items-center justify-between gap-2 rounded border p-2">
                                 <span>
-                                    {p.name} — {p.amount} {p.currency} / {p.interval} — coins: {p.coins ?? 0} (
-                                    {String(p.stripe_price_id ?? 'no price')})
+                                    {p.name} — {p.amount} {p.currency} / {p.interval} — coins: {p.coins ?? 0} — Apple:{' '}
+                                    {p.apple_product_id ?? '—'} (Stripe: {String(p.stripe_price_id ?? 'no price')})
                                 </span>
                                 <Button variant="outline" size="sm" className="gap-1" onClick={() => openEdit(p)}>
                                     <Pencil className="size-3" /> Edit
@@ -767,6 +788,14 @@ export function PlansPanel({ plans: initialPlans }: { plans: Record<string, unkn
                         <div className="space-y-2">
                             <Label>Coins</Label>
                             <Input inputMode="numeric" value={ef.coins} onChange={(e) => setEf((f) => ({ ...f, coins: e.target.value }))} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Apple product ID</Label>
+                            <Input
+                                value={ef.apple_product_id}
+                                onChange={(e) => setEf((f) => ({ ...f, apple_product_id: e.target.value }))}
+                                placeholder="com.example.pro.monthly"
+                            />
                         </div>
                         <div className="flex items-center gap-2">
                             <Switch checked={ef.removes_ads} onCheckedChange={(c) => setEf((f) => ({ ...f, removes_ads: Boolean(c) }))} />

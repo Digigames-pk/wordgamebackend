@@ -195,7 +195,23 @@ class ApiAdsTest extends TestCase
 
     public function test_subscription_plans_public(): void
     {
-        $this->getJson('/api/subscription/plans')->assertOk()->assertJsonStructure(['plans']);
+        SubscriptionPlan::query()->create([
+            'name' => 'Pro',
+            'description' => null,
+            'interval' => 'month',
+            'amount' => 999,
+            'currency' => 'usd',
+            'removes_ads' => true,
+            'is_active' => true,
+            'coins' => 100,
+            'apple_product_id' => 'com.gameapp.pro.monthly',
+            'stripe_product_id' => null,
+            'stripe_price_id' => null,
+        ]);
+
+        $this->getJson('/api/subscription/plans')
+            ->assertOk()
+            ->assertJsonPath('plans.0.apple_product_id', 'com.gameapp.pro.monthly');
     }
 
     public function test_game_level_settings_public(): void
