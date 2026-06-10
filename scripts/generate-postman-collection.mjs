@@ -158,6 +158,15 @@ const folders = [
                 description: 'Key/value map for mobile (e.g. level_coins).',
             }),
             item({
+                name: 'List game levels (paginated)',
+                method: 'GET',
+                urlPath: 'game/levels',
+                auth: 'noauth',
+                query: [{ key: 'page', value: '1', description: '10 levels per page (default page 1)' }],
+                description:
+                    'Pagination: ?page=1 → levels 1–10. Bulk range: ?from=1&to=25. Bulk list: ?levels=1,11,12. Missing levels 11+ are generated and saved.',
+            }),
+            item({
                 name: 'Get game level',
                 method: 'GET',
                 urlPath: 'game/level/{{level_number}}',

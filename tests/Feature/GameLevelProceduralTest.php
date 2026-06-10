@@ -48,4 +48,54 @@ class GameLevelProceduralTest extends TestCase
         $b = $this->getJson('/api/game/level/12')->json('level.words');
         $this->assertNotEquals($a, $b);
     }
+
+    public function test_levels_paginated_returns_ten_per_page(): void
+    {
+        $response = $this->getJson('/api/game/levels?page=1')
+            ->assertOk()
+            ->assertJsonStructure([
+                'levels',
+                'pagination' => ['page', 'per_page', 'from_level', 'to_level', 'count', 'has_more'],
+            ]);
+
+        $this->assertCount(10, $response->json('levels'));
+        $this->assertSame(1, $response->json('pagination.page'));
+        $this->assertSame(10, $response->json('pagination.per_page'));
+        $this->assertSame(1, $response->json('pagination.from_level'));
+        $this->assertSame(10, $response->json('pagination.to_level'));
+        $this->assertSame(1, $response->json('levels.0.id'));
+        $this->assertSame(10, $response->json('levels.9.id'));
+    }
+
+    public function test_levels_page_two_generates_procedural_levels(): void
+    {
+        $this->assertNull(GameLevel::query()->where('level_number', 11)->first());
+
+        $response = $this->getJson('/api/game/levels?page=2')->assertOk();
+
+        $this->assertCount(10, $response->json('levels'));
+        $this->assertSame(11, $response->json('pagination.from_level'));
+        $this->assertSame(20, $response->json('pagination.to_level'));
+        $this->assertSame(11, $response->json('levels.0.id'));
+        $this->assertNotNull(GameLevel::query()->where('level_number', 11)->first());
+        $this->assertNotNull(GameLevel::query()->where('level_number', 20)->first());
+    }
+
+    public function test_levels_bulk_by_range(): void
+    {
+        $response = $this->getJson('/api/game/levels?from=9&to=12')->assertOk();
+
+        $this->assertCount(4, $response->json('levels'));
+        $this->assertSame(9, $response->json('bulk.from'));
+        $this->assertSame(12, $response->json('bulk.to'));
+        $this->assertSame([9, 10, 11, 12], array_column($response->json('levels'), 'id'));
+    }
+
+    public function test_levels_bulk_by_list(): void
+    {
+        $response = $this->getJson('/api/game/levels?levels=1,11,12')->assertOk();
+
+        $this->assertCount(3, $response->json('levels'));
+        $this->assertSame([1, 11, 12], $response->json('bulk.level_numbers'));
+    }
 }

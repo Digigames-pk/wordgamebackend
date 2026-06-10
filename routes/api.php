@@ -44,6 +44,7 @@ Route::post('/stripe/webhook', StripeWebhookController::class)->middleware('thro
 Route::get('/game/level-ad-settings', [GamePublicController::class, 'levelAdSettings']);
 Route::get('/game/config', [GamePublicController::class, 'config']);
 Route::get('/game/mobile-configs', [GamePublicController::class, 'mobileConfigs']);
+Route::get('/game/levels', [GameLevelApiController::class, 'index']);
 Route::get('/game/level/{level}', [GameLevelApiController::class, 'show'])->whereNumber('level');
 
 Route::post('/public/device-state', [DeviceStatePublicController::class, 'store'])->middleware('throttle:120,1');

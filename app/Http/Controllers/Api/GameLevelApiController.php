@@ -7,6 +7,7 @@ use App\Models\GameLevel;
 use App\Models\LevelBackgroundImage;
 use App\Services\Game\GameLevelService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class GameLevelApiController extends Controller
@@ -15,15 +16,101 @@ class GameLevelApiController extends Controller
         protected GameLevelService $levels,
     ) {}
 
-    public function show(int $level): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $model = GameLevel::query()->where('level_number', $level)->first();
-        if (! $model) {
-            abort_unless($level > 10, 404, 'Level not found. Run database seeders for static levels.');
-            $model = $this->levels->resolveLevel($level);
+        $data = $request->validate([
+            'page' => ['sometimes', 'integer', 'min:1'],
+            'from' => ['sometimes', 'integer', 'min:1'],
+            'to' => ['sometimes', 'integer', 'min:1'],
+            'levels' => ['sometimes', 'string', 'max:2000'],
+        ]);
+
+        $perPage = GameLevelService::PER_PAGE;
+
+        if (isset($data['levels'])) {
+            $numbers = $this->parseLevelList($data['levels']);
+            $models = $this->levels->getOrCreateMany($numbers);
+
+            return response()->json([
+                'levels' => $this->toClientPayloadMany($models),
+                'bulk' => [
+                    'level_numbers' => array_map(fn (GameLevel $l) => $l->level_number, $models),
+                    'count' => count($models),
+                ],
+            ]);
         }
 
+        if (isset($data['from']) || isset($data['to'])) {
+            $from = (int) ($data['from'] ?? $data['to']);
+            $to = (int) ($data['to'] ?? $data['from']);
+            if ($to < $from) {
+                [$from, $to] = [$to, $from];
+            }
+            $models = $this->levels->getOrCreateRange($from, $to);
+
+            return response()->json([
+                'levels' => $this->toClientPayloadMany($models),
+                'bulk' => [
+                    'from' => $from,
+                    'to' => $to,
+                    'count' => count($models),
+                ],
+            ]);
+        }
+
+        $page = (int) ($data['page'] ?? 1);
+        $from = ($page - 1) * $perPage + 1;
+        $to = $page * $perPage;
+        $models = $this->levels->getOrCreateRange($from, $to);
+
+        return response()->json([
+            'levels' => $this->toClientPayloadMany($models),
+            'pagination' => [
+                'page' => $page,
+                'per_page' => $perPage,
+                'from_level' => $from,
+                'to_level' => $to,
+                'count' => count($models),
+                'has_more' => true,
+            ],
+        ]);
+    }
+
+    public function show(int $level): JsonResponse
+    {
+        $model = $this->levels->getOrCreate($level);
+
         return response()->json(['level' => $this->toClientPayload($model)]);
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    protected function parseLevelList(string $levels): array
+    {
+        $parts = preg_split('/[\s,]+/', $levels, -1, PREG_SPLIT_NO_EMPTY);
+        if ($parts === false || $parts === []) {
+            abort(422, 'Invalid levels list.');
+        }
+
+        $numbers = [];
+        foreach ($parts as $part) {
+            if (! ctype_digit($part)) {
+                abort(422, 'Levels must be comma-separated positive integers.');
+            }
+            $numbers[] = (int) $part;
+        }
+
+        return $numbers;
+    }
+
+    /**
+     * @param  array<int, GameLevel>  $levels
+     * @return array<int, array<string, mixed>>
+     */
+    protected function toClientPayloadMany(array $levels): array
+    {
+        return array_map(fn (GameLevel $level): array => $this->toClientPayload($level), $levels);
     }
 
     /**
@@ -60,7 +147,6 @@ class GameLevelApiController extends Controller
     }
 
     /**
-     * @param  mixed  $words
      * @return array<int, string>
      */
     protected function normalizeWords(mixed $words): array
@@ -75,7 +161,6 @@ class GameLevelApiController extends Controller
     }
 
     /**
-     * @param  mixed  $gridLayout
      * @return array<int, array<string, mixed>>
      */
     protected function normalizeGridLayout(mixed $gridLayout): array
