@@ -166,7 +166,7 @@ return [
         'reward' => 100,
     ],
     [
-        'name' => 'Northern Lights',
+        'name' => 'Frosty Morning',
         'theme' => 'aurora',
         'difficulty' => 'Medium',
         'letters' => [
@@ -278,7 +278,7 @@ return [
         'reward' => 200,
     ],
     [
-        'name' => 'Midnight Mass',
+        'name' => 'Holiday Lights',
         'theme' => 'christmas_eve',
         'difficulty' => 'Medium',
         'letters' => [
@@ -341,7 +341,7 @@ return [
         'reward' => 125,
     ],
     [
-        'name' => 'Frosty Morning',
+        'name' => 'Snow Day',
         'theme' => 'winter',
         'difficulty' => 'Hard',
         'letters' => [
@@ -402,7 +402,7 @@ return [
         'reward' => 150,
     ],
     [
-        'name' => 'Gingerbread House',
+        'name' => 'Cozy Fireplace',
         'theme' => 'santa',
         'difficulty' => 'Hard',
         'letters' => [
@@ -465,7 +465,7 @@ return [
         'reward' => 200,
     ],
     [
-        'name' => 'Starry Holy Night',
+        'name' => 'Reindeer Trail',
         'theme' => 'aurora',
         'difficulty' => 'Hard',
         'letters' => [
@@ -526,7 +526,7 @@ return [
         'reward' => 250,
     ],
     [
-        'name' => 'Ice Palace',
+        'name' => 'Jingle Bells',
         'theme' => 'candy',
         'difficulty' => 'Expert',
         'letters' => [

@@ -453,9 +453,12 @@ class ChristmasWordImporter
     {
         $blueprints = config('game_level_blueprints', []);
 
+        $resolver = app(LevelNameResolver::class);
+
         foreach ($blueprints as $index => &$blueprint) {
             $levelNumber = $index + 1;
             $words = $levelAssignments[$levelNumber] ?? [];
+            $blueprint['name'] = $resolver->forLevel($levelNumber);
             $blueprint['words'] = $words;
             $blueprint['grid_words'] = $words;
             $blueprint['letters'] = $this->lettersFromWords($words);

@@ -11,6 +11,10 @@ use Illuminate\Support\Str;
  */
 class ProceduralLevelGenerator
 {
+    public function __construct(
+        protected LevelNameResolver $levelNames,
+    ) {}
+
     /**
      * @return array<string, mixed> GameLevel fillable attributes (includes level_number)
      */
@@ -60,7 +64,7 @@ class ProceduralLevelGenerator
 
         return [
             'level_number' => $levelNumber,
-            'name' => $bp['name'].' — '.$this->rankLabel($tier),
+            'name' => $this->levelNames->forLevel($levelNumber),
             'theme' => $theme,
             'difficulty' => $difficulty,
             'letters' => $letters,

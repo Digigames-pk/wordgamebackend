@@ -3,10 +3,15 @@
 namespace Database\Seeders;
 
 use App\Models\GameLevel;
+use App\Services\Game\LevelNameResolver;
 use Illuminate\Database\Seeder;
 
 class DefaultGameLevelsSeeder extends Seeder
 {
+    public function __construct(
+        protected LevelNameResolver $levelNames,
+    ) {}
+
     public function run(): void
     {
         GameLevel::query()->where('level_number', '<=', 10)->delete();
@@ -17,7 +22,7 @@ class DefaultGameLevelsSeeder extends Seeder
             GameLevel::query()->updateOrCreate(
                 ['level_number' => $n],
                 [
-                    'name' => $bp['name'],
+                    'name' => $this->levelNames->forLevel($n),
                     'theme' => $bp['theme'],
                     'difficulty' => $bp['difficulty'],
                     'letters' => $bp['letters'],
