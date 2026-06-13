@@ -169,7 +169,7 @@ class AdSelectionService
     }
 
     /**
-     * First matching active rule for a level (inclusive range).
+     * First matching active rule whose level range contains the given level (sort order wins).
      */
     public function resolveRuleForLevel(int $level): ?GameLevelAdRule
     {
@@ -178,16 +178,86 @@ class AdSelectionService
             ->orderBy('sort_order')
             ->orderBy('level_from')
             ->get()
-            ->first(function (GameLevelAdRule $r) use ($level) {
-                if ($level < $r->level_from) {
-                    return false;
-                }
-                if ($r->level_to !== null && $level > $r->level_to) {
-                    return false;
-                }
+            ->first(fn (GameLevelAdRule $r): bool => $this->isLevelInRuleRange($level, $r));
+    }
 
-                return true;
-            });
+    public function isLevelInRuleRange(int $level, GameLevelAdRule $rule): bool
+    {
+        if ($level < $rule->level_from) {
+            return false;
+        }
+
+        if ($rule->level_to !== null && $level > $rule->level_to) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Whether the level number falls on this rule's ad interval (e.g. interval 10 → 10, 20, 30…).
+     */
+    public function isLevelOnAdInterval(int $level, GameLevelAdRule $rule): bool
+    {
+        $interval = max(1, (int) ($rule->level_interval ?? 1));
+
+        if ($interval <= 1) {
+            return true;
+        }
+
+        return $level % $interval === 0;
+    }
+
+    /**
+     * Full eligibility: active rule range, positive ad count, and interval match.
+     */
+    public function isLevelEligibleForAd(int $level, GameLevelAdRule $rule): bool
+    {
+        if (! $rule->is_active) {
+            return false;
+        }
+
+        if (! $this->isLevelInRuleRange($level, $rule)) {
+            return false;
+        }
+
+        if ((int) $rule->ads_after_level_complete <= 0) {
+            return false;
+        }
+
+        return $this->isLevelOnAdInterval($level, $rule);
+    }
+
+    /**
+     * @return array{
+     *     eligible: bool,
+     *     rule: GameLevelAdRule|null,
+     *     in_range: bool,
+     *     interval_match: bool,
+     * }
+     */
+    public function evaluateLevelAd(int $level): array
+    {
+        $rule = $this->resolveRuleForLevel($level);
+
+        if ($rule === null) {
+            return [
+                'eligible' => false,
+                'rule' => null,
+                'in_range' => false,
+                'interval_match' => false,
+            ];
+        }
+
+        $inRange = $this->isLevelInRuleRange($level, $rule);
+        $intervalMatch = $this->isLevelOnAdInterval($level, $rule);
+
+        return [
+            'eligible' => $this->isLevelEligibleForAd($level, $rule),
+            'rule' => $rule,
+            'in_range' => $inRange,
+            'interval_match' => $intervalMatch,
+        ];
     }
 
     public function isValidForSchedule(AdAsset $ad): bool

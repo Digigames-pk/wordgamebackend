@@ -27,6 +27,7 @@ export interface LevelAdRuleRow {
     sort_order: number;
     level_from: number;
     level_to: number | null;
+    level_interval: number;
     ads_after_level_complete: number;
     is_active: boolean;
     created_at?: string | null;
@@ -49,10 +50,19 @@ function formatRange(from: number, to: number | null): string {
     return `${from}–${to}`;
 }
 
+function formatInterval(interval: number): string {
+    const n = interval > 0 ? interval : 1;
+    if (n <= 1) {
+        return 'Every level';
+    }
+    return `Every ${n} levels (${n}, ${n * 2}, ${n * 3}…)`;
+}
+
 type FormState = {
     sort_order: string;
     level_from: string;
     level_to: string;
+    level_interval: string;
     ads_after_level_complete: string;
     is_active: boolean;
 };
@@ -61,6 +71,7 @@ const emptyForm = (): FormState => ({
     sort_order: '0',
     level_from: '1',
     level_to: '',
+    level_interval: '1',
     ads_after_level_complete: '1',
     is_active: true,
 });
@@ -70,6 +81,7 @@ function formFromRow(r: LevelAdRuleRow): FormState {
         sort_order: String(r.sort_order),
         level_from: String(r.level_from),
         level_to: r.level_to === null ? '' : String(r.level_to),
+        level_interval: String(r.level_interval ?? 1),
         ads_after_level_complete: String(r.ads_after_level_complete),
         is_active: r.is_active,
     };
@@ -80,6 +92,7 @@ function payloadFromForm(f: FormState): Record<string, unknown> {
         sort_order: Number(f.sort_order) || 0,
         level_from: Number(f.level_from),
         level_to: f.level_to.trim() === '' ? null : Number(f.level_to),
+        level_interval: Math.max(1, Number(f.level_interval) || 1),
         ads_after_level_complete: Number(f.ads_after_level_complete),
         is_active: f.is_active,
     };
@@ -167,20 +180,50 @@ export function LevelAdRulesPanel({ levelRules }: { levelRules: LevelAdRuleRow[]
         <div className="space-y-8">
             <Alert>
                 <Info className="size-4" />
-                <AlertTitle>How rules apply</AlertTitle>
-                <AlertDescription className="space-y-2 text-muted-foreground">
+                <AlertTitle>How level ad rules work</AlertTitle>
+                <AlertDescription className="space-y-3 text-muted-foreground">
                     <p>
-                        Rules are evaluated in <strong className="text-foreground">sort order</strong>, then by level range.
-                        The first rule whose range contains the player&apos;s level wins when calling{' '}
-                        <code className="rounded bg-muted px-1 py-0.5 text-xs">GET /api/game/next-ad?level=…</code>.
+                        Rules are checked in <strong className="text-foreground">sort order</strong> (lowest first). The
+                        first rule whose <strong className="text-foreground">level range</strong> contains the completed level
+                        applies. The app calls{' '}
+                        <code className="rounded bg-muted px-1 py-0.5 text-xs">GET /api/game/next-ad?level=…</code> after
+                        each level; the API returns whether an interstitial is eligible.
                     </p>
                     <p>
-                        <strong className="text-foreground">Ads after level complete</strong> is the number of interstitial
-                        opportunities after finishing a level in this band (client may still throttle). Leave <strong>level to</strong>{' '}
-                        empty for &quot;from this level upward&quot;.
+                        <strong className="text-foreground">Show every N levels</strong> controls frequency within the range.
+                        Set <strong className="text-foreground">1</strong> to offer ads after every level in the band. Set{' '}
+                        <strong className="text-foreground">2</strong> for levels 2, 4, 6… Set{' '}
+                        <strong className="text-foreground">10</strong> for levels 10, 20, 30… (level number must be divisible
+                        by N).
+                    </p>
+                    <p>
+                        <strong className="text-foreground">Ads after level</strong> is how many interstitial slots to return
+                        when eligible (<strong className="text-foreground">0</strong> disables ads for that band). Leave{' '}
+                        <strong className="text-foreground">level to</strong> empty for an open-ended range (e.g. level 1+).
                     </p>
                 </AlertDescription>
             </Alert>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle className="text-lg">Quick examples</CardTitle>
+                    <CardDescription>Common setups you can copy into the form below.</CardDescription>
+                </CardHeader>
+                <CardContent className="grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="rounded-lg border bg-muted/30 p-3">
+                        <p className="font-medium">Ad after every level</p>
+                        <p className="mt-1 text-muted-foreground">From 1, open end, interval 1, ads 1</p>
+                    </div>
+                    <div className="rounded-lg border bg-muted/30 p-3">
+                        <p className="font-medium">Ad every 2 levels</p>
+                        <p className="mt-1 text-muted-foreground">From 1, open end, interval 2, ads 1 → levels 2, 4, 6…</p>
+                    </div>
+                    <div className="rounded-lg border bg-muted/30 p-3">
+                        <p className="font-medium">Ad every 10 levels</p>
+                        <p className="mt-1 text-muted-foreground">From 1, open end, interval 10, ads 1 → 10, 20, 30…</p>
+                    </div>
+                </CardContent>
+            </Card>
 
             <Card>
                 <CardHeader>
@@ -188,10 +231,10 @@ export function LevelAdRulesPanel({ levelRules }: { levelRules: LevelAdRuleRow[]
                         <Plus className="size-5 opacity-70" />
                         Add rule
                     </CardTitle>
-                    <CardDescription>Define a level band and how many ad slots to offer after a level completes.</CardDescription>
+                    <CardDescription>Define a level band, frequency, and ad count.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
                         <div className="space-y-2">
                             <Label htmlFor="create-sort">Sort order</Label>
                             <Input
@@ -221,6 +264,19 @@ export function LevelAdRulesPanel({ levelRules }: { levelRules: LevelAdRuleRow[]
                                 value={createForm.level_to}
                                 onChange={(e) => setCreateForm((f) => ({ ...f, level_to: e.target.value }))}
                             />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="create-interval">Show every N levels</Label>
+                            <Input
+                                id="create-interval"
+                                inputMode="numeric"
+                                min={1}
+                                value={createForm.level_interval}
+                                onChange={(e) => setCreateForm((f) => ({ ...f, level_interval: e.target.value }))}
+                            />
+                            <p className="text-xs text-muted-foreground">
+                                {formatInterval(Number(createForm.level_interval) || 1)}
+                            </p>
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="create-ads">Ads after level</Label>
@@ -278,6 +334,7 @@ export function LevelAdRulesPanel({ levelRules }: { levelRules: LevelAdRuleRow[]
                                         <TableRow>
                                             <TableHead className="w-20">Order</TableHead>
                                             <TableHead>Level range</TableHead>
+                                            <TableHead>Frequency</TableHead>
                                             <TableHead className="text-right">Ads after level</TableHead>
                                             <TableHead>Active</TableHead>
                                             <TableHead className="text-right">Actions</TableHead>
@@ -289,10 +346,9 @@ export function LevelAdRulesPanel({ levelRules }: { levelRules: LevelAdRuleRow[]
                                                 <TableCell className="font-mono text-muted-foreground">{r.sort_order}</TableCell>
                                                 <TableCell>
                                                     <span className="font-medium tabular-nums">{formatRange(r.level_from, r.level_to)}</span>
-                                                    <span className="ml-2 text-xs text-muted-foreground">
-                                                        (levels {r.level_from}
-                                                        {r.level_to === null ? '–∞' : `–${r.level_to}`})
-                                                    </span>
+                                                </TableCell>
+                                                <TableCell className="text-sm text-muted-foreground">
+                                                    {formatInterval(r.level_interval ?? 1)}
                                                 </TableCell>
                                                 <TableCell className="text-right tabular-nums">
                                                     {r.ads_after_level_complete}
@@ -332,8 +388,13 @@ export function LevelAdRulesPanel({ levelRules }: { levelRules: LevelAdRuleRow[]
                             </div>
                             <Separator className="my-4" />
                             <p className="text-xs text-muted-foreground">
-                                Last updated timestamps are stored per row. Mobile apps read public rules from{' '}
-                                <code className="rounded bg-muted px-1">GET /api/game/level-ad-settings</code>.
+                                Mobile apps read rules from{' '}
+                                <code className="rounded bg-muted px-1">GET /api/game/level-ad-settings</code> and check
+                                eligibility via{' '}
+                                <code className="rounded bg-muted px-1">GET /api/game/next-ad?level=…</code> (returns{' '}
+                                <code className="rounded bg-muted px-1">eligible</code>,{' '}
+                                <code className="rounded bg-muted px-1">interval_match</code>, and the matched{' '}
+                                <code className="rounded bg-muted px-1">rule</code>).
                             </p>
                         </>
                     )}
@@ -344,7 +405,7 @@ export function LevelAdRulesPanel({ levelRules }: { levelRules: LevelAdRuleRow[]
                 <DialogContent className="sm:max-w-lg">
                     <DialogHeader>
                         <DialogTitle>Edit rule</DialogTitle>
-                        <DialogDescription>Update sort order, level range, ad count, or active state.</DialogDescription>
+                        <DialogDescription>Update sort order, level range, frequency, ad count, or active state.</DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-2 sm:grid-cols-2">
                         <div className="space-y-2">
@@ -369,6 +430,15 @@ export function LevelAdRulesPanel({ levelRules }: { levelRules: LevelAdRuleRow[]
                                 inputMode="numeric"
                                 value={editForm.level_to}
                                 onChange={(e) => setEditForm((f) => ({ ...f, level_to: e.target.value }))}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Show every N levels</Label>
+                            <Input
+                                inputMode="numeric"
+                                min={1}
+                                value={editForm.level_interval}
+                                onChange={(e) => setEditForm((f) => ({ ...f, level_interval: e.target.value }))}
                             />
                         </div>
                         <div className="space-y-2">
@@ -405,15 +475,16 @@ export function LevelAdRulesPanel({ levelRules }: { levelRules: LevelAdRuleRow[]
                     <DialogHeader>
                         <DialogTitle>Delete this rule?</DialogTitle>
                         <DialogDescription>
-                            This removes the level band configuration. Clients using{' '}
-                            <code className="text-xs">/api/game/next-ad?level=…</code> will no longer match this rule.
+                            Clients using <code className="text-xs">/api/game/next-ad?level=…</code> will no longer use this
+                            rule.
                         </DialogDescription>
                     </DialogHeader>
                     {deleteTarget ? (
                         <p className="rounded-md border bg-muted/50 px-3 py-2 text-sm">
                             Order {deleteTarget.sort_order}: levels{' '}
                             <strong>{formatRange(deleteTarget.level_from, deleteTarget.level_to)}</strong>,{' '}
-                            {deleteTarget.ads_after_level_complete} ad(s) after level.
+                            {formatInterval(deleteTarget.level_interval ?? 1)},{' '}
+                            {deleteTarget.ads_after_level_complete} ad(s) when eligible.
                         </p>
                     ) : null}
                     <DialogFooter>

@@ -64,13 +64,16 @@ class PublicAdController extends Controller
         $levelParam = $request->query('level');
         if ($levelParam !== null && $levelParam !== '') {
             $level = (int) $levelParam;
-            $rule = $this->selection->resolveRuleForLevel($level);
-            if ($rule === null) {
+            $evaluation = $this->selection->evaluateLevelAd($level);
+
+            if (! $evaluation['eligible']) {
                 return response()->json([
                     'ad' => null,
                     'adsDisabled' => false,
                     'eligible' => false,
-                    'rule' => null,
+                    'in_range' => $evaluation['in_range'],
+                    'interval_match' => $evaluation['interval_match'],
+                    'rule' => $evaluation['rule'],
                 ]);
             }
 
@@ -80,7 +83,9 @@ class PublicAdController extends Controller
                 'ad' => $ad,
                 'adsDisabled' => false,
                 'eligible' => true,
-                'rule' => $rule,
+                'in_range' => true,
+                'interval_match' => true,
+                'rule' => $evaluation['rule'],
             ]);
         }
 
