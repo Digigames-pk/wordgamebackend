@@ -19,19 +19,23 @@ class GameLevelProceduralTest extends TestCase
 
     public function test_level_one_is_seeded_static_content(): void
     {
+        $expectedWords = config('game_level_blueprints.0.words');
+
         $this->getJson('/api/game/level/1')
             ->assertOk()
             ->assertJsonPath('level.id', 1)
-            ->assertJsonPath('level.words', ['CAT', 'ACT', 'SAT']);
+            ->assertJsonPath('level.words', $expectedWords);
     }
 
     public function test_level_eleven_generates_distinct_words_and_persists(): void
     {
+        $levelOneWords = config('game_level_blueprints.0.words');
+
         $this->assertNull(GameLevel::query()->where('level_number', 11)->first());
 
         $first = $this->getJson('/api/game/level/11')->assertOk()->json('level');
         $this->assertSame(11, $first['id']);
-        $this->assertNotSame(['CAT', 'ACT', 'SAT'], $first['words']);
+        $this->assertNotSame($levelOneWords, $first['words']);
 
         $row = GameLevel::query()->where('level_number', 11)->first();
         $this->assertNotNull($row);

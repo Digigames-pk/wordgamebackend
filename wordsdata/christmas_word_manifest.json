@@ -1,0 +1,4430 @@
+{
+    "total_raw": 781,
+    "total_unique": 621,
+    "duplicates_removed": 160,
+    "singular_filtered": 74,
+    "words": [
+        {
+            "word": "BOW",
+            "length": 3,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 1
+        },
+        {
+            "word": "ELF",
+            "length": 3,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 2
+        },
+        {
+            "word": "FIR",
+            "length": 3,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 3
+        },
+        {
+            "word": "FOX",
+            "length": 3,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 4
+        },
+        {
+            "word": "HAM",
+            "length": 3,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 5
+        },
+        {
+            "word": "HAT",
+            "length": 3,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 6
+        },
+        {
+            "word": "ICE",
+            "length": 3,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 7
+        },
+        {
+            "word": "JOY",
+            "length": 3,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 8
+        },
+        {
+            "word": "LOG",
+            "length": 3,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 9
+        },
+        {
+            "word": "MUG",
+            "length": 3,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 10
+        },
+        {
+            "word": "OWL",
+            "length": 3,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 11
+        },
+        {
+            "word": "TEA",
+            "length": 3,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 12
+        },
+        {
+            "word": "TOY",
+            "length": 3,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 13
+        },
+        {
+            "word": "BELL",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 14
+        },
+        {
+            "word": "CARD",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 15
+        },
+        {
+            "word": "COAL",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 16
+        },
+        {
+            "word": "COZY",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 17
+        },
+        {
+            "word": "DEER",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 18
+        },
+        {
+            "word": "GIFT",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 19
+        },
+        {
+            "word": "GLOW",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 20
+        },
+        {
+            "word": "HOLY",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 21
+        },
+        {
+            "word": "HOPE",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 22
+        },
+        {
+            "word": "HYMN",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 23
+        },
+        {
+            "word": "KING",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 24
+        },
+        {
+            "word": "LAMB",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 25
+        },
+        {
+            "word": "LOVE",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 26
+        },
+        {
+            "word": "MAGI",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 27
+        },
+        {
+            "word": "NOEL",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 28
+        },
+        {
+            "word": "PINE",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 29
+        },
+        {
+            "word": "SNOW",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 30
+        },
+        {
+            "word": "STAR",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 31
+        },
+        {
+            "word": "TREE",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 32
+        },
+        {
+            "word": "YULE",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 1,
+            "rank": 33
+        },
+        {
+            "word": "ANGEL",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 34
+        },
+        {
+            "word": "BERRY",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 35
+        },
+        {
+            "word": "BLESS",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 36
+        },
+        {
+            "word": "BLIMP",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 37
+        },
+        {
+            "word": "BOWER",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 38
+        },
+        {
+            "word": "CABIN",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 39
+        },
+        {
+            "word": "CAMEL",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 40
+        },
+        {
+            "word": "CANDY",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 41
+        },
+        {
+            "word": "CAROL",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 42
+        },
+        {
+            "word": "CEDAR",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 43
+        },
+        {
+            "word": "CHEER",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 44
+        },
+        {
+            "word": "CHILD",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 45
+        },
+        {
+            "word": "CHOIR",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 46
+        },
+        {
+            "word": "CLOCK",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 47
+        },
+        {
+            "word": "COCOA",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 48
+        },
+        {
+            "word": "COMET",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 49
+        },
+        {
+            "word": "CRANE",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 50
+        },
+        {
+            "word": "CROWN",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 51
+        },
+        {
+            "word": "DECOR",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 52
+        },
+        {
+            "word": "DREAM",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 53
+        },
+        {
+            "word": "DRINK",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 54
+        },
+        {
+            "word": "EAGLE",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 55
+        },
+        {
+            "word": "EARTH",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 56
+        },
+        {
+            "word": "EMBER",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 57
+        },
+        {
+            "word": "FEAST",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 58
+        },
+        {
+            "word": "FLAME",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 59
+        },
+        {
+            "word": "FROST",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 60
+        },
+        {
+            "word": "GLORY",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 61
+        },
+        {
+            "word": "GRACE",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 62
+        },
+        {
+            "word": "GREEN",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 63
+        },
+        {
+            "word": "HOLLY",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 64
+        },
+        {
+            "word": "HONOR",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 65
+        },
+        {
+            "word": "HOUSE",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 66
+        },
+        {
+            "word": "IGLOO",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 67
+        },
+        {
+            "word": "JOLLY",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 68
+        },
+        {
+            "word": "LIGHT",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 69
+        },
+        {
+            "word": "LODGE",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 70
+        },
+        {
+            "word": "MERRY",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 71
+        },
+        {
+            "word": "MOOSE",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 72
+        },
+        {
+            "word": "MUSIC",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 73
+        },
+        {
+            "word": "PARKA",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 74
+        },
+        {
+            "word": "PEACE",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 75
+        },
+        {
+            "word": "POLAR",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 76
+        },
+        {
+            "word": "QUILT",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 77
+        },
+        {
+            "word": "ROBIN",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 78
+        },
+        {
+            "word": "SCARF",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 79
+        },
+        {
+            "word": "SHEEP",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 80
+        },
+        {
+            "word": "SHINE",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 81
+        },
+        {
+            "word": "SMILE",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 82
+        },
+        {
+            "word": "SPARK",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 83
+        },
+        {
+            "word": "SPICE",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 84
+        },
+        {
+            "word": "SPRIG",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 85
+        },
+        {
+            "word": "SWEET",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 86
+        },
+        {
+            "word": "TOAST",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 87
+        },
+        {
+            "word": "TRAIN",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 88
+        },
+        {
+            "word": "TREAT",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 89
+        },
+        {
+            "word": "TRUST",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 90
+        },
+        {
+            "word": "TRUTH",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 91
+        },
+        {
+            "word": "VISIT",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 92
+        },
+        {
+            "word": "WATCH",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 93
+        },
+        {
+            "word": "WHITE",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 94
+        },
+        {
+            "word": "ADVENT",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 95
+        },
+        {
+            "word": "ARCTIC",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 96
+        },
+        {
+            "word": "BAUBLE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 97
+        },
+        {
+            "word": "BEANIE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 98
+        },
+        {
+            "word": "BRANCH",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 99
+        },
+        {
+            "word": "BRIGHT",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 100
+        },
+        {
+            "word": "CANDLE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 101
+        },
+        {
+            "word": "CHAPEL",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 102
+        },
+        {
+            "word": "CHILLY",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 103
+        },
+        {
+            "word": "CHURCH",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 104
+        },
+        {
+            "word": "COFFEE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 105
+        },
+        {
+            "word": "COOKIE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 106
+        },
+        {
+            "word": "COTTON",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 107
+        },
+        {
+            "word": "DANCER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 108
+        },
+        {
+            "word": "DINNER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 109
+        },
+        {
+            "word": "DONKEY",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 110
+        },
+        {
+            "word": "EGGNOG",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 111
+        },
+        {
+            "word": "FAMILY",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 112
+        },
+        {
+            "word": "FATHER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 113
+        },
+        {
+            "word": "FOREST",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 114
+        },
+        {
+            "word": "FROZEN",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 115
+        },
+        {
+            "word": "GARDEN",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 116
+        },
+        {
+            "word": "GENTLE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 117
+        },
+        {
+            "word": "GINGER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 118
+        },
+        {
+            "word": "GIVING",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 119
+        },
+        {
+            "word": "GOLDEN",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 120
+        },
+        {
+            "word": "GOSPEL",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 121
+        },
+        {
+            "word": "GRINCH",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 122
+        },
+        {
+            "word": "HEARTH",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 123
+        },
+        {
+            "word": "HEAVEN",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 124
+        },
+        {
+            "word": "ICICLE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 125
+        },
+        {
+            "word": "JACKET",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 126
+        },
+        {
+            "word": "JOSEPH",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 127
+        },
+        {
+            "word": "MARKET",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 128
+        },
+        {
+            "word": "MITTEN",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 129
+        },
+        {
+            "word": "MOTHER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 130
+        },
+        {
+            "word": "PASTOR",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 131
+        },
+        {
+            "word": "PILLOW",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 132
+        },
+        {
+            "word": "PRAYER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 133
+        },
+        {
+            "word": "PRINCE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 134
+        },
+        {
+            "word": "RABBIT",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 135
+        },
+        {
+            "word": "RIBBON",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 136
+        },
+        {
+            "word": "SAVIOR",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 137
+        },
+        {
+            "word": "SEASON",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 138
+        },
+        {
+            "word": "SLEIGH",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 139
+        },
+        {
+            "word": "SPIRIT",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 140
+        },
+        {
+            "word": "STABLE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 141
+        },
+        {
+            "word": "WINTER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 142
+        },
+        {
+            "word": "WONDER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 143
+        },
+        {
+            "word": "WOOLEN",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 144
+        },
+        {
+            "word": "WREATH",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 145
+        },
+        {
+            "word": "BROWNIE",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 146
+        },
+        {
+            "word": "CAROLER",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 147
+        },
+        {
+            "word": "CHIMNEY",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 148
+        },
+        {
+            "word": "COMFORT",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 149
+        },
+        {
+            "word": "CUPCAKE",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 150
+        },
+        {
+            "word": "FLANNEL",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 151
+        },
+        {
+            "word": "GARLAND",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 152
+        },
+        {
+            "word": "HARMONY",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 153
+        },
+        {
+            "word": "HOLIDAY",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 154
+        },
+        {
+            "word": "LANTERN",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 155
+        },
+        {
+            "word": "PANCAKE",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 156
+        },
+        {
+            "word": "PENGUIN",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 157
+        },
+        {
+            "word": "RUDOLPH",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 158
+        },
+        {
+            "word": "SNOWMAN",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 159
+        },
+        {
+            "word": "SWEATER",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 160
+        },
+        {
+            "word": "WISEMAN",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 161
+        },
+        {
+            "word": "WORSHIP",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 1,
+            "rank": 162
+        },
+        {
+            "word": "BLIZZARD",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 163
+        },
+        {
+            "word": "CALENDAR",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 164
+        },
+        {
+            "word": "CINNAMON",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 165
+        },
+        {
+            "word": "DECORATE",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 166
+        },
+        {
+            "word": "KINDNESS",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 167
+        },
+        {
+            "word": "MOUNTAIN",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 168
+        },
+        {
+            "word": "NATIVITY",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 169
+        },
+        {
+            "word": "ORNAMENT",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 170
+        },
+        {
+            "word": "PINECONE",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 171
+        },
+        {
+            "word": "REINDEER",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 172
+        },
+        {
+            "word": "SHEPHERD",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 173
+        },
+        {
+            "word": "SNOWBALL",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 174
+        },
+        {
+            "word": "SNOWFALL",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 175
+        },
+        {
+            "word": "SNOWSHOE",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 176
+        },
+        {
+            "word": "STOCKING",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 177
+        },
+        {
+            "word": "TOBOGGAN",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 178
+        },
+        {
+            "word": "TREASURE",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 179
+        },
+        {
+            "word": "WRAPPING",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 180
+        },
+        {
+            "word": "YULETIDE",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 181
+        },
+        {
+            "word": "CANDYCANE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 182
+        },
+        {
+            "word": "CELEBRATE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 183
+        },
+        {
+            "word": "COCOABEAN",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 184
+        },
+        {
+            "word": "COUNTDOWN",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 185
+        },
+        {
+            "word": "CRANBERRY",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 186
+        },
+        {
+            "word": "EVERGREEN",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 187
+        },
+        {
+            "word": "FIREPLACE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 188
+        },
+        {
+            "word": "GATHERING",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 189
+        },
+        {
+            "word": "GRATITUDE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 190
+        },
+        {
+            "word": "MISTLETOE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 191
+        },
+        {
+            "word": "SNOWFLAKE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 192
+        },
+        {
+            "word": "SNOWSTORM",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 193
+        },
+        {
+            "word": "TRADITION",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 194
+        },
+        {
+            "word": "NUTCRACKER",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 195
+        },
+        {
+            "word": "RESOLUTION",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 1,
+            "rank": 196
+        },
+        {
+            "word": "GINGERBREAD",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 1,
+            "rank": 197
+        },
+        {
+            "word": "MARSHMALLOW",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 1,
+            "rank": 198
+        },
+        {
+            "word": "ACORN",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 199
+        },
+        {
+            "word": "APRON",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 200
+        },
+        {
+            "word": "FINCH",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 201
+        },
+        {
+            "word": "NOBLE",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 202
+        },
+        {
+            "word": "ALPINE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 203
+        },
+        {
+            "word": "ANTLER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 204
+        },
+        {
+            "word": "AURORA",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 205
+        },
+        {
+            "word": "BAKERY",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 206
+        },
+        {
+            "word": "BEACON",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 207
+        },
+        {
+            "word": "BEAVER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 208
+        },
+        {
+            "word": "BONNET",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 209
+        },
+        {
+            "word": "BORDER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 210
+        },
+        {
+            "word": "BUCKLE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 211
+        },
+        {
+            "word": "BUFFET",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 212
+        },
+        {
+            "word": "BUTTER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 213
+        },
+        {
+            "word": "CANYON",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 214
+        },
+        {
+            "word": "CARVER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 215
+        },
+        {
+            "word": "CHALET",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 216
+        },
+        {
+            "word": "CHORAL",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 217
+        },
+        {
+            "word": "CLOVER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 218
+        },
+        {
+            "word": "COPPER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 219
+        },
+        {
+            "word": "CRECHE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 220
+        },
+        {
+            "word": "DASHER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 221
+        },
+        {
+            "word": "DONATE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 222
+        },
+        {
+            "word": "DRAPER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 223
+        },
+        {
+            "word": "GATHER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 224
+        },
+        {
+            "word": "GILDED",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 225
+        },
+        {
+            "word": "HARBOR",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 226
+        },
+        {
+            "word": "HUMBLE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 227
+        },
+        {
+            "word": "ICEMAN",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 228
+        },
+        {
+            "word": "JOYFUL",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 229
+        },
+        {
+            "word": "KETTLE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 230
+        },
+        {
+            "word": "LOGGER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 231
+        },
+        {
+            "word": "LUMBER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 232
+        },
+        {
+            "word": "NUTMEG",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 233
+        },
+        {
+            "word": "PASTRY",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 234
+        },
+        {
+            "word": "PEBBLE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 235
+        },
+        {
+            "word": "SKATER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 236
+        },
+        {
+            "word": "SPRUCE",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 237
+        },
+        {
+            "word": "TIMBER",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 238
+        },
+        {
+            "word": "TOASTY",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 239
+        },
+        {
+            "word": "WALNUT",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 240
+        },
+        {
+            "word": "WINTRY",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 241
+        },
+        {
+            "word": "ANGELIC",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 242
+        },
+        {
+            "word": "BISCUIT",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 243
+        },
+        {
+            "word": "CHURCHY",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 244
+        },
+        {
+            "word": "COTTAGE",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 245
+        },
+        {
+            "word": "COZYING",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 246
+        },
+        {
+            "word": "CRACKER",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 247
+        },
+        {
+            "word": "CRYSTAL",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 248
+        },
+        {
+            "word": "CUSTARD",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 249
+        },
+        {
+            "word": "DRUMMER",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 250
+        },
+        {
+            "word": "FIRCONE",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 251
+        },
+        {
+            "word": "FOLIAGE",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 252
+        },
+        {
+            "word": "FROSTED",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 253
+        },
+        {
+            "word": "GRACEFY",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 254
+        },
+        {
+            "word": "HARVEST",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 255
+        },
+        {
+            "word": "JUNIPER",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 256
+        },
+        {
+            "word": "KNITTED",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 257
+        },
+        {
+            "word": "LEATHER",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 258
+        },
+        {
+            "word": "MERRIER",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 259
+        },
+        {
+            "word": "MOONLIT",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 260
+        },
+        {
+            "word": "OATMEAL",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 261
+        },
+        {
+            "word": "PUDDING",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 262
+        },
+        {
+            "word": "QUILTED",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 263
+        },
+        {
+            "word": "RADIANT",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 264
+        },
+        {
+            "word": "ROSYING",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 265
+        },
+        {
+            "word": "SCARFED",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 266
+        },
+        {
+            "word": "SHIMMER",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 267
+        },
+        {
+            "word": "SLEDDER",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 268
+        },
+        {
+            "word": "SPARKLE",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 269
+        },
+        {
+            "word": "STARLIT",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 270
+        },
+        {
+            "word": "THAWING",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 271
+        },
+        {
+            "word": "TRINKET",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 272
+        },
+        {
+            "word": "WELCOME",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 2,
+            "rank": 273
+        },
+        {
+            "word": "BLESSING",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 274
+        },
+        {
+            "word": "CAROLING",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 275
+        },
+        {
+            "word": "CHESTNUT",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 276
+        },
+        {
+            "word": "DONATION",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 277
+        },
+        {
+            "word": "EMBERING",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 278
+        },
+        {
+            "word": "FEASTFUL",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 279
+        },
+        {
+            "word": "FESTIVAL",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 280
+        },
+        {
+            "word": "GOODWILL",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 281
+        },
+        {
+            "word": "GRATEFUL",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 282
+        },
+        {
+            "word": "GREETING",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 283
+        },
+        {
+            "word": "HOLLYDAY",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 284
+        },
+        {
+            "word": "MITTENED",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 285
+        },
+        {
+            "word": "PINEWOOD",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 286
+        },
+        {
+            "word": "POSTCARD",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 287
+        },
+        {
+            "word": "RIBBONED",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 288
+        },
+        {
+            "word": "SNOWYDAY",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 289
+        },
+        {
+            "word": "SONGBIRD",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 290
+        },
+        {
+            "word": "TRAVELER",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 291
+        },
+        {
+            "word": "WORKSHOP",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 292
+        },
+        {
+            "word": "MERRIMENT",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 293
+        },
+        {
+            "word": "NORTHWIND",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 294
+        },
+        {
+            "word": "PARTRIDGE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 295
+        },
+        {
+            "word": "POLARBEAR",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 296
+        },
+        {
+            "word": "ROBINHOOD",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 297
+        },
+        {
+            "word": "SNOWANGEL",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 298
+        },
+        {
+            "word": "SNOWDRIFT",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 299
+        },
+        {
+            "word": "STABLEMAN",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 300
+        },
+        {
+            "word": "SUGARPLUM",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 301
+        },
+        {
+            "word": "WORSHIPER",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 302
+        },
+        {
+            "word": "COCOAHOUSE",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 303
+        },
+        {
+            "word": "HEARTHSIDE",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 304
+        },
+        {
+            "word": "HOLIDAYING",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 305
+        },
+        {
+            "word": "PEPPERMINT",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 306
+        },
+        {
+            "word": "PINEFOREST",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 307
+        },
+        {
+            "word": "WONDERLAND",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 2,
+            "rank": 308
+        },
+        {
+            "word": "EVERGREENLY",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 2,
+            "rank": 309
+        },
+        {
+            "word": "JINGLEKEEPER",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 2,
+            "rank": 310
+        },
+        {
+            "word": "TOGETHERNESS",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 2,
+            "rank": 311
+        },
+        {
+            "word": "BONFIRE",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 3,
+            "rank": 312
+        },
+        {
+            "word": "CARIBOU",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 3,
+            "rank": 313
+        },
+        {
+            "word": "REVELRY",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 3,
+            "rank": 314
+        },
+        {
+            "word": "ANTELOPE",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 315
+        },
+        {
+            "word": "DEVOTION",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 316
+        },
+        {
+            "word": "GLADNESS",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 317
+        },
+        {
+            "word": "HOMESPUN",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 318
+        },
+        {
+            "word": "ABUNDANCE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 319
+        },
+        {
+            "word": "ADORATION",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 320
+        },
+        {
+            "word": "AFTERGLOW",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 321
+        },
+        {
+            "word": "APPLEWOOD",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 322
+        },
+        {
+            "word": "AVALANCHE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 323
+        },
+        {
+            "word": "BOARDWALK",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 324
+        },
+        {
+            "word": "FESTIVITY",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 325
+        },
+        {
+            "word": "FIRELIGHT",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 326
+        },
+        {
+            "word": "FROSTBITE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 327
+        },
+        {
+            "word": "REJOICING",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 328
+        },
+        {
+            "word": "SANCTUARY",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 329
+        },
+        {
+            "word": "ADVENTURER",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 330
+        },
+        {
+            "word": "AMBASSADOR",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 331
+        },
+        {
+            "word": "ATMOSPHERE",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 332
+        },
+        {
+            "word": "BLACKBERRY",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 333
+        },
+        {
+            "word": "CHARITABLE",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 334
+        },
+        {
+            "word": "COMFORTING",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 335
+        },
+        {
+            "word": "DECORATING",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 336
+        },
+        {
+            "word": "DELIGHTFUL",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 337
+        },
+        {
+            "word": "DEVOTIONAL",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 338
+        },
+        {
+            "word": "FELLOWSHIP",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 339
+        },
+        {
+            "word": "GENEROSITY",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 340
+        },
+        {
+            "word": "HALLELUJAH",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 341
+        },
+        {
+            "word": "JOYFULNESS",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 342
+        },
+        {
+            "word": "PROCESSION",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 343
+        },
+        {
+            "word": "SNOWBLOWER",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 344
+        },
+        {
+            "word": "SNOWMOBILE",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 345
+        },
+        {
+            "word": "TREETOPPER",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 346
+        },
+        {
+            "word": "WINTERTIME",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 347
+        },
+        {
+            "word": "WONDERMENT",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 3,
+            "rank": 348
+        },
+        {
+            "word": "ACCLAMATION",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 349
+        },
+        {
+            "word": "ANGELICNESS",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 350
+        },
+        {
+            "word": "ARRANGEMENT",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 351
+        },
+        {
+            "word": "BEAUTIFULLY",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 352
+        },
+        {
+            "word": "BENEVOLENCE",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 353
+        },
+        {
+            "word": "BLESSEDNESS",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 354
+        },
+        {
+            "word": "CANDLELIGHT",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 355
+        },
+        {
+            "word": "CELEBRATION",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 356
+        },
+        {
+            "word": "CHRISTENING",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 357
+        },
+        {
+            "word": "CONTENTMENT",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 358
+        },
+        {
+            "word": "DECLARATION",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 359
+        },
+        {
+            "word": "ENCHANTMENT",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 360
+        },
+        {
+            "word": "GRANDPARENT",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 361
+        },
+        {
+            "word": "HANDCRAFTED",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 362
+        },
+        {
+            "word": "HEARTHSTONE",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 363
+        },
+        {
+            "word": "HOSPITALITY",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 364
+        },
+        {
+            "word": "INSPIRATION",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 365
+        },
+        {
+            "word": "MASTERPIECE",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 366
+        },
+        {
+            "word": "MOONLIGHTED",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 367
+        },
+        {
+            "word": "POMEGRANATE",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 368
+        },
+        {
+            "word": "REFRESHMENT",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 369
+        },
+        {
+            "word": "REJOICINGLY",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 370
+        },
+        {
+            "word": "REMEMBRANCE",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 371
+        },
+        {
+            "word": "RESTORATION",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 372
+        },
+        {
+            "word": "SHEPHERDING",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 373
+        },
+        {
+            "word": "SNOWCOVERED",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 374
+        },
+        {
+            "word": "SNOWSHOEING",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 375
+        },
+        {
+            "word": "STORYTELLER",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 376
+        },
+        {
+            "word": "TRANQUILITY",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 377
+        },
+        {
+            "word": "TWINKLINGLY",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 378
+        },
+        {
+            "word": "WINTERGREEN",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 379
+        },
+        {
+            "word": "ANTICIPATION",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 380
+        },
+        {
+            "word": "ASTONISHMENT",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 381
+        },
+        {
+            "word": "CANDLEHOLDER",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 382
+        },
+        {
+            "word": "CHEERFULNESS",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 383
+        },
+        {
+            "word": "CINNAMONROLL",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 384
+        },
+        {
+            "word": "CONGREGATION",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 385
+        },
+        {
+            "word": "FAITHFULNESS",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 386
+        },
+        {
+            "word": "HEARTWARMING",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 387
+        },
+        {
+            "word": "HOLIDAYMAKER",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 388
+        },
+        {
+            "word": "ILLUMINATION",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 389
+        },
+        {
+            "word": "LANTERNLIGHT",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 390
+        },
+        {
+            "word": "NEIGHBORHOOD",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 391
+        },
+        {
+            "word": "PEACEFULNESS",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 392
+        },
+        {
+            "word": "PERSEVERANCE",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 393
+        },
+        {
+            "word": "PROCLAMATION",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 394
+        },
+        {
+            "word": "REINDEERLAND",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 395
+        },
+        {
+            "word": "SNOWBOARDING",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 396
+        },
+        {
+            "word": "THANKFULNESS",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 397
+        },
+        {
+            "word": "TRADITIONARY",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 398
+        },
+        {
+            "word": "AMBASSADORIAL",
+            "length": 13,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 399
+        },
+        {
+            "word": "CHRISTMASTIDE",
+            "length": 13,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 400
+        },
+        {
+            "word": "COMPANIONSHIP",
+            "length": 13,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 401
+        },
+        {
+            "word": "JOYFULHEARTED",
+            "length": 13,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 402
+        },
+        {
+            "word": "NATIVITYSCENE",
+            "length": 13,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 403
+        },
+        {
+            "word": "ORNAMENTATION",
+            "length": 13,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 404
+        },
+        {
+            "word": "CELEBRATIONIST",
+            "length": 14,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 405
+        },
+        {
+            "word": "CONGREGATIONER",
+            "length": 14,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 406
+        },
+        {
+            "word": "EVERGREENESQUE",
+            "length": 14,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 407
+        },
+        {
+            "word": "RECONCILIATION",
+            "length": 14,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 408
+        },
+        {
+            "word": "RESTORATIONIST",
+            "length": 14,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 409
+        },
+        {
+            "word": "ILLUMINATIONIST",
+            "length": 15,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 410
+        },
+        {
+            "word": "KINDHEARTEDNESS",
+            "length": 15,
+            "difficulty": "Expert",
+            "source_pack": 3,
+            "rank": 411
+        },
+        {
+            "word": "ANGELOLOGY",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 4,
+            "rank": 412
+        },
+        {
+            "word": "CARETAKING",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 4,
+            "rank": 413
+        },
+        {
+            "word": "REDEMPTION",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 4,
+            "rank": 414
+        },
+        {
+            "word": "CHARITYWORK",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 415
+        },
+        {
+            "word": "CHRISTCHILD",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 416
+        },
+        {
+            "word": "CHRISTENDOM",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 417
+        },
+        {
+            "word": "CHURCHGOING",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 418
+        },
+        {
+            "word": "EVERLASTING",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 419
+        },
+        {
+            "word": "FAITHFILLED",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 420
+        },
+        {
+            "word": "GLADHEARTED",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 421
+        },
+        {
+            "word": "KINGDOMCOME",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 422
+        },
+        {
+            "word": "MANGERSCENE",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 423
+        },
+        {
+            "word": "PREPARATION",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 424
+        },
+        {
+            "word": "ANNUNCIATION",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 425
+        },
+        {
+            "word": "BETHLEHEMITE",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 426
+        },
+        {
+            "word": "COMFORTINGLY",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 427
+        },
+        {
+            "word": "DISCIPLESHIP",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 428
+        },
+        {
+            "word": "FRANKINCENSE",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 429
+        },
+        {
+            "word": "FRUITFULNESS",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 430
+        },
+        {
+            "word": "GRATEFULNESS",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 431
+        },
+        {
+            "word": "INTERCESSION",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 432
+        },
+        {
+            "word": "MERCIFULNESS",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 433
+        },
+        {
+            "word": "STORYTELLING",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 434
+        },
+        {
+            "word": "CHRISTMASTIME",
+            "length": 13,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 435
+        },
+        {
+            "word": "COMMEMORATIVE",
+            "length": 13,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 436
+        },
+        {
+            "word": "ENLIGHTENMENT",
+            "length": 13,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 437
+        },
+        {
+            "word": "FELLOWSHIPPER",
+            "length": 13,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 438
+        },
+        {
+            "word": "INSPIRATIONAL",
+            "length": 13,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 439
+        },
+        {
+            "word": "LONGSUFFERING",
+            "length": 13,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 440
+        },
+        {
+            "word": "MIRACLEWORKER",
+            "length": 13,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 441
+        },
+        {
+            "word": "RIGHTEOUSNESS",
+            "length": 13,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 442
+        },
+        {
+            "word": "UNDERSTANDING",
+            "length": 13,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 443
+        },
+        {
+            "word": "ADVENTCALENDAR",
+            "length": 14,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 444
+        },
+        {
+            "word": "CANDLELIGHTING",
+            "length": 14,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 445
+        },
+        {
+            "word": "CELEBRATIONARY",
+            "length": 14,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 446
+        },
+        {
+            "word": "GRANDPARENTING",
+            "length": 14,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 447
+        },
+        {
+            "word": "SANCTIFICATION",
+            "length": 14,
+            "difficulty": "Expert",
+            "source_pack": 4,
+            "rank": 448
+        },
+        {
+            "word": "DOVE",
+            "length": 4,
+            "difficulty": "Easy",
+            "source_pack": 5,
+            "rank": 449
+        },
+        {
+            "word": "ABBEY",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 450
+        },
+        {
+            "word": "AROMA",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 451
+        },
+        {
+            "word": "ASPEN",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 452
+        },
+        {
+            "word": "ATTIC",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 453
+        },
+        {
+            "word": "BADGE",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 454
+        },
+        {
+            "word": "BIRCH",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 455
+        },
+        {
+            "word": "BRIAR",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 456
+        },
+        {
+            "word": "CHIME",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 457
+        },
+        {
+            "word": "CIDER",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 458
+        },
+        {
+            "word": "CLOAK",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 459
+        },
+        {
+            "word": "IVORY",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 460
+        },
+        {
+            "word": "ALMOND",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 461
+        },
+        {
+            "word": "AUBURN",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 462
+        },
+        {
+            "word": "BALLET",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 463
+        },
+        {
+            "word": "BALSAM",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 464
+        },
+        {
+            "word": "BURLAP",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 465
+        },
+        {
+            "word": "CLARET",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 466
+        },
+        {
+            "word": "MANTEL",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 467
+        },
+        {
+            "word": "APRICOT",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 468
+        },
+        {
+            "word": "ARTISAN",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 469
+        },
+        {
+            "word": "BANQUET",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 470
+        },
+        {
+            "word": "BEEHIVE",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 471
+        },
+        {
+            "word": "BELLHOP",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 472
+        },
+        {
+            "word": "BOOKLET",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 473
+        },
+        {
+            "word": "CAMPHOR",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 474
+        },
+        {
+            "word": "COBBLER",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 475
+        },
+        {
+            "word": "CONIFER",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 476
+        },
+        {
+            "word": "FIRWOOD",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 477
+        },
+        {
+            "word": "JOYRIDE",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 478
+        },
+        {
+            "word": "LEAFLET",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 479
+        },
+        {
+            "word": "LIGHTED",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 480
+        },
+        {
+            "word": "OAKWOOD",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 481
+        },
+        {
+            "word": "PAGEANT",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 482
+        },
+        {
+            "word": "TREETOP",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 5,
+            "rank": 483
+        },
+        {
+            "word": "BOOKMARK",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 484
+        },
+        {
+            "word": "BOOTLACE",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 485
+        },
+        {
+            "word": "CAROUSEL",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 486
+        },
+        {
+            "word": "DAZZLING",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 487
+        },
+        {
+            "word": "DOORSTEP",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 488
+        },
+        {
+            "word": "FIRESIDE",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 489
+        },
+        {
+            "word": "FROSTING",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 490
+        },
+        {
+            "word": "GIFTWRAP",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 491
+        },
+        {
+            "word": "GREENERY",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 492
+        },
+        {
+            "word": "HANDBELL",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 493
+        },
+        {
+            "word": "ICESTORM",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 494
+        },
+        {
+            "word": "KEEPSAKE",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 495
+        },
+        {
+            "word": "KNITWEAR",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 496
+        },
+        {
+            "word": "MOONBEAM",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 497
+        },
+        {
+            "word": "PLUMCAKE",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 498
+        },
+        {
+            "word": "ROSEWOOD",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 499
+        },
+        {
+            "word": "SNOWBANK",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 500
+        },
+        {
+            "word": "SNOWDROP",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 501
+        },
+        {
+            "word": "SNOWLAND",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 502
+        },
+        {
+            "word": "SNOWMELT",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 503
+        },
+        {
+            "word": "SNOWPLOW",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 504
+        },
+        {
+            "word": "SONGBOOK",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 505
+        },
+        {
+            "word": "TREEFARM",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 506
+        },
+        {
+            "word": "WOODLAND",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 507
+        },
+        {
+            "word": "BOULEVARD",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 508
+        },
+        {
+            "word": "BRASSWARE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 509
+        },
+        {
+            "word": "BROOKSIDE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 510
+        },
+        {
+            "word": "BUTTERCUP",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 511
+        },
+        {
+            "word": "CARETAKER",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 512
+        },
+        {
+            "word": "FIRNEEDLE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 513
+        },
+        {
+            "word": "FROSTLINE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 514
+        },
+        {
+            "word": "GARLANDED",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 515
+        },
+        {
+            "word": "GOLDFINCH",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 516
+        },
+        {
+            "word": "HEARTHRUG",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 517
+        },
+        {
+            "word": "HOLLYHOCK",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 518
+        },
+        {
+            "word": "LAMPLIGHT",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 519
+        },
+        {
+            "word": "MAPLEWOOD",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 520
+        },
+        {
+            "word": "MOONLIGHT",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 521
+        },
+        {
+            "word": "NIGHTFALL",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 522
+        },
+        {
+            "word": "NORTHLAND",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 523
+        },
+        {
+            "word": "PINEBOUGH",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 524
+        },
+        {
+            "word": "PINEGROVE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 525
+        },
+        {
+            "word": "PRAYERFUL",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 526
+        },
+        {
+            "word": "REDBREAST",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 527
+        },
+        {
+            "word": "SNOWFIELD",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 528
+        },
+        {
+            "word": "SNOWGLOBE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 529
+        },
+        {
+            "word": "STARGAZER",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 530
+        },
+        {
+            "word": "STARSHINE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 531
+        },
+        {
+            "word": "TREELIGHT",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 532
+        },
+        {
+            "word": "WINTERING",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 533
+        },
+        {
+            "word": "WOODCRAFT",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 534
+        },
+        {
+            "word": "BROOMSTICK",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 535
+        },
+        {
+            "word": "CARDHOLDER",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 536
+        },
+        {
+            "word": "CONFECTION",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 537
+        },
+        {
+            "word": "CRYSTALIZE",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 538
+        },
+        {
+            "word": "DRUMMERBOY",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 539
+        },
+        {
+            "word": "GLISTENING",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 540
+        },
+        {
+            "word": "GOODWILLER",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 541
+        },
+        {
+            "word": "HOLLYBERRY",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 542
+        },
+        {
+            "word": "NEEDLEWORK",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 543
+        },
+        {
+            "word": "PORCHLIGHT",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 544
+        },
+        {
+            "word": "QUILTMAKER",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 545
+        },
+        {
+            "word": "RIBBONWORK",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 546
+        },
+        {
+            "word": "SNOWBRIDGE",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 547
+        },
+        {
+            "word": "SNOWCAPPED",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 548
+        },
+        {
+            "word": "SNOWSHOEER",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 549
+        },
+        {
+            "word": "WINTERFEST",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 5,
+            "rank": 550
+        },
+        {
+            "word": "CANDLEMAKER",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 5,
+            "rank": 551
+        },
+        {
+            "word": "CANDLESTICK",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 5,
+            "rank": 552
+        },
+        {
+            "word": "CHOIRMASTER",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 5,
+            "rank": 553
+        },
+        {
+            "word": "COBBLESTONE",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 5,
+            "rank": 554
+        },
+        {
+            "word": "HONEYSUCKLE",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 5,
+            "rank": 555
+        },
+        {
+            "word": "MANGERCLOTH",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 5,
+            "rank": 556
+        },
+        {
+            "word": "MORNINGSTAR",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 5,
+            "rank": 557
+        },
+        {
+            "word": "SUGARCOOKIE",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 5,
+            "rank": 558
+        },
+        {
+            "word": "WINTERBERRY",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 5,
+            "rank": 559
+        },
+        {
+            "word": "WREATHMAKER",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 5,
+            "rank": 560
+        },
+        {
+            "word": "CONFECTIONER",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 5,
+            "rank": 561
+        },
+        {
+            "word": "EVERGREENERY",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 5,
+            "rank": 562
+        },
+        {
+            "word": "GREETINGCARD",
+            "length": 12,
+            "difficulty": "Expert",
+            "source_pack": 5,
+            "rank": 563
+        },
+        {
+            "word": "CRANBERRYSAUCE",
+            "length": 14,
+            "difficulty": "Expert",
+            "source_pack": 5,
+            "rank": 564
+        },
+        {
+            "word": "PEPPERMINTBARK",
+            "length": 14,
+            "difficulty": "Expert",
+            "source_pack": 5,
+            "rank": 565
+        },
+        {
+            "word": "ADORE",
+            "length": 5,
+            "difficulty": "Medium",
+            "source_pack": 6,
+            "rank": 566
+        },
+        {
+            "word": "STARRY",
+            "length": 6,
+            "difficulty": "Medium",
+            "source_pack": 6,
+            "rank": 567
+        },
+        {
+            "word": "BRISKET",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 6,
+            "rank": 568
+        },
+        {
+            "word": "DOGSLED",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 6,
+            "rank": 569
+        },
+        {
+            "word": "DOVELET",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 6,
+            "rank": 570
+        },
+        {
+            "word": "HAYRIDE",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 6,
+            "rank": 571
+        },
+        {
+            "word": "OAKLEAF",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 6,
+            "rank": 572
+        },
+        {
+            "word": "REDBIRD",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 6,
+            "rank": 573
+        },
+        {
+            "word": "SNOWCAP",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 6,
+            "rank": 574
+        },
+        {
+            "word": "THIMBLE",
+            "length": 7,
+            "difficulty": "Medium",
+            "source_pack": 6,
+            "rank": 575
+        },
+        {
+            "word": "BAYBERRY",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 576
+        },
+        {
+            "word": "BREADBOX",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 577
+        },
+        {
+            "word": "BROOKLET",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 578
+        },
+        {
+            "word": "CARILLON",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 579
+        },
+        {
+            "word": "CHOIRBOY",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 580
+        },
+        {
+            "word": "GIFTSHOP",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 581
+        },
+        {
+            "word": "HANDWORK",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 582
+        },
+        {
+            "word": "LARKSPUR",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 583
+        },
+        {
+            "word": "MOONRISE",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 584
+        },
+        {
+            "word": "PINEVIEW",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 585
+        },
+        {
+            "word": "POSTMARK",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 586
+        },
+        {
+            "word": "ROSEMARY",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 587
+        },
+        {
+            "word": "SNOWBELL",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 588
+        },
+        {
+            "word": "TABLETOP",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 589
+        },
+        {
+            "word": "TOYMAKER",
+            "length": 8,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 590
+        },
+        {
+            "word": "BAKEHOUSE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 591
+        },
+        {
+            "word": "BERRYWOOD",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 592
+        },
+        {
+            "word": "BIRDHOUSE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 593
+        },
+        {
+            "word": "BLACKBIRD",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 594
+        },
+        {
+            "word": "CLOAKROOM",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 595
+        },
+        {
+            "word": "CORNSTALK",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 596
+        },
+        {
+            "word": "CRAFTSMAN",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 597
+        },
+        {
+            "word": "CROSSROAD",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 598
+        },
+        {
+            "word": "FROSTWORK",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 599
+        },
+        {
+            "word": "GOLDCREST",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 600
+        },
+        {
+            "word": "GOODNIGHT",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 601
+        },
+        {
+            "word": "HANDCRAFT",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 602
+        },
+        {
+            "word": "HOLLYLEAF",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 603
+        },
+        {
+            "word": "LETTERBOX",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 604
+        },
+        {
+            "word": "PAGEANTRY",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 605
+        },
+        {
+            "word": "PINECREST",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 606
+        },
+        {
+            "word": "QUILTWORK",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 607
+        },
+        {
+            "word": "SNOWMOUND",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 608
+        },
+        {
+            "word": "SNOWPRINT",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 609
+        },
+        {
+            "word": "SNOWTRAIL",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 610
+        },
+        {
+            "word": "STARLIGHT",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 611
+        },
+        {
+            "word": "TREEHOUSE",
+            "length": 9,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 612
+        },
+        {
+            "word": "ALPINEGLOW",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 613
+        },
+        {
+            "word": "BELLRINGER",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 614
+        },
+        {
+            "word": "CANDLEWICK",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 615
+        },
+        {
+            "word": "DEEPFREEZE",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 616
+        },
+        {
+            "word": "NEEDLEPINE",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 617
+        },
+        {
+            "word": "WINTERBIRD",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 618
+        },
+        {
+            "word": "WINTERWOOD",
+            "length": 10,
+            "difficulty": "Hard",
+            "source_pack": 6,
+            "rank": 619
+        },
+        {
+            "word": "CRYSTALBALL",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 6,
+            "rank": 620
+        },
+        {
+            "word": "MANTELPIECE",
+            "length": 11,
+            "difficulty": "Expert",
+            "source_pack": 6,
+            "rank": 621
+        }
+    ],
+    "level_assignments": {
+        "1": [
+            "BELL",
+            "ELF",
+            "LOG"
+        ],
+        "2": [
+            "BELL",
+            "LOG",
+            "LAMB"
+        ],
+        "3": [
+            "EARTH",
+            "DEER",
+            "COAL",
+            "TREE"
+        ],
+        "4": [
+            "BLESS",
+            "BELL",
+            "SNOW"
+        ],
+        "5": [
+            "BEANIE",
+            "COAL",
+            "KING",
+            "ICE"
+        ],
+        "6": [
+            "ANGEL",
+            "DEER",
+            "GIFT",
+            "GLOW"
+        ],
+        "7": [
+            "BERRY",
+            "TREE",
+            "ABBEY",
+            "CRANE"
+        ],
+        "8": [
+            "BEANIE",
+            "KING",
+            "LIGHT",
+            "DEER"
+        ],
+        "9": [
+            "FLANNEL",
+            "GLOW",
+            "NOEL",
+            "BELL"
+        ],
+        "10": [
+            "CHAPEL",
+            "CRANE",
+            "PINE",
+            "HOLY",
+            "CARD"
+        ]
+    },
+    "pools_by_length": {
+        "3": 10,
+        "4": 8,
+        "5": 70,
+        "6": 96,
+        "7": 75,
+        "8": 81,
+        "9": 83,
+        "10": 53,
+        "11": 56,
+        "12": 34,
+        "13": 15,
+        "14": 12,
+        "15": 2
+    }
+}

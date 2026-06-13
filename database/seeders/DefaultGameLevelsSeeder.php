@@ -9,6 +9,8 @@ class DefaultGameLevelsSeeder extends Seeder
 {
     public function run(): void
     {
+        GameLevel::query()->where('level_number', '<=', 10)->delete();
+
         $blueprints = config('game_level_blueprints', []);
         $n = 1;
         foreach ($blueprints as $bp) {
