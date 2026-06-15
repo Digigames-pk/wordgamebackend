@@ -202,25 +202,22 @@ class ChristmasWordImporter
      */
     private function assignBlueprintWords(array $orderedWords, array $blueprints): array
     {
+        $candidatesByLength = [];
+        foreach ($orderedWords as $entry) {
+            $candidatesByLength[$entry['length']][] = $entry['word'];
+        }
+
         $levelAssignments = [];
         $usedWords = [];
 
         foreach ($blueprints as $index => $blueprint) {
             $levelNumber = $index + 1;
-            $templateWords = array_map(
-                static fn (mixed $w): string => strtoupper((string) $w),
-                $blueprint['words'] ?? [],
-            );
-            $slotLengths = array_map(static fn (string $w): int => strlen($w), $templateWords);
-            $constraints = $this->buildCrossConstraints($blueprint['grid_layout'] ?? [], $slotLengths);
-            $slotOrder = $this->slotOrderByConstraints($slotLengths, $constraints);
+            [$slotOrder, $slotLengths, $constraints] = $this->blueprintCrosswordMeta($blueprint);
 
-            $candidatesByLength = [];
-            foreach ($orderedWords as $entry) {
-                $candidatesByLength[$entry['length']][] = $entry['word'];
+            $assignment = $this->solveCrossword($slotOrder, $slotLengths, $constraints, $candidatesByLength, $usedWords);
+            if ($assignment === null) {
+                $assignment = $this->solveCrossword($slotOrder, $slotLengths, $constraints, $candidatesByLength, []);
             }
-
-            $assignment = $this->solveCrossword($slotOrder, $slotLengths, $constraints, $candidatesByLength);
             if ($assignment === null) {
                 throw new RuntimeException("No Christmas word set found for blueprint level {$levelNumber}.");
             }
@@ -233,6 +230,23 @@ class ChristmasWordImporter
         }
 
         return [$levelAssignments, $usedWords];
+    }
+
+    /**
+     * @param  array<string, mixed>  $blueprint
+     * @return array{0: array<int, int>, 1: array<int, int>, 2: array<int, array{int, int, int, int}>}
+     */
+    private function blueprintCrosswordMeta(array $blueprint): array
+    {
+        $templateWords = array_map(
+            static fn (mixed $w): string => strtoupper((string) $w),
+            $blueprint['words'] ?? [],
+        );
+        $slotLengths = array_map(static fn (string $w): int => strlen($w), $templateWords);
+        $constraints = $this->buildCrossConstraints($blueprint['grid_layout'] ?? [], $slotLengths);
+        $slotOrder = $this->slotOrderByConstraints($slotLengths, $constraints);
+
+        return [$slotOrder, $slotLengths, $constraints];
     }
 
     /**
@@ -313,15 +327,21 @@ class ChristmasWordImporter
      * @param  array<int, int>  $slotLengths
      * @param  array<int, array{int, int, int, int}>  $constraints
      * @param  array<int, array<int, string>>  $candidatesByLength
+     * @param  array<string, true>  $usedWords
      * @return array<int, string>|null
      */
-    private function solveCrossword(array $slotOrder, array $slotLengths, array $constraints, array $candidatesByLength): ?array
-    {
+    private function solveCrossword(
+        array $slotOrder,
+        array $slotLengths,
+        array $constraints,
+        array $candidatesByLength,
+        array $usedWords,
+    ): ?array {
         $slotCount = count($slotLengths);
         /** @var array<int, string|null> $assignment */
         $assignment = array_fill(0, $slotCount, null);
 
-        if ($this->backtrackCrossword($slotOrder, 0, $slotLengths, $constraints, $candidatesByLength, $assignment)) {
+        if ($this->backtrackCrossword($slotOrder, 0, $slotLengths, $constraints, $candidatesByLength, $assignment, $usedWords)) {
             return array_map(static fn (?string $w): string => (string) $w, $assignment);
         }
 
@@ -334,6 +354,7 @@ class ChristmasWordImporter
      * @param  array<int, array{int, int, int, int}>  $constraints
      * @param  array<int, array<int, string>>  $candidatesByLength
      * @param  array<int, string|null>  $assignment
+     * @param  array<string, true>  $usedWords
      */
     private function backtrackCrossword(
         array $slotOrder,
@@ -342,6 +363,7 @@ class ChristmasWordImporter
         array $constraints,
         array $candidatesByLength,
         array &$assignment,
+        array $usedWords,
     ): bool {
         if ($orderIndex >= count($slotOrder)) {
             return true;
@@ -352,6 +374,10 @@ class ChristmasWordImporter
         $candidates = $candidatesByLength[$length] ?? [];
 
         foreach ($candidates as $candidate) {
+            if (isset($usedWords[$candidate])) {
+                continue;
+            }
+
             if (in_array($candidate, $assignment, true)) {
                 continue;
             }
@@ -364,7 +390,7 @@ class ChristmasWordImporter
                 continue;
             }
 
-            if ($this->backtrackCrossword($slotOrder, $orderIndex + 1, $slotLengths, $constraints, $candidatesByLength, $assignment)) {
+            if ($this->backtrackCrossword($slotOrder, $orderIndex + 1, $slotLengths, $constraints, $candidatesByLength, $assignment, $usedWords)) {
                 return true;
             }
 

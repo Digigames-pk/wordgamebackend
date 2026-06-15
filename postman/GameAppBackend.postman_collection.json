@@ -293,6 +293,23 @@
 					}
 				},
 				{
+					"name": "List game levels (paginated)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": "{{base_url}}/api/game/levels",
+						"description": "Pagination: ?page=1 → levels 1–10. Bulk range: ?from=1&to=25. Bulk list: ?levels=1,11,12. Missing levels 11+ are generated and saved.",
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				},
+				{
 					"name": "Get game level",
 					"request": {
 						"method": "GET",
