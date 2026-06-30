@@ -7,6 +7,7 @@ use App\Models\DeviceState;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class ProfileApiController extends Controller
@@ -42,6 +43,24 @@ class ProfileApiController extends Controller
         $user->save();
 
         return response()->json(['user' => $this->formatUser($user->fresh()->load('deviceState'))]);
+    }
+
+    public function destroy(Request $request): JsonResponse
+    {
+        $request->validate([
+            'password' => ['required', 'string'],
+        ]);
+
+        $user = $request->user();
+
+        if (! Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Invalid password.'], 422);
+        }
+
+        $user->tokens()->delete();
+        $user->delete();
+
+        return response()->json(['message' => 'Account deleted.']);
     }
 
     /**

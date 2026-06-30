@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AdAssetController;
 use App\Http\Controllers\Api\AdRuleController;
 use App\Http\Controllers\Api\AdvertiserController;
 use App\Http\Controllers\Api\BannerAdminController;
+use App\Http\Controllers\Api\ContactMessageAdminController;
 use App\Http\Controllers\Api\GameConfigAdminController;
 use App\Http\Controllers\Api\SubscriptionPlanController;
 use App\Http\Controllers\Api\UserAdminController;
@@ -15,6 +16,14 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
+
+Route::get('/privacy', function () {
+    return Inertia::render('privacy');
+})->name('privacy');
+
+Route::get('/contact', function () {
+    return Inertia::render('contact');
+})->name('contact');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', function () {
@@ -30,6 +39,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('users', [UserAdminController::class, 'store'])->name('users.store');
     Route::patch('users/{id}', [UserAdminController::class, 'update'])->name('users.update');
     Route::delete('users/{id}', [UserAdminController::class, 'destroy'])->name('users.destroy');
+
+    Route::get('contact-messages', [AdsPageController::class, 'contactMessages'])->name('contact-messages');
+    Route::get('contact-messages/data', [ContactMessageAdminController::class, 'index'])->name('contact-messages.data');
+    Route::patch('contact-messages/{id}', [ContactMessageAdminController::class, 'update'])->name('contact-messages.update');
+    Route::delete('contact-messages/{id}', [ContactMessageAdminController::class, 'destroy'])->name('contact-messages.destroy');
 
     Route::prefix('ads')->name('ads.')->group(function () {
         Route::post('assets', [AdminAdsActionController::class, 'storeAdAsset'])->name('assets.store');

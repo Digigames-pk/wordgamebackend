@@ -125,4 +125,6 @@ return [
 
     'registration_open' => (bool) env('APP_REGISTRATION_OPEN', true),
 
+    'support_email' => env('APP_SUPPORT_EMAIL', env('MAIL_FROM_ADDRESS', 'hello@example.com')),
+
 ];

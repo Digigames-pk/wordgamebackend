@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\AdvertiserController;
 use App\Http\Controllers\Api\AppSettingsController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BannerAdminController;
+use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\ContactMessageAdminController;
 use App\Http\Controllers\Api\DeviceStatePublicController;
 use App\Http\Controllers\Api\GameConfigAdminController;
 use App\Http\Controllers\Api\GameLevelAdRuleController;
@@ -35,7 +37,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/profile', [ProfileApiController::class, 'show']);
     Route::put('/profile', [ProfileApiController::class, 'update']);
+    Route::delete('/profile', [ProfileApiController::class, 'destroy']);
 });
+
+Route::post('/contact', [ContactController::class, 'store'])
+    ->middleware(['optional.sanctum', 'throttle:10,1']);
 
 Route::get('/subscription/plans', [SubscriptionPlanController::class, 'publicPlans']);
 
@@ -140,4 +146,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/admin/users/{id}', [UserAdminController::class, 'show']);
     Route::patch('/admin/users/{id}', [UserAdminController::class, 'update']);
     Route::delete('/admin/users/{id}', [UserAdminController::class, 'destroy']);
+
+    Route::get('/admin/contact-messages', [ContactMessageAdminController::class, 'index']);
+    Route::patch('/admin/contact-messages/{id}', [ContactMessageAdminController::class, 'update']);
+    Route::delete('/admin/contact-messages/{id}', [ContactMessageAdminController::class, 'destroy']);
 });

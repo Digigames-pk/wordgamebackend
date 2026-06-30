@@ -10,6 +10,7 @@ use App\Models\AdRule;
 use App\Models\Advertiser;
 use App\Models\BannerAd;
 use App\Models\GameLevelAdRule;
+use App\Models\ContactMessage;
 use App\Models\GameConfigEntry;
 use App\Models\LevelBackgroundImage;
 use App\Models\SubscriptionPlan;
@@ -145,6 +146,17 @@ class AdsPageController extends Controller
             'users' => User::query()
                 ->with(['subscriptions.plan', 'deviceState'])
                 ->orderBy('name')
+                ->get()
+                ->all(),
+        ]);
+    }
+
+    public function contactMessages(): Response
+    {
+        return Inertia::render('admin/contact-messages', [
+            'messages' => ContactMessage::query()
+                ->with('user:id,name,email')
+                ->orderByDesc('created_at')
                 ->get()
                 ->all(),
         ]);

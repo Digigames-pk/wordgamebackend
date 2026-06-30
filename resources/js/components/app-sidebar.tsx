@@ -12,6 +12,7 @@ import {
     LayoutGrid,
     LayoutList,
     Layers,
+    MessageSquare,
     Music,
     Settings,
     Users,
@@ -34,6 +35,7 @@ function useMainNavItems(): NavItem[] {
 
 const adminNavItems: NavItem[] = [
     { title: 'Users', url: '/admin/users', icon: UserCog },
+    { title: 'Contact messages', url: '/admin/contact-messages', icon: MessageSquare },
     { title: 'Audio ads', url: '/admin/ads/audio', icon: Music },
     { title: 'VAST / VMAP', url: '/admin/ads/vast', icon: Code },
     { title: 'Video ads', url: '/admin/ads/video', icon: Video },
