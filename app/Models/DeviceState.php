@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class DeviceState extends Model
@@ -11,6 +12,11 @@ class DeviceState extends Model
         'device_id',
         'last_level',
         'coins',
+        'subscription_plan_id',
+        'iap_product_id',
+        'iap_transaction_id',
+        'iap_platform',
+        'iap_purchased_at',
     ];
 
     protected function casts(): array
@@ -18,7 +24,13 @@ class DeviceState extends Model
         return [
             'last_level' => 'integer',
             'coins' => 'integer',
+            'iap_purchased_at' => 'datetime',
         ];
+    }
+
+    public function subscriptionPlan(): BelongsTo
+    {
+        return $this->belongsTo(SubscriptionPlan::class, 'subscription_plan_id');
     }
 
     public function users(): HasMany

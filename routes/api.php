@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\PublicAdController;
 use App\Http\Controllers\Api\PublicBannerController;
 use App\Http\Controllers\Api\StripeWebhookController;
 use App\Http\Controllers\Api\SubscriptionCheckoutController;
+use App\Http\Controllers\Api\SubscriptionIapController;
 use App\Http\Controllers\Api\SubscriptionPlanController;
 use App\Http\Controllers\Api\UserAdminController;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +45,12 @@ Route::post('/contact', [ContactController::class, 'store'])
     ->middleware(['optional.sanctum', 'throttle:10,1']);
 
 Route::get('/subscription/plans', [SubscriptionPlanController::class, 'publicPlans']);
+
+Route::middleware(['optional.sanctum', 'throttle:60,1'])->group(function () {
+    Route::post('/subscription/iap/confirm', [SubscriptionIapController::class, 'confirm']);
+    Route::post('/subscription/iap/restore', [SubscriptionIapController::class, 'restore']);
+    Route::get('/subscription/status', [SubscriptionIapController::class, 'status']);
+});
 
 Route::post('/stripe/webhook', StripeWebhookController::class)->middleware('throttle:120,1');
 
@@ -73,7 +80,6 @@ Route::middleware(['throttle:120,1'])->group(function () {
 
 Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
     Route::post('/subscription/checkout', [SubscriptionCheckoutController::class, 'checkout']);
-    Route::get('/subscription/status', [SubscriptionCheckoutController::class, 'status']);
     Route::post('/subscription/portal', [SubscriptionCheckoutController::class, 'portal']);
 });
 // 'throttle:120,1'

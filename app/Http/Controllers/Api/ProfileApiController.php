@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\DeviceState;
 use App\Models\User;
+use App\Services\Subscription\IapSubscriptionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -87,6 +88,6 @@ class ProfileApiController extends Controller
             ['last_level' => 1, 'coins' => 0],
         );
 
-        $user->device_id_key = $state->id;
+        app(IapSubscriptionService::class)->attachDeviceEntitlementToUser($user, $state);
     }
 }

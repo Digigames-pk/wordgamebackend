@@ -32,16 +32,19 @@ export default function Privacy() {
                             <h2 className="mb-2 text-lg font-medium">Information We Collect</h2>
                             <ul className="list-disc space-y-2 pl-5">
                                 <li>
-                                    <strong>Account information:</strong> When you register, we collect your name, email address, and
-                                    password (stored in hashed form). We do not store your plain-text password.
+                                    <strong>Account information (optional):</strong> You may play and purchase subscriptions without
+                                    creating an account. If you choose to register, we collect your name, email address, and password
+                                    (stored in hashed form) to sync progress and purchases across your devices.
                                 </li>
                                 <li>
                                     <strong>Game progress:</strong> We store gameplay data including a device identifier, current level,
                                     and coin balance so your progress can be saved and restored across sessions.
                                 </li>
                                 <li>
-                                    <strong>Subscription data:</strong> If you purchase an ad-free subscription, we process payment
-                                    information through Stripe and store Stripe customer and subscription identifiers and status.
+                                    <strong>Subscription data:</strong> Ad-free subscriptions can be purchased through Apple In-App
+                                    Purchase without an account. We store the device identifier, product ID, and transaction ID needed to
+                                    restore ad-free access on that device. If you create an account, we may also link that purchase to your
+                                    profile so it can sync across your devices. Stripe is used only for optional web-based billing flows.
                                 </li>
                                 <li>
                                     <strong>Advertising analytics:</strong> When ads are shown or interacted with, we may collect event

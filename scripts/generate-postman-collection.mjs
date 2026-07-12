@@ -278,20 +278,48 @@ const folders = [
         ],
     },
     {
-        name: 'Subscription (authenticated user)',
+        name: 'Subscription (guest or authenticated)',
+        item: [
+            item({
+                name: 'IAP confirm (no account required)',
+                method: 'POST',
+                urlPath: 'subscription/iap/confirm',
+                auth: 'noauth',
+                body: {
+                    mode: 'raw',
+                    raw: '{\n  "device_id": "{{device_id}}",\n  "product_id": "com.wordgridarena.app.pro.monthly",\n  "transaction_id": "txn_example_123",\n  "platform": "ios"\n}',
+                },
+                description: 'optional.sanctum. Records StoreKit purchase for a device without requiring login.',
+            }),
+            item({
+                name: 'IAP restore (no account required)',
+                method: 'POST',
+                urlPath: 'subscription/iap/restore',
+                auth: 'noauth',
+                body: {
+                    mode: 'raw',
+                    raw: '{\n  "device_id": "{{device_id}}",\n  "platform": "ios",\n  "purchases": [\n    {\n      "product_id": "com.wordgridarena.app.pro.monthly",\n      "transaction_id": "txn_example_123"\n    }\n  ]\n}',
+                },
+                description: 'optional.sanctum. Restores IAP entitlements for a device without requiring login.',
+            }),
+            item({
+                name: 'Subscription status (device or user)',
+                method: 'GET',
+                urlPath: 'subscription/status?device_id={{device_id}}',
+                auth: 'noauth',
+                description: 'optional.sanctum. Pass device_id for guests; Bearer token optional for account-linked status.',
+            }),
+        ],
+    },
+    {
+        name: 'Subscription (Stripe — authenticated user)',
         item: [
             item({
                 name: 'Checkout',
                 method: 'POST',
                 urlPath: 'subscription/checkout',
-                body: { mode: 'raw', raw: '{\n  "price_id": "price_xxx"\n}' },
-                description: 'auth:sanctum. Throttle: 60/min',
-            }),
-            item({
-                name: 'Subscription status',
-                method: 'GET',
-                urlPath: 'subscription/status',
-                description: 'auth:sanctum. Throttle: 60/min',
+                body: { mode: 'raw', raw: '{\n  "subscription_plan_id": 1,\n  "success_url": "https://example.com/success",\n  "cancel_url": "https://example.com/cancel"\n}' },
+                description: 'auth:sanctum. Stripe web checkout only. Throttle: 60/min',
             }),
             item({
                 name: 'Billing portal',

@@ -12,6 +12,9 @@ class Subscription extends Model
         'subscription_plan_id',
         'stripe_customer_id',
         'stripe_subscription_id',
+        'iap_product_id',
+        'iap_transaction_id',
+        'platform',
         'status',
         'current_period_end',
     ];
